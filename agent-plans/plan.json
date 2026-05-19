@@ -1,0 +1,139 @@
+{
+  "project": {
+    "codename": "KickStream",
+    "tagline": "Every Match. Your Server. No Compromise.",
+    "brand_description": "A premium British football streaming service that grants direct access to a proprietary server pre-loaded with a firmware streaming kit — built for serious supporters who refuse to miss a single whistle.",
+    "target_audience": "British football fans, 18–45, who distrust overpriced broadcasters, value technical reliability, and have tribal loyalty to their club",
+    "vibe": "Dark stadium atmosphere meets precision engineering. Think the tension of a 90th-minute winner overlaid with the cold confidence of server infrastructure. Not flashy — lethal. The design should feel like you're already inside the stadium tunnel, kit on, seconds before kick-off."
+  },
+
+  "design_direction": {
+    "aesthetic_pole": "Cinematic dark minimalism with raw industrial texture — the love child of Apple's product obsession, Linear's developer-grade precision, and the visceral physicality of a sold-out Anfield night match",
+    "reference_brands": [
+      "Apple — product confidence, zero clutter, hero moments that convert",
+      "Linear — dark UI, tight typographic rhythm, developer-grade trust signals",
+      "Stripe — clear value hierarchy, premium documentation energy, conversion-optimised sections",
+      "Sky Sports — emotional football ownership, broadcast authority",
+      "Vercel — dark-mode-first, glowing accents, infrastructure-as-identity"
+    ],
+    "palette_mood": {
+      "base": "Pitch black with a near-imperceptible warm undertone — not #000000 but #0A0A0B, like stadium concrete at midnight",
+      "secondary": "Gunmetal grey (#1C1C1E) for card surfaces and section separators",
+      "accent_primary": "Flare green (#AAFF45) — the moment the goal goes in, the net lights up. Used sparingly: CTAs, live indicators, hover states only",
+      "accent_secondary": "Signal white (#F5F5F0) for headline copy — slightly warm, never cold clinical white",
+      "texture_tint": "Deep amber grain overlay at 4% opacity across all hero sections — evokes old terracing photographs, adds tactile warmth",
+      "forbidden_colors": "No purple gradients. No sky blue. No generic SaaS teal."
+    },
+    "typography_mood": {
+      "display_font": "Bebas Neue or Monument Extended — compressed, tall, aggressive. Headlines should feel stamped onto the page like a match programme. Tracking: tight to negative.",
+      "body_font": "Sora or DM Mono — clean, slightly technical, reads well at small sizes against dark backgrounds",
+      "accent_font": "A condensed serif like Playfair Display Condensed for pull-quotes or score tickers — adds editorial gravitas",
+      "hierarchy_rule": "Display at 96–144px for hero. Section titles at 64px. Body at 16–18px. Never more than 3 type sizes visible at once per section.",
+      "text_treatment": "Headlines split across two lines with a hard left-align. Important words in accent green. No centred body copy."
+    }
+  },
+
+  "hero_moment": {
+    "description": "Full-viewport dark scene. A looping, near-silent WebM of stadium floodlights flickering on, shot from pitch level — desaturated, grain-heavy, almost cinematic black and white except for the green of the grass. Over this, in massive compressed white type, the headline SMASHES in word by word with a subtle motion-blur stagger (not bounce — slam). Below it, a single line of green monospace text types itself out character by character: 'Server connected. Firmware loaded. Match starting in 00:03:41.' A single pill-shaped CTA button in flare green reads 'GET YOUR KIT →' — on hover it pulses once like a heartbeat and the cursor becomes a crosshair.",
+    "motion_details": "Parallax depth: video scrolls at 0.4x speed creating depth as user enters scroll. Headline words arrive at 60ms staggered delay each. The countdown timer is live JavaScript.",
+    "emotional_target": "The user should feel the pre-match electricity — heart rate ticks up, they lean forward, hand already reaching for the CTA."
+  },
+
+  "scroll_motion_system": {
+    "philosophy": "Layered, purposeful, never decorative. Motion should reveal information like a slow-motion replay — each element earns its entrance.",
+    "techniques": [
+      "Intersection Observer triggered fade-up with slight Y translate (32px → 0) at 0.6s ease-out for all section content",
+      "Section backgrounds shift hue by 2–3 degrees on scroll using CSS custom property interpolation — imperceptible but subliminal",
+      "Stats and numbers count up from zero when entering viewport — scroll-triggered CountUp.js",
+      "Feature cards enter with a staggered cascade: card 1 at 0ms, card 2 at 120ms, card 3 at 240ms",
+      "A sticky pitch-line progress indicator (thin flare-green horizontal rule) tracks scroll position from 0% to 100% of page at the very top",
+      "On the pricing section, the recommended plan has a slow breathing box-shadow pulse — alive, not static"
+    ]
+  },
+
+  "sections": [
+    {
+      "id": "nav",
+      "type": "sticky navigation",
+      "description": "Minimal dark nav bar, blurred glass background (backdrop-filter: blur(20px)), KickStream wordmark left in white. Right: 'How It Works', 'Pricing', 'Sign In' in small caps, spaced tightly. CTA pill 'Get Started' in flare green. On scroll past hero, nav slides down with a 0.3s ease transition from above."
+    },
+    {
+      "id": "hero",
+      "type": "full-viewport cinematic hero",
+      "description": "As described in hero_moment above. Mobile: video replaced by a static dark gradient with a grain overlay. Headline stacks vertically. CTA full-width."
+    },
+    {
+      "id": "trust-bar",
+      "type": "social proof ticker",
+      "description": "Dark gunmetal bar below hero. Infinite horizontal marquee of trust signals in small white caps, separated by flare-green bullet points: '12,000+ ACTIVE STREAMS', 'COVERAGE: ALL PREMIER LEAGUE FIXTURES', 'LATENCY UNDER 3 SECONDS', 'BRITISH SERVERS. BRITISH FOOTBALL.', 'NO CONTRACT. CANCEL ANYTIME.' Scrolls left at medium pace, pauses on hover."
+    },
+    {
+      "id": "product-reveal",
+      "type": "two-column feature split",
+      "description": "Left: a dark device mockup (laptop or smart TV) showing the streaming UI mid-match — crowd noise waveform visible, HD badge glowing green. Right: three stacked feature lines, each with a green icon, bold compressed headline, and one-sentence body. Features: (1) 'YOUR OWN SERVER' — dedicated hardware, not shared bandwidth; (2) 'FIRMWARE KIT INCLUDED' — plug in and stream, zero technical experience needed; (3) 'ALL KICK-OFF TIMES COVERED' — from 12:30 Saturday to Monday night."
+    },
+    {
+      "id": "how-it-works",
+      "type": "horizontal numbered process",
+      "description": "Three steps displayed in a row, connected by a dashed green line like a tactical formation diagram. Step 01: Choose your plan. Step 02: Receive your server + firmware kit in 48hrs. Step 03: Plug in, log on, never miss a match. Each step has a large white step number, short headline, micro body text. On mobile: stacks vertically with connector line becoming vertical."
+    },
+    {
+      "id": "stats",
+      "type": "full-width dark stat block",
+      "description": "Three massive numbers centred on a near-black background: '4K QUALITY', '3s LATENCY', '99.9% UPTIME'. Numbers count up on scroll. Below each, a single descriptive line in small body text. Background has a subtle radial gradient glow behind the centre stat — like a stadium spotlight from above."
+    },
+    {
+      "id": "pricing",
+      "type": "three-tier pricing cards",
+      "description": "Cards on dark gunmetal background. Three tiers: Terrace (monthly, basic), Season Ticket (annual, most popular), Boardroom (multi-device family). The Season Ticket card is elevated 16px above siblings, has a green 'MOST POPULAR' badge clipped to top-right corner, and has the pulsing box-shadow animation. Pricing in large compressed type. Feature lists use green checkmarks. CTA buttons: outlined for Terrace, solid green for Season Ticket, solid white for Boardroom."
+    },
+    {
+      "id": "testimonials",
+      "type": "editorial quote grid",
+      "description": "Three testimonials displayed as editorial pull-quotes, not review cards. Large opening quotation mark in flare green at 120px. Quote text in condensed serif italic. Attribution in monospace small caps. Backgrounds slightly offset in grey tone — creates a staggered grid feel. Real-feeling British names and clubs: 'Gary T., Tottenham fan, Watford', etc."
+    },
+    {
+      "id": "unexpected-design-move",
+      "type": "LIVE MATCH TICKER — the signature unexpected element",
+      "description": "A section that looks exactly like a real live match scoreboard dashboard, showing today's/upcoming Premier League fixtures with live scores (static demo data styled to look live). Clubs rendered with subtle crest placeholders, half-time/live/FT badges in green. This section functions as a product demo AND social proof simultaneously. It's interactive — hovering a match shows 'STREAMING NOW on KickStream'. This breaks every expectation a SaaS landing page sets and immediately answers the question: 'does it actually work?' The section headline above it reads: 'THIS IS WHAT YOU'RE MISSING.' in 96px compressed white type."
+    },
+    {
+      "id": "faq",
+      "type": "minimal accordion",
+      "description": "Dark background, left-aligned questions in medium white type. Expand/collapse with a green + → × icon. Answers in slightly dimmed body text. No borders — uses vertical spacing as separator. Questions include: 'Do I need technical skills?', 'Is this legal and licensed?', 'What football competitions are covered?', 'How fast is shipping?', 'What happens if my server has issues?'"
+    },
+    {
+      "id": "final-cta",
+      "type": "full-viewport closing hero",
+      "description": "Mirror of the opening hero but inverted emotionally — this is post-match, celebrating. Dark gradient with a single flare of stadium light from top-right. Massive headline: 'THE MATCH STARTS WITH OR WITHOUT YOU.' Subheadline: 'Join 12,000 fans who chose their own stream.' Two CTAs side-by-side: 'GET YOUR KIT NOW' (green filled) and 'SEE PRICING' (outlined white). Below CTAs, a single line: '📦 Ships within 48 hours. No contract. Cancel anytime.'"
+    },
+    {
+      "id": "footer",
+      "type": "minimal dark footer",
+      "description": "KickStream wordmark. Left: nav links. Centre: social icons (X, Instagram, YouTube). Right: legal (Privacy, Terms, Contact). Bottom line in tiny monospace: 'Built for British fans. Powered by our servers. Not theirs.' Thin green rule above footer as final flourish."
+    }
+  ],
+
+  "texture_details": {
+    "grain_overlay": "SVG noise filter at 3–5% opacity over hero and CTA sections — adds tactile depth, prevents the 'flat digital' look",
+    "surface_variation": "Cards use #1C1C1E with a 1px border of rgba(255,255,255,0.06) — barely visible but adds dimension",
+    "glow_effects": "Flare green radial glows (box-shadow: 0 0 60px rgba(170,255,69,0.15)) used on: active CTA button, live badge, featured pricing card",
+    "stadium_light_flare": "CSS radial gradient from rgba(255,220,100,0.04) to transparent, positioned top-right corner in hero and final CTA — mimics floodlight warmth",
+    "pitch_line_motif": "Thin white dashed lines used as decorative dividers — references painted pitch markings, keeps football soul in the UI geometry"
+  },
+
+  "technical_requirements": {
+    "framework": "React with Tailwind CSS — or pure HTML/CSS/JS with CSS custom properties",
+    "fonts": "Google Fonts: Bebas Neue (display), Sora (body), DM Mono (code/labels)",
+    "animations": "CSS keyframes for hero entrance and stat counters. Intersection Observer for scroll reveals. No external animation libraries required unless Motion (Framer) is available.",
+    "video": "WebM looping, muted, autoplay, playsinline — with fallback static image for mobile",
+    "performance": "Lazy load all below-fold sections. Preload hero font and video poster. Target LCP under 2.5s.",
+    "responsive": "Mobile-first. Hamburger nav on mobile. Hero headline at 56px mobile. All grids collapse to single column."
+  },
+
+  "copy_tone": {
+    "voice": "Direct, tribal, technically confident. Talks to fans as fans. No corporate softness. Contractions always. Short sentences hit harder.",
+    "forbidden_phrases": ["cutting-edge", "seamless experience", "next-level", "unlock the power of", "revolutionise your viewing"],
+    "signature_phrases": ["Your server. Your stream.", "No middleman. No blackout.", "Plug in. Kick off.", "Built for the 90 minutes that matter."]
+  }
+}
