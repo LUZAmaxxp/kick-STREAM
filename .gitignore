@@ -1,5 +1,3 @@
 node_modules/
 dist/
-src/assets/*.mp4
-src/assets/*.webm
-src/assets/*.mov
+
