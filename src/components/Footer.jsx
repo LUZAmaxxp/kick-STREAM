@@ -45,8 +45,10 @@ export default function Footer() {
 
       <div className="px-6 py-16" style={{ backgroundColor: '#F5F3EE', color: '#1A1A1A' }}>
         <div className="max-w-7xl mx-auto">
+
           {/* Top row */}
           <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-10 mb-16">
+
             {/* Wordmark + tagline */}
             <div>
               <a href="#" className="font-display text-3xl tracking-widest text-black">

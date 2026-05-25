@@ -68,32 +68,33 @@ export default function AdminUsers() {
   );
 }
 
-const avatarColors = ['#5B9EFF', '#AAFF45', '#FFB347', '#FF5B5B', '#c084fc'];
+const avatarColors = ['#E8714F', '#1A1A1A', '#E8714F', '#1A1A1A', '#E8714F'];
 
 const styles = {
   root: {
-    fontFamily: "'JetBrains Mono', monospace",
-    color: '#F2F0E8',
+    fontFamily: "'DM Sans', sans-serif",
+    color: '#1A1A1A',
     display: 'flex', flexDirection: 'column',
   },
   header: {
     display: 'flex', alignItems: 'center', justifyContent: 'space-between',
     padding: '14px 20px',
-    borderBottom: '1px solid rgba(255,255,255,0.06)',
+    borderBottom: '2px solid #1A1A1A',
   },
   headerLeft: { display: 'flex', alignItems: 'center', gap: 8 },
-  panelTitle: { fontSize: 11, fontWeight: 700, letterSpacing: '0.16em', color: '#F2F0E8' },
+  panelTitle: { fontSize: 11, fontWeight: 700, letterSpacing: '0.16em', color: '#1A1A1A', textTransform: 'uppercase' },
   badge: (color) => ({
     fontSize: 10, fontWeight: 700,
-    background: `${color}18`,
+    background: 'transparent',
     color: color,
-    border: `1px solid ${color}30`,
-    borderRadius: 4, padding: '1px 6px',
+    border: `2px solid ${color}`,
+    borderRadius: 0, padding: '1px 6px',
   }),
   liveTag: {
     display: 'flex', alignItems: 'center', gap: 5,
     fontSize: 10, letterSpacing: '0.1em',
-    color: 'rgba(242,240,232,0.3)',
+    color: 'rgba(26,26,26,0.5)',
+    fontFamily: "'Courier Prime', monospace",
   },
   liveDot: (color) => ({
     display: 'inline-block',
@@ -103,47 +104,48 @@ const styles = {
   colRow: {
     display: 'flex', padding: '8px 20px',
     fontSize: 9, letterSpacing: '0.14em',
-    color: 'rgba(242,240,232,0.25)',
-    borderBottom: '1px solid rgba(255,255,255,0.04)',
+    color: 'rgba(26,26,26,0.4)',
+    borderBottom: '1px solid rgba(26,26,26,0.1)',
+    fontFamily: "'Courier Prime', monospace",
   },
   list: { display: 'flex', flexDirection: 'column' },
   emptyState: {
     padding: '32px 20px',
-    fontSize: 12, color: 'rgba(242,240,232,0.3)',
+    fontSize: 12, color: 'rgba(26,26,26,0.4)',
     textAlign: 'center',
   },
   row: (i) => ({
     display: 'flex', alignItems: 'center',
     padding: '12px 20px',
-    borderBottom: '1px solid rgba(255,255,255,0.04)',
-    background: i % 2 === 0 ? 'transparent' : 'rgba(255,255,255,0.01)',
+    borderBottom: '1px solid rgba(26,26,26,0.08)',
+    background: i % 2 === 0 ? 'transparent' : 'rgba(26,26,26,0.02)',
     transition: 'background 0.15s',
   }),
   avatar: (i) => ({
     width: 28, height: 28,
-    borderRadius: 4,
-    background: `${avatarColors[i % avatarColors.length]}18`,
-    border: `1px solid ${avatarColors[i % avatarColors.length]}30`,
+    borderRadius: 0,
+    background: 'transparent',
+    border: `2px solid ${avatarColors[i % avatarColors.length]}`,
     color: avatarColors[i % avatarColors.length],
     fontSize: 11, fontWeight: 700,
     display: 'flex', alignItems: 'center', justifyContent: 'center',
     flexShrink: 0,
   }),
-  emailText: { fontSize: 12, color: '#F2F0E8', letterSpacing: '0.02em' },
-  uidText: { fontSize: 10, color: 'rgba(242,240,232,0.25)', marginTop: 1 },
+  emailText: { fontSize: 12, color: '#1A1A1A', letterSpacing: '0.02em' },
+  uidText: { fontSize: 10, color: 'rgba(26,26,26,0.4)', marginTop: 1, fontFamily: "'Courier Prime', monospace" },
   visitBadge: (visits) => ({
     display: 'inline-block',
     fontSize: 11, fontWeight: 600,
-    color: visits > 5 ? '#AAFF45' : visits > 2 ? '#FFB347' : 'rgba(242,240,232,0.5)',
-    background: visits > 5 ? 'rgba(170,255,69,0.08)' : 'transparent',
-    padding: '2px 8px', borderRadius: 4,
+    color: visits > 5 ? '#E8714F' : visits > 2 ? '#1A1A1A' : 'rgba(26,26,26,0.5)',
+    background: visits > 5 ? 'rgba(232, 113, 79, 0.08)' : 'transparent',
+    padding: '2px 8px', borderRadius: 0,
   }),
   statusPill: (status) => ({
     display: 'inline-block',
     fontSize: 9, letterSpacing: '0.12em', fontWeight: 700,
-    background: 'rgba(170,255,69,0.1)',
-    color: '#AAFF45',
-    border: '1px solid rgba(170,255,69,0.2)',
-    padding: '3px 8px', borderRadius: 20,
+    background: 'transparent',
+    color: '#E8714F',
+    border: '2px solid #E8714F',
+    padding: '3px 8px', borderRadius: 0,
   }),
 };

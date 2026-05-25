@@ -33,6 +33,7 @@ export default function Testimonials() {
   return (
     <section className="py-28 px-6" style={{ backgroundColor: '#F5F3EE' }}>
       <div className="max-w-7xl mx-auto">
+
         <motion.p
           variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }}
           className="font-data text-black text-xs tracking-[0.25em] uppercase mb-4 opacity-60"
@@ -46,6 +47,7 @@ export default function Testimonials() {
         >
           FANS DON'T LIE.
         </motion.h2>
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {QUOTES.map((q, i) => (
             <motion.div
@@ -65,6 +67,7 @@ export default function Testimonials() {
               >
                 "
               </span>
+
               {/* Quote body */}
               <p
                 className="font-ui text-base text-black/80 leading-relaxed mb-8"
@@ -72,6 +75,7 @@ export default function Testimonials() {
               >
                 {q.text}
               </p>
+
               {/* Attribution */}
               <div className="rule-top pt-5">
                 <p className="font-data text-[11px] tracking-[0.18em] text-black/50 uppercase">
