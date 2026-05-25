@@ -4,10 +4,10 @@ import { motion, AnimatePresence } from 'framer-motion'
 const NAV_LINKS = [
   { label: 'How It Works', href: '#how-it-works' },
   { label: 'Pricing',      href: '#pricing' },
-  { label: 'Sign In',      href: '#' },
+  { label: 'Sign In',      href: '/auth', auth: true },
 ]
 
-export default function Nav() {
+export default function Nav({ user, logout }) { // Accept user, logout as props
   const [visible, setVisible] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
 
@@ -36,22 +36,48 @@ export default function Nav() {
 
             {/* Desktop links */}
             <div className="hidden md:flex items-center gap-8">
-              {NAV_LINKS.map(l => (
-                <a
-                  key={l.label}
-                  href={l.href}
-                  className="text-xs font-ui font-semibold uppercase tracking-[0.15em] text-black/60 hover:text-black transition-colors"
+              {NAV_LINKS.map(l => {
+                if (l.label === 'Sign In' && user) return null; // Don't show Sign In if logged in
+                if (l.auth) {
+                  return (
+                    <a
+                      key={l.label}
+                      href={l.href}
+                      className="text-xs font-ui font-semibold uppercase tracking-[0.15em] text-black/60 hover:text-black transition-colors"
+                    >
+                      {l.label}
+                    </a>
+                  );
+                }
+                return (
+                  <a
+                    key={l.label}
+                    href={l.href}
+                    className="text-xs font-ui font-semibold uppercase tracking-[0.15em] text-black/60 hover:text-black transition-colors"
+                  >
+                    {l.label}
+                  </a>
+                );
+              })}
+              {user ? (
+                <button
+                  onClick={logout}
+                  className="px-5 py-2 bg-[#1A1A1A] text-[#F5F3EE] text-xs font-anton font-semibold uppercase tracking-[0.12em] hover:bg-[#00A651] hover:text-[#F5F3EE] transition rounded-none"
+                  style={{ borderRadius: 0 }}
                 >
-                  {l.label}
+                  Sign Out
+                </button>
+              ) : (
+                <a
+                  href="/auth"
+                  className="px-5 py-2 bg-[#1A1A1A] text-[#F5F3EE] text-xs font-anton font-semibold uppercase tracking-[0.12em] hover:bg-[#00A651] hover:text-[#F5F3EE] transition rounded-none"
+                  style={{ borderRadius: 0 }}
+                >
+                  Get Started
                 </a>
-              ))}
-              <a
-                href="#pricing"
-                className="px-5 py-2 bg-black text-cream text-xs font-ui font-semibold uppercase tracking-[0.12em] hover:bg-black-light transition"
-              >
-                Get Started
-              </a>
+              )}
             </div>
+
 
             {/* Mobile hamburger */}
             <button
@@ -77,16 +103,31 @@ export default function Nav() {
                 style={{ borderColor: '#1A1A1A' }}
               >
                 <div className="flex flex-col gap-4 px-6 py-6">
-                  {NAV_LINKS.map(l => (
-                    <a
-                      key={l.label}
-                      href={l.href}
-                      onClick={() => setMenuOpen(false)}
-                      className="text-sm font-ui font-semibold uppercase tracking-widest text-black/60 hover:text-black"
-                    >
-                      {l.label}
-                    </a>
-                  ))}
+                  {NAV_LINKS.map(l => {
+                    if (l.label === 'Sign In' && user) return null;
+                    if (l.auth) {
+                      return (
+                        <a
+                          key={l.label}
+                          href={l.href}
+                          onClick={() => setMenuOpen(false)}
+                          className="text-sm font-ui font-semibold uppercase tracking-widest text-black/60 hover:text-black"
+                        >
+                          {l.label}
+                        </a>
+                      );
+                    }
+                    return (
+                      <a
+                        key={l.label}
+                        href={l.href}
+                        onClick={() => setMenuOpen(false)}
+                        className="text-sm font-ui font-semibold uppercase tracking-widest text-black/60 hover:text-black"
+                      >
+                        {l.label}
+                      </a>
+                    );
+                  })}
                   <a
                     href="#pricing"
                     onClick={() => setMenuOpen(false)}
