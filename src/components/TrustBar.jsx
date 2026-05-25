@@ -15,8 +15,8 @@ const TRACK = [...ITEMS, ...ITEMS]
 export default function TrustBar() {
   return (
     <div
-      className="relative overflow-hidden bg-surface border-y"
-      style={{ borderColor: 'rgba(255,255,255,0.06)', borderTopWidth: '1px', borderBottomWidth: '1px' }}
+      className="relative overflow-hidden rule-top rule-bottom texture-overlay"
+      style={{ backgroundColor: '#1A1A1A' }}
     >
       <div
         className="flex whitespace-nowrap py-4 animate-marquee"
@@ -26,10 +26,10 @@ export default function TrustBar() {
       >
         {TRACK.map((item, i) => (
           <span key={i} className="inline-flex items-center gap-4 mx-4">
-            <span className="font-mono text-xs tracking-[0.18em] text-snow/70 uppercase">
+            <span className="font-data text-xs tracking-[0.18em] text-cream/80 uppercase">
               {item}
             </span>
-            <span className="text-green text-xs leading-none select-none">●</span>
+            <span className="text-accent text-xs leading-none select-none">●</span>
           </span>
         ))}
       </div>

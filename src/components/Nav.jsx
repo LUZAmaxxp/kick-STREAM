@@ -26,11 +26,11 @@ export default function Nav() {
           exit={{ y: '-100%', opacity: 0 }}
           transition={{ duration: 0.3, ease: 'easeOut' }}
           className="fixed top-0 left-0 right-0 z-50"
-          style={{ backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', background: 'rgba(10,10,11,0.75)', borderBottom: '1px solid rgba(255,255,255,0.06)' }}
+          style={{ backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', background: 'rgba(245, 243, 238, 0.9)', borderBottom: '2px solid #1A1A1A' }}
         >
           <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
             {/* Wordmark */}
-            <a href="#" className="font-display text-2xl tracking-widest text-snow">
+            <a href="#" className="font-display text-2xl tracking-widest text-black">
               KICKSTREAM
             </a>
 
@@ -40,14 +40,14 @@ export default function Nav() {
                 <a
                   key={l.label}
                   href={l.href}
-                  className="text-xs font-body font-semibold uppercase tracking-[0.15em] text-snow/60 hover:text-snow transition-colors"
+                  className="text-xs font-ui font-semibold uppercase tracking-[0.15em] text-black/60 hover:text-black transition-colors"
                 >
                   {l.label}
                 </a>
               ))}
               <a
                 href="#pricing"
-                className="px-5 py-2 rounded-full bg-green text-pitch text-xs font-body font-semibold uppercase tracking-[0.12em] hover:brightness-110 transition"
+                className="px-5 py-2 bg-black text-cream text-xs font-ui font-semibold uppercase tracking-[0.12em] hover:bg-black-light transition"
               >
                 Get Started
               </a>
@@ -59,9 +59,9 @@ export default function Nav() {
               onClick={() => setMenuOpen(o => !o)}
               aria-label="Toggle menu"
             >
-              <span className={`block w-6 h-0.5 bg-snow transition-transform ${menuOpen ? 'rotate-45 translate-y-2' : ''}`} />
-              <span className={`block w-6 h-0.5 bg-snow transition-opacity ${menuOpen ? 'opacity-0' : ''}`} />
-              <span className={`block w-6 h-0.5 bg-snow transition-transform ${menuOpen ? '-rotate-45 -translate-y-2' : ''}`} />
+              <span className={`block w-6 h-0.5 bg-black transition-transform ${menuOpen ? 'rotate-45 translate-y-2' : ''}`} />
+              <span className={`block w-6 h-0.5 bg-black transition-opacity ${menuOpen ? 'opacity-0' : ''}`} />
+              <span className={`block w-6 h-0.5 bg-black transition-transform ${menuOpen ? '-rotate-45 -translate-y-2' : ''}`} />
             </button>
           </div>
 
@@ -73,8 +73,8 @@ export default function Nav() {
                 animate={{ height: 'auto', opacity: 1 }}
                 exit={{ height: 0, opacity: 0 }}
                 transition={{ duration: 0.25 }}
-                className="md:hidden overflow-hidden border-t"
-                style={{ borderColor: 'rgba(255,255,255,0.06)' }}
+                className="md:hidden overflow-hidden border-t-rule"
+                style={{ borderColor: '#1A1A1A' }}
               >
                 <div className="flex flex-col gap-4 px-6 py-6">
                   {NAV_LINKS.map(l => (
@@ -82,7 +82,7 @@ export default function Nav() {
                       key={l.label}
                       href={l.href}
                       onClick={() => setMenuOpen(false)}
-                      className="text-sm font-body font-semibold uppercase tracking-widest text-snow/60 hover:text-snow"
+                      className="text-sm font-ui font-semibold uppercase tracking-widest text-black/60 hover:text-black"
                     >
                       {l.label}
                     </a>
@@ -90,7 +90,7 @@ export default function Nav() {
                   <a
                     href="#pricing"
                     onClick={() => setMenuOpen(false)}
-                    className="w-full text-center px-5 py-3 rounded-full bg-green text-pitch text-sm font-body font-semibold uppercase tracking-widest"
+                    className="w-full text-center px-5 py-3 bg-black text-cream text-sm font-ui font-semibold uppercase tracking-widest"
                   >
                     Get Started
                   </a>

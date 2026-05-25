@@ -33,7 +33,8 @@ export default function Hero() {
     <section
       ref={ref}
       id="hero"
-      className="relative w-full h-screen min-h-[600px] flex items-center justify-start overflow-hidden grain"
+      className="relative w-full h-screen min-h-[600px] flex items-center justify-start overflow-hidden texture-overlay"
+      style={{ backgroundColor: '#F5F3EE' }}
     >
       {/* ── Video background (hidden on mobile) ── */}
       <motion.div
@@ -45,8 +46,8 @@ export default function Hero() {
           muted
           loop
           playsInline
-          className="w-full h-full object-cover grayscale opacity-70"
-          style={{ filter: 'grayscale(0.6) brightness(0.65) contrast(1.05)' }}
+          className="w-full h-full object-cover"
+          style={{ filter: 'grayscale(0.3) brightness(1.1) contrast(0.9)' }}
         >
           <source src={HERO_VIDEO} type="video/mp4" />
         </video>
@@ -55,31 +56,25 @@ export default function Hero() {
       {/* ── Mobile fallback gradient ── */}
       <div
         className="absolute inset-0 md:hidden"
-        style={{ background: 'linear-gradient(160deg, #0A0A0B 0%, #111213 60%, #0A0A0B 100%)' }}
+        style={{ background: 'linear-gradient(160deg, #F5F3EE 0%, #FAFAF8 60%, #F5F3EE 100%)' }}
       />
 
-      {/* ── Stadium floodlight flare ── */}
+      {/* ── Light editorial vignette ── */}
       <div
         className="absolute inset-0 pointer-events-none"
-        style={{ background: 'radial-gradient(ellipse at top right, rgba(255,220,100,0.06) 0%, transparent 55%)' }}
-      />
-
-      {/* ── Dark gradient vignette over video ── */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{ background: 'linear-gradient(to right, rgba(10,10,11,0.92) 0%, rgba(10,10,11,0.5) 60%, rgba(10,10,11,0.2) 100%)' }}
+        style={{ background: 'linear-gradient(to right, rgba(245, 243, 238, 0.85) 0%, rgba(245, 243, 238, 0.4) 60%, rgba(245, 243, 238, 0) 100%)' }}
       />
 
       {/* ── Content ── */}
       <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 w-full">
         {/* Eyebrow */}
-        <p className="font-mono text-green text-xs tracking-[0.25em] uppercase mb-6 opacity-80">
+        <p className="font-data text-black text-xs tracking-[0.25em] uppercase mb-6 opacity-70">
           British Football Streaming
         </p>
 
         {/* Headline */}
         <motion.h1
-          className="font-display text-[clamp(56px,11vw,144px)] leading-[0.92] text-snow max-w-3xl"
+          className="font-display text-[clamp(56px,11vw,144px)] leading-[0.92] text-black max-w-3xl"
           style={{ letterSpacing: '-0.02em' }}
           variants={containerVariants}
           initial="hidden"
@@ -89,7 +84,7 @@ export default function Hero() {
             <motion.span
               key={i}
               variants={wordVariants}
-              className={`inline-block mr-[0.1em] ${word === 'NO' || word === 'COMPROMISE.' ? 'text-green' : ''}`}
+              className={`inline-block mr-[0.1em] ${word === 'NO' || word === 'COMPROMISE.' ? 'text-accent' : ''}`}
             >
               {word}
             </motion.span>
@@ -104,12 +99,12 @@ export default function Hero() {
             animate="show"
             className="whitespace-nowrap overflow-hidden"
           >
-            <p className="font-mono text-green text-sm md:text-base tracking-wider">
+            <p className="font-data text-black text-sm md:text-base tracking-wider">
               Server connected. Firmware loaded.{' '}
-              <span className="text-snow/70">
+              <span className="text-black/60">
                 {matchName} starting in{' '}
               </span>
-              <span className="text-green font-semibold">
+              <span className="text-accent font-semibold">
                 {hh}:{mm}:{ss}
               </span>
             </p>
@@ -124,21 +119,20 @@ export default function Hero() {
           transition={{ delay: 1.2, duration: 0.4 }}
           className="
             inline-flex items-center gap-2
-            px-8 py-4 rounded-full
-            bg-green text-pitch
-            font-body font-semibold text-sm uppercase tracking-[0.14em]
-            cursor-crosshair
-            transition-[box-shadow]
-            hover:animate-heartbeat
-            focus:outline-none focus-visible:ring-2 focus-visible:ring-green
+            px-8 py-4
+            bg-black text-cream
+            font-ui font-semibold text-sm uppercase tracking-[0.14em]
+            transition-all
+            hover:shadow-editorial
+            focus:outline-none focus-visible:ring-2 focus-visible:ring-black
           "
-          style={{ boxShadow: '0 0 0 0 rgba(170,255,69,0)' }}
+          style={{ boxShadow: '4px 4px 0px rgba(26, 26, 26, 0.3)' }}
           onMouseEnter={e => {
-            e.currentTarget.style.animation = 'none'
-            void e.currentTarget.offsetWidth
-            e.currentTarget.style.animation = 'heartbeat 0.4s ease-out 1'
+            e.currentTarget.style.boxShadow = '8px 8px 0px rgba(26, 26, 26, 0.5)'
           }}
-          onMouseLeave={e => { e.currentTarget.style.animation = '' }}
+          onMouseLeave={e => {
+            e.currentTarget.style.boxShadow = '4px 4px 0px rgba(26, 26, 26, 0.3)'
+          }}
         >
           Get Your Kit
           <span className="text-base leading-none">→</span>
@@ -149,7 +143,7 @@ export default function Hero() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1.5, duration: 0.6 }}
-          className="mt-5 font-body text-sm text-snow/40 tracking-wide"
+          className="mt-5 font-ui text-sm text-black/50 tracking-wide"
         >
           Ships within 48 hours. No contract. Cancel anytime.
         </motion.p>
@@ -162,8 +156,8 @@ export default function Hero() {
         transition={{ delay: 2, duration: 1 }}
         className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
       >
-        <span className="font-mono text-[10px] tracking-[0.2em] text-snow/30 uppercase">Scroll</span>
-        <div className="w-px h-10 bg-gradient-to-b from-green/50 to-transparent" />
+        <span className="font-data text-[10px] tracking-[0.2em] text-black/40 uppercase">Scroll</span>
+        <div className="w-px h-10 bg-gradient-to-b from-black/30 to-transparent" />
       </motion.div>
     </section>
   )

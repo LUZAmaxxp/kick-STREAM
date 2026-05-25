@@ -51,31 +51,31 @@ export default function ProductReveal() {
           viewport={{ once: true, margin: '-80px' }}
           className="relative"
         >
-          {/* Outer glow */}
-          <div className="absolute -inset-4 rounded-2xl" style={{ background: 'radial-gradient(ellipse at center, rgba(170,255,69,0.06) 0%, transparent 70%)' }} />
+          {/* Outer shadow box */}
+          <div className="absolute -inset-4" style={{ background: 'radial-gradient(ellipse at center, rgba(26,26,26,0.08) 0%, transparent 70%)' }} />
 
           {/* TV / monitor bezel */}
-          <div className="relative surface-card rounded-2xl p-3 shadow-2xl">
-            <div className="rounded-xl overflow-hidden aspect-video bg-pitch flex items-center justify-center relative">
+          <div className="relative editorial-box p-3">
+            <div className="overflow-hidden aspect-video bg-cream-light flex items-center justify-center relative">
               {/* Fake match HUD */}
-              <div className="absolute inset-0 bg-gradient-to-br from-[#0d1a0d] via-[#0A0A0B] to-[#0A0A0B]" />
+              <div className="absolute inset-0 bg-gradient-to-br from-[#f0ebe3] via-[#f5f3ee] to-[#f5f3ee]" />
 
               {/* Score bar */}
-              <div className="absolute top-3 left-1/2 -translate-x-1/2 flex items-center gap-3 bg-black/70 rounded px-4 py-1.5">
-                <span className="font-display text-snow text-lg tracking-widest">ARS</span>
-                <span className="font-mono text-green text-xl font-bold">2 — 1</span>
-                <span className="font-display text-snow text-lg tracking-widest">CHE</span>
+              <div className="absolute top-3 left-1/2 -translate-x-1/2 flex items-center gap-3 bg-white/80 px-4 py-1.5 border border-black/10">
+                <span className="font-display text-black text-lg tracking-widest">ARS</span>
+                <span className="font-data text-accent text-xl font-bold">2 — 1</span>
+                <span className="font-display text-black text-lg tracking-widest">CHE</span>
               </div>
 
               {/* LIVE badge */}
-              <div className="absolute top-3 right-3 flex items-center gap-1.5 bg-green rounded px-2 py-0.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-pitch animate-pulse" />
-                <span className="font-mono text-pitch text-[10px] font-bold tracking-widest">LIVE</span>
+              <div className="absolute top-3 right-3 flex items-center gap-1.5 bg-accent px-2 py-0.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-cream animate-pulse" />
+                <span className="font-data text-cream text-[10px] font-bold tracking-widest">LIVE</span>
               </div>
 
               {/* Pitch */}
-              <div className="w-full h-full opacity-10">
-                <svg viewBox="0 0 320 180" className="w-full h-full" fill="none" stroke="white" strokeWidth="1">
+              <div className="w-full h-full opacity-8">
+                <svg viewBox="0 0 320 180" className="w-full h-full" fill="none" stroke="#1A1A1A" strokeWidth="1">
                   <rect x="10" y="10" width="300" height="160"/>
                   <line x1="160" y1="10" x2="160" y2="170"/>
                   <circle cx="160" cy="90" r="28"/>
@@ -87,8 +87,8 @@ export default function ProductReveal() {
               </div>
 
               {/* HD badge */}
-              <div className="absolute bottom-3 left-3 border border-green/40 rounded px-2 py-0.5">
-                <span className="font-mono text-green text-[10px] tracking-widest">4K HD</span>
+              <div className="absolute bottom-3 left-3 border border-black/20 px-2 py-0.5">
+                <span className="font-data text-black text-[10px] tracking-widest">4K HD</span>
               </div>
 
               {/* Waveform */}
@@ -96,7 +96,7 @@ export default function ProductReveal() {
                 {[3,6,4,8,5,10,7,4,9,5,6,3,8,6,4].map((h, i) => (
                   <div
                     key={i}
-                    className="w-0.5 bg-green/60 rounded-full"
+                    className="w-0.5 bg-accent/60 rounded-full"
                     style={{ height: `${h * 2}px`, animationDelay: `${i * 80}ms` }}
                   />
                 ))}
@@ -105,7 +105,7 @@ export default function ProductReveal() {
 
             {/* Stand */}
             <div className="flex justify-center mt-2">
-              <div className="w-16 h-1 rounded-full bg-surface" />
+              <div className="w-16 h-1 bg-black/10" />
             </div>
           </div>
         </motion.div>
@@ -122,14 +122,14 @@ export default function ProductReveal() {
               transition={{ delay: i * 0.12 }}
               className="flex gap-5 items-start"
             >
-              <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-green/10 border border-green/20 flex items-center justify-center text-green">
+              <div className="flex-shrink-0 w-10 h-10 border-rule flex items-center justify-center text-accent">
                 {f.icon}
               </div>
               <div>
-                <h3 className="font-display text-2xl tracking-wider text-snow mb-1">
+                <h3 className="font-display text-2xl tracking-wider text-black mb-1">
                   {f.headline}
                 </h3>
-                <p className="font-body text-sm text-snow/50 leading-relaxed">
+                <p className="font-ui text-sm text-black/60 leading-relaxed">
                   {f.body}
                 </p>
               </div>

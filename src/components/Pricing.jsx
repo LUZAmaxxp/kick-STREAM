@@ -63,26 +63,26 @@ const fadeUp = {
 
 export default function Pricing() {
   return (
-    <section id="pricing" className="py-28 px-6 bg-surface/20">
+    <section id="pricing" className="py-28 px-6" style={{ backgroundColor: '#F5F3EE' }}>
       <div className="max-w-7xl mx-auto">
 
         <motion.p
           variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }}
-          className="font-mono text-green text-xs tracking-[0.25em] uppercase mb-4"
+          className="font-data text-black text-xs tracking-[0.25em] uppercase mb-4 opacity-60"
         >
           Pricing
         </motion.p>
         <motion.h2
           variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }}
           transition={{ delay: 0.1 }}
-          className="font-display text-[clamp(40px,6vw,72px)] text-snow mb-4 leading-none"
+          className="font-display text-[clamp(40px,6vw,72px)] text-black mb-4 leading-none"
         >
           ONE PRICE. EVERY MATCH.
         </motion.h2>
         <motion.p
           variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }}
           transition={{ delay: 0.15 }}
-          className="font-body text-sm text-snow/40 mb-16 max-w-md"
+          className="font-ui text-sm text-black/60 mb-16 max-w-md"
         >
           No blackouts. No upsells. No broadcaster telling you which games you're allowed to watch.
         </motion.p>
@@ -96,26 +96,26 @@ export default function Pricing() {
               whileInView="show"
               viewport={{ once: true, margin: '-60px' }}
               transition={{ delay: i * 0.12 }}
-              className={`relative surface-card p-8 flex flex-col gap-6 ${plan.popular ? 'md:-translate-y-4 animate-breathe' : ''}`}
-              style={plan.popular ? { boxShadow: '0 0 40px rgba(170,255,69,0.12), 0 0 0 1px rgba(170,255,69,0.25)' } : {}}
+              className={`relative editorial-box p-8 flex flex-col gap-6 ${plan.popular ? 'md:-translate-y-4' : ''}`}
+              style={plan.popular ? { boxShadow: '8px 8px 0px rgba(26, 26, 26, 0.4)' } : { boxShadow: '4px 4px 0px rgba(26, 26, 26, 0.2)' }}
             >
               {/* MOST POPULAR badge */}
               {plan.popular && (
-                <div className="absolute -top-3 right-6 bg-green text-pitch font-mono text-[10px] tracking-[0.2em] uppercase px-3 py-1 rounded-full font-semibold">
+                <div className="absolute -top-4 right-6 bg-accent text-cream font-data text-[10px] tracking-[0.2em] uppercase px-3 py-1 font-semibold border border-black">
                   MOST POPULAR
                 </div>
               )}
 
               {/* Plan name */}
               <div>
-                <p className="font-mono text-[11px] tracking-[0.2em] text-snow/40 uppercase mb-2">{plan.name}</p>
+                <p className="font-data text-[11px] tracking-[0.2em] text-black/50 uppercase mb-2">{plan.name}</p>
                 <div className="flex items-end gap-1">
-                  <span className="font-display text-[64px] leading-none text-snow" style={{ letterSpacing: '-0.03em' }}>
+                  <span className="font-display text-[64px] leading-none text-black" style={{ letterSpacing: '-0.03em' }}>
                     {plan.price}
                   </span>
-                  <span className="font-body text-sm text-snow/40 mb-2">{plan.period}</span>
+                  <span className="font-ui text-sm text-black/50 mb-2">{plan.period}</span>
                 </div>
-                <p className="font-body text-sm text-snow/50 leading-relaxed mt-2">{plan.description}</p>
+                <p className="font-ui text-sm text-black/70 leading-relaxed mt-2">{plan.description}</p>
               </div>
 
               {/* Features */}
@@ -123,9 +123,9 @@ export default function Pricing() {
                 {plan.features.map((feat, fi) => (
                   <li key={fi} className="flex items-center gap-3">
                     <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                      <path d="M2 7l3.5 3.5L12 3" stroke="#AAFF45" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path d="M2 7l3.5 3.5L12 3" stroke="#E8714F" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
-                    <span className="font-body text-sm text-snow/70">{feat}</span>
+                    <span className="font-ui text-sm text-black/80">{feat}</span>
                   </li>
                 ))}
               </ul>
@@ -134,10 +134,10 @@ export default function Pricing() {
               <a
                 href="#"
                 className={`
-                  mt-auto text-center py-3.5 rounded-full text-sm font-body font-semibold uppercase tracking-[0.12em] transition-all
-                  ${plan.ctaStyle === 'border'      ? 'border border-snow/20 text-snow/70 hover:border-snow/50 hover:text-snow' : ''}
-                  ${plan.ctaStyle === 'solid-green' ? 'bg-green text-pitch hover:brightness-110 cursor-crosshair' : ''}
-                  ${plan.ctaStyle === 'solid-white' ? 'bg-snow text-pitch hover:brightness-95' : ''}
+                  mt-auto text-center py-3.5 text-sm font-ui font-semibold uppercase tracking-[0.12em] transition-all
+                  ${plan.ctaStyle === 'border'      ? 'border-rule text-black/70 hover:text-black hover:bg-cream' : ''}
+                  ${plan.ctaStyle === 'solid-green' ? 'bg-accent text-cream hover:bg-accent' : ''}
+                  ${plan.ctaStyle === 'solid-white' ? 'bg-black text-cream hover:bg-black-light' : ''}
                 `}
               >
                 {plan.cta}

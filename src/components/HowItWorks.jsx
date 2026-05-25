@@ -25,19 +25,19 @@ const fadeUp = {
 
 export default function HowItWorks() {
   return (
-    <section id="how-it-works" className="py-28 px-6 bg-surface/30">
+    <section id="how-it-works" className="py-28 px-6" style={{ backgroundColor: '#F5F3EE' }}>
       <div className="max-w-7xl mx-auto">
         {/* Section label */}
         <motion.p
           variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }}
-          className="font-mono text-green text-xs tracking-[0.25em] uppercase mb-4"
+          className="font-data text-black text-xs tracking-[0.25em] uppercase mb-4 opacity-60"
         >
           How It Works
         </motion.p>
         <motion.h2
           variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }}
           transition={{ delay: 0.1 }}
-          className="font-display text-[clamp(40px,6vw,72px)] text-snow mb-16 leading-none"
+          className="font-display text-[clamp(40px,6vw,72px)] text-black mb-16 leading-none"
         >
           THREE STEPS TO EVERY MATCH.
         </motion.h2>
@@ -59,16 +59,16 @@ export default function HowItWorks() {
                 {/* Step number */}
                 <span
                   className="font-display text-[80px] md:text-[96px] leading-none"
-                  style={{ color: 'rgba(170,255,69,0.15)', letterSpacing: '-0.04em' }}
+                  style={{ color: 'rgba(26,26,26,0.08)', letterSpacing: '-0.04em' }}
                 >
                   {step.num}
                 </span>
 
                 <div>
-                  <h3 className="font-display text-2xl md:text-3xl text-snow tracking-wider mb-2">
+                  <h3 className="font-display text-2xl md:text-3xl text-black tracking-wider mb-2">
                     {step.headline}
                   </h3>
-                  <p className="font-body text-sm text-snow/50 leading-relaxed max-w-xs">
+                  <p className="font-ui text-sm text-black/60 leading-relaxed max-w-xs">
                     {step.body}
                   </p>
                 </div>
@@ -80,12 +80,12 @@ export default function HowItWorks() {
                   {/* Vertical on mobile */}
                   <div
                     className="block md:hidden w-px h-12 ml-[2px] mt-1"
-                    style={{ background: 'repeating-linear-gradient(to bottom, rgba(170,255,69,0.5) 0px, rgba(170,255,69,0.5) 4px, transparent 4px, transparent 10px)' }}
+                    style={{ background: 'repeating-linear-gradient(to bottom, rgba(26,26,26,0.4) 0px, rgba(26,26,26,0.4) 4px, transparent 4px, transparent 10px)' }}
                   />
                   {/* Horizontal on desktop */}
                   <div
                     className="hidden md:block h-px w-12 flex-shrink-0"
-                    style={{ background: 'repeating-linear-gradient(to right, rgba(170,255,69,0.5) 0px, rgba(170,255,69,0.5) 4px, transparent 4px, transparent 10px)' }}
+                    style={{ background: 'repeating-linear-gradient(to right, rgba(26,26,26,0.4) 0px, rgba(26,26,26,0.4) 4px, transparent 4px, transparent 10px)' }}
                   />
                 </div>
               )}

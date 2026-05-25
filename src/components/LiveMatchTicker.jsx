@@ -23,9 +23,9 @@ function Badge({ url, name }) {
   return (
     <div
       className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0"
-      style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)' }}
+      style={{ background: 'rgba(26,26,26,0.08)', border: '1px solid rgba(26,26,26,0.15)' }}
     >
-      <span className="font-mono text-[10px] font-semibold text-snow/70">{initials}</span>
+      <span className="font-data text-[10px] font-semibold text-black/60">{initials}</span>
     </div>
   )
 }
@@ -33,24 +33,24 @@ function Badge({ url, name }) {
 /* ─── Status badge ────────────────────────────────────────── */
 function StatusBadge({ code, label }) {
   if (code === 'LIVE') return (
-    <span className="flex items-center gap-1.5 bg-green rounded px-2 py-0.5 flex-shrink-0">
-      <span className="w-1.5 h-1.5 rounded-full bg-pitch animate-pulse" />
-      <span className="font-mono text-pitch text-[10px] font-bold tracking-widest">{label}</span>
+    <span className="flex items-center gap-1.5 bg-accent px-2 py-0.5 flex-shrink-0">
+      <span className="w-1.5 h-1.5 rounded-full bg-cream animate-pulse" />
+      <span className="font-data text-cream text-[10px] font-bold tracking-widest">{label}</span>
     </span>
   )
   if (code === 'HT') return (
-    <span className="border border-snow/30 rounded px-2 py-0.5 flex-shrink-0">
-      <span className="font-mono text-snow/60 text-[10px] tracking-widest">HT</span>
+    <span className="border px-2 py-0.5 flex-shrink-0" style={{ borderColor: 'rgba(26,26,26,0.3)' }}>
+      <span className="font-data text-black/60 text-[10px] tracking-widest">HT</span>
     </span>
   )
   if (code === 'FT') return (
-    <span className="border border-snow/10 rounded px-2 py-0.5 flex-shrink-0">
-      <span className="font-mono text-snow/30 text-[10px] tracking-widest">FT</span>
+    <span className="border px-2 py-0.5 flex-shrink-0" style={{ borderColor: 'rgba(26,26,26,0.1)' }}>
+      <span className="font-data text-black/30 text-[10px] tracking-widest">FT</span>
     </span>
   )
   return (
-    <span className="border border-snow/10 rounded px-2 py-0.5 flex-shrink-0 max-w-[130px]">
-      <span className="font-mono text-snow/40 text-[9px] tracking-wide truncate block">{label}</span>
+    <span className="border px-2 py-0.5 flex-shrink-0 max-w-[130px]" style={{ borderColor: 'rgba(26,26,26,0.15)' }}>
+      <span className="font-data text-black/40 text-[9px] tracking-wide truncate block">{label}</span>
     </span>
   )
 }
@@ -63,11 +63,11 @@ function MatchRow({ match }) {
 
   return (
     <div
-      className="relative flex items-center gap-3 md:gap-4 px-4 md:px-6 py-4 rounded-xl transition-colors cursor-default"
+      className="relative flex items-center gap-3 md:gap-4 px-4 md:px-6 py-4 transition-colors cursor-default"
       style={{
-        background:  hovered ? 'rgba(170,255,69,0.04)' : 'transparent',
+        background:  hovered ? 'rgba(232, 113, 79, 0.04)' : 'transparent',
         border:      '1px solid',
-        borderColor: hovered ? 'rgba(170,255,69,0.18)' : 'rgba(255,255,255,0.05)',
+        borderColor: hovered ? 'rgba(232, 113, 79, 0.15)' : 'rgba(26,26,26,0.08)',
       }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
@@ -75,7 +75,7 @@ function MatchRow({ match }) {
       {/* Home */}
       <div className="flex items-center gap-2 flex-1 min-w-0">
         <Badge url={match.homeBadge} name={match.home} />
-        <span className={`font-body text-sm truncate ${isLive ? 'text-snow' : 'text-snow/70'}`}>
+        <span className={`font-ui text-sm truncate ${isLive ? 'text-black' : 'text-black/60'}`}>
           {match.home}
         </span>
       </div>
@@ -84,19 +84,19 @@ function MatchRow({ match }) {
       <div className="flex flex-col items-center gap-1 flex-shrink-0 w-36">
         {hasScore ? (
           <div className="flex items-center gap-2">
-            <span className="font-display text-2xl text-snow">{match.homeScore}</span>
-            <span className="font-mono text-snow/30 text-sm">—</span>
-            <span className="font-display text-2xl text-snow">{match.awayScore}</span>
+            <span className="font-display text-2xl text-black">{match.homeScore}</span>
+            <span className="font-data text-black/30 text-sm">—</span>
+            <span className="font-display text-2xl text-black">{match.awayScore}</span>
           </div>
         ) : (
-          <span className="font-display text-xl text-snow/30">vs</span>
+          <span className="font-display text-xl text-black/30">vs</span>
         )}
         <StatusBadge code={match.statusCode} label={match.statusLabel} />
       </div>
 
       {/* Away */}
       <div className="flex items-center gap-2 flex-1 min-w-0 justify-end">
-        <span className={`font-body text-sm truncate text-right ${isLive ? 'text-snow' : 'text-snow/70'}`}>
+        <span className={`font-ui text-sm truncate text-right ${isLive ? 'text-black' : 'text-black/60'}`}>
           {match.away}
         </span>
         <Badge url={match.awayBadge} name={match.away} />
@@ -107,12 +107,12 @@ function MatchRow({ match }) {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="absolute inset-0 rounded-xl flex items-center justify-center pointer-events-none"
-          style={{ background: 'rgba(10,10,11,0.85)' }}
+          className="absolute inset-0 flex items-center justify-center pointer-events-none"
+          style={{ background: 'rgba(245, 243, 238, 0.85)' }}
         >
           <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-green animate-pulse" />
-            <span className="font-mono text-green text-xs tracking-[0.2em] uppercase">
+            <span className="w-2 h-2 rounded-full bg-accent animate-pulse" />
+            <span className="font-data text-accent text-xs tracking-[0.2em] uppercase">
               Streaming Now on KickStream
             </span>
           </div>
@@ -125,18 +125,18 @@ function MatchRow({ match }) {
 /* ─── Loading skeleton ────────────────────────────────────── */
 function SkeletonRow() {
   return (
-    <div className="flex items-center gap-4 px-6 py-4 rounded-xl" style={{ border: '1px solid rgba(255,255,255,0.04)' }}>
+    <div className="flex items-center gap-4 px-6 py-4" style={{ border: '1px solid rgba(26,26,26,0.08)' }}>
       <div className="flex items-center gap-2 flex-1">
-        <div className="w-8 h-8 rounded-full bg-surface animate-pulse" />
-        <div className="h-3 w-28 rounded bg-surface animate-pulse" />
+        <div className="w-8 h-8 rounded-full bg-black/10 animate-pulse" />
+        <div className="h-3 w-28 rounded bg-black/10 animate-pulse" />
       </div>
       <div className="flex flex-col items-center gap-2 w-36">
-        <div className="h-5 w-14 rounded bg-surface animate-pulse" />
-        <div className="h-3 w-10 rounded bg-surface animate-pulse" />
+        <div className="h-5 w-14 rounded bg-black/10 animate-pulse" />
+        <div className="h-3 w-10 rounded bg-black/10 animate-pulse" />
       </div>
       <div className="flex items-center gap-2 flex-1 justify-end">
-        <div className="h-3 w-28 rounded bg-surface animate-pulse" />
-        <div className="w-8 h-8 rounded-full bg-surface animate-pulse" />
+        <div className="h-3 w-28 rounded bg-black/10 animate-pulse" />
+        <div className="w-8 h-8 rounded-full bg-black/10 animate-pulse" />
       </div>
     </div>
   )
@@ -154,7 +154,7 @@ export default function LiveMatchTicker() {
   const hasAnyLive = liveCount > 0
 
   return (
-    <section className="py-28 px-6" style={{ background: '#08080A' }}>
+    <section className="py-28 px-6" style={{ backgroundColor: '#F5F3EE' }}>
       <div className="max-w-5xl mx-auto">
 
         {/* Headline */}
@@ -162,17 +162,17 @@ export default function LiveMatchTicker() {
           variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }}
           className="mb-16"
         >
-          <p className="font-mono text-green text-xs tracking-[0.25em] uppercase mb-4">
+          <p className="font-data text-black text-xs tracking-[0.25em] uppercase mb-4 opacity-60">
             Right Now
           </p>
           <h2
-            className="font-display text-[clamp(48px,8vw,96px)] leading-none text-snow"
+            className="font-display text-[clamp(48px,8vw,96px)] leading-none text-black"
             style={{ letterSpacing: '-0.02em' }}
           >
             THIS IS WHAT<br />
-            <span className="text-green">YOU'RE MISSING.</span>
+            <span className="text-accent">YOU'RE MISSING.</span>
           </h2>
-          <p className="font-body text-sm text-snow/40 mt-4 max-w-sm">
+          <p className="font-ui text-sm text-black/60 mt-4 max-w-sm">
             Live Premier League fixtures — real data, real scores, updated every minute.
           </p>
         </motion.div>
@@ -184,23 +184,23 @@ export default function LiveMatchTicker() {
           whileInView="show"
           viewport={{ once: true, margin: '-80px' }}
           transition={{ delay: 0.2 }}
-          className="surface-card rounded-2xl overflow-hidden"
+          className="editorial-box overflow-hidden"
         >
           {/* Board header */}
           <div
             className="flex items-center justify-between px-6 py-3 border-b"
-            style={{ borderColor: 'rgba(255,255,255,0.06)', background: 'rgba(255,255,255,0.02)' }}
+            style={{ borderColor: 'rgba(26,26,26,0.15)', background: 'rgba(26,26,26,0.02)' }}
           >
-            <span className="font-mono text-[11px] tracking-[0.2em] text-snow/40 uppercase">
+            <span className="font-data text-[11px] tracking-[0.2em] text-black/60 uppercase">
               Premier League{round ? ` — Matchday ${round}` : ''}
             </span>
             {hasAnyLive ? (
               <div className="flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-green animate-pulse" />
-                <span className="font-mono text-green text-[10px] tracking-widest">{liveCount} LIVE</span>
+                <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
+                <span className="font-data text-accent text-[10px] tracking-widest">{liveCount} LIVE</span>
               </div>
             ) : (
-              <span className="font-mono text-snow/25 text-[10px] tracking-widest uppercase">Real Data</span>
+              <span className="font-data text-black/40 text-[10px] tracking-widest uppercase">Real Data</span>
             )}
           </div>
 
@@ -208,12 +208,12 @@ export default function LiveMatchTicker() {
           <div className="flex flex-col gap-1 p-3">
             {loading && Array.from({ length: 6 }).map((_, i) => <SkeletonRow key={i} />)}
             {error && !loading && (
-              <p className="py-10 text-center font-mono text-snow/25 text-xs tracking-widest uppercase">
+              <p className="py-10 text-center font-data text-black/30 text-xs tracking-widest uppercase">
                 Could not load fixtures
               </p>
             )}
             {!loading && !error && matches.length === 0 && (
-              <p className="py-10 text-center font-mono text-snow/25 text-xs tracking-widest uppercase">
+              <p className="py-10 text-center font-data text-black/30 text-xs tracking-widest uppercase">
                 No fixtures available
               </p>
             )}
@@ -231,7 +231,7 @@ export default function LiveMatchTicker() {
         >
           <a
             href="#pricing"
-            className="px-8 py-4 rounded-full bg-green text-pitch font-body font-semibold text-sm uppercase tracking-[0.14em] hover:brightness-110 transition cursor-crosshair"
+            className="px-8 py-4 bg-black text-cream font-ui font-semibold text-sm uppercase tracking-[0.14em] hover:bg-black-light transition"
           >
             Get Your Kit Now →
           </a>

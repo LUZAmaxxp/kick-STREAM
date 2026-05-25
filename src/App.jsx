@@ -27,11 +27,11 @@ export default function App() {
   }, [])
 
   return (
-    <div className="bg-pitch text-snow overflow-x-hidden">
+    <div className="overflow-x-hidden" style={{ backgroundColor: '#F5F3EE', color: '#1A1A1A' }}>
       {/* Scroll progress bar */}
       <div
-        className="fixed top-0 left-0 z-[60] h-[2px] bg-green transition-none"
-        style={{ width: `${scrollPct}%` }}
+        className="fixed top-0 left-0 z-[60] h-[2px] transition-none"
+        style={{ width: `${scrollPct}%`, backgroundColor: '#E8714F' }}
       />
 
       <Nav />
