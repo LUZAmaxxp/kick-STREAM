@@ -52,8 +52,7 @@ export default function App() {
 
               <Nav />
               <Hero />
-
-              <Suspense fallback={null}>
+                <Suspense fallback={null}>
                 <TrustBar />
                 <ProductReveal />
                 <HowItWorks />
@@ -62,8 +61,7 @@ export default function App() {
                 <Testimonials />
                 <LiveMatchTicker />
                 <FAQ />
-                <ContactAdmin /> {/* Retained from main branch */}
-                <FinalCTA /> {/* Moved from top to follow FAQ as in kickstream-redesign structure, but before Footer */}
+                <ContactAdmin /> 
                 <Footer />
               </Suspense>
             </div>
