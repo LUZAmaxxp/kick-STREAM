@@ -2,51 +2,59 @@ import { motion } from 'framer-motion'
 
 const PLANS = [
   {
-    id: 'monthly',
-    name: 'Monthly',
-    price: '$9',
+    id: 'terrace',
+    name: 'TERRACE',
+    price: '£9',
     period: '/mo',
-    description: 'Unlimited access to every match for 30 days. Cancel anytime.',
+    description: 'For the casual supporter who wants a reliable stream without the commitment.',
     features: [
-      'All Premier League matches',
-      'HD streaming',
-      'Watch on any device',
-      'No blackouts or region locks',
+      'Single device',
+      'HD 1080p quality',
+      'All Premier League fixtures',
+      'Standard latency (< 8s)',
+      'Email support',
     ],
-    cta: 'Get Monthly',
+    cta: 'Get Terrace',
+    ctaStyle: 'border',
     popular: false,
   },
   {
     id: 'season',
-    name: 'Season Pass',
-    price: '$49',
-    period: '/season',
-    description: 'Best value. Every match, all season long. One payment.',
+    name: 'SEASON TICKET',
+    price: '£69',
+    period: '/yr',
+    description: 'The fan choice. Best value, best performance, best experience.',
     features: [
-      'All Premier League matches',
-      'HD streaming',
-      'Watch on any device',
-      'No blackouts or region locks',
-      'Priority support',
+      'Two devices',
+      '4K Ultra HD',
+      'All fixtures inc. FA Cup & EFL',
+      'Sub 3-second latency',
+      'Priority 24/7 support',
+      'Firmware auto-updates',
     ],
-    cta: 'Get Season Pass',
+    cta: 'Get Season Ticket',
+    ctaStyle: 'solid-green',
     popular: true,
   },
   {
-    id: 'weekend',
-    name: 'Weekend',
-    price: '$4',
-    period: '/wknd',
-    description: 'Perfect for catching all the action this weekend only.',
+    id: 'boardroom',
+    name: 'BOARDROOM',
+    price: '£149',
+    period: '/yr',
+    description: 'For the household that argues over the remote. Four devices, zero compromises.',
     features: [
-      'All Premier League matches',
-      'HD streaming',
-      'Watch on any device',
+      'Four devices simultaneously',
+      '4K Ultra HD',
+      'All competitions + International',
+      'Sub 3-second latency',
+      'Dedicated account manager',
+      'Priority shipping',
     ],
-    cta: 'Get Weekend',
+    cta: 'Get Boardroom',
+    ctaStyle: 'solid-white',
     popular: false,
   },
-];
+]
 
 const fadeUp = {
   hidden: { opacity: 0, y: 32 },
@@ -57,6 +65,7 @@ export default function Pricing() {
   return (
     <section id="pricing" className="py-28 px-6" style={{ backgroundColor: '#F5F3EE' }}>
       <div className="max-w-7xl mx-auto">
+
         <motion.p
           variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }}
           className="font-data text-black text-xs tracking-[0.25em] uppercase mb-4 opacity-60"
@@ -77,6 +86,7 @@ export default function Pricing() {
         >
           No blackouts. No upsells. No broadcaster telling you which games you're allowed to watch.
         </motion.p>
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
           {PLANS.map((plan, i) => (
             <motion.div
@@ -95,6 +105,7 @@ export default function Pricing() {
                   MOST POPULAR
                 </div>
               )}
+
               {/* Plan name */}
               <div>
                 <p className="font-data text-[11px] tracking-[0.2em] text-black/50 uppercase mb-2">{plan.name}</p>
@@ -106,6 +117,7 @@ export default function Pricing() {
                 </div>
                 <p className="font-ui text-sm text-black/70 leading-relaxed mt-2">{plan.description}</p>
               </div>
+
               {/* Features */}
               <ul className="flex flex-col gap-3">
                 {plan.features.map((feat, fi) => (
@@ -117,11 +129,10 @@ export default function Pricing() {
                   </li>
                 ))}
               </ul>
+
               {/* CTA */}
               <a
-                href={`https://wa.me/212631604905?text=${encodeURIComponent(`Hi, I'm interested in the ${plan.name} plan.`)}`}
-                target="_blank"
-                rel="noopener noreferrer"
+                href="#"
                 className={`
                   mt-auto text-center py-3.5 text-sm font-ui font-semibold uppercase tracking-[0.12em] transition-all
                   ${plan.ctaStyle === 'border'      ? 'border-rule text-black/70 hover:text-black hover:bg-cream' : ''}
@@ -134,7 +145,8 @@ export default function Pricing() {
             </motion.div>
           ))}
         </div>
+
       </div>
     </section>
-  );
+  )
 }

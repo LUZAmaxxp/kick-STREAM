@@ -41,8 +41,10 @@ export default function HowItWorks() {
         >
           THREE STEPS TO EVERY MATCH.
         </motion.h2>
+
         {/* Steps */}
         <div className="relative flex flex-col md:flex-row items-start gap-0 md:gap-0">
+
           {STEPS.map((step, i) => (
             <div key={i} className="flex flex-col md:flex-row flex-1 items-start md:items-stretch">
               {/* Step card */}
@@ -61,6 +63,7 @@ export default function HowItWorks() {
                 >
                   {step.num}
                 </span>
+
                 <div>
                   <h3 className="font-display text-2xl md:text-3xl text-black tracking-wider mb-2">
                     {step.headline}
@@ -70,6 +73,7 @@ export default function HowItWorks() {
                   </p>
                 </div>
               </motion.div>
+
               {/* Connector — hidden after last step */}
               {i < STEPS.length - 1 && (
                 <div className="flex flex-col md:flex-row items-center justify-center px-0 md:px-2 py-0 md:py-12">

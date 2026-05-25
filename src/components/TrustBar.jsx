@@ -19,7 +19,7 @@ export default function TrustBar() {
       style={{ backgroundColor: '#F5F3EE', borderTop: '2px solid #1A1A1A', borderBottom: '2px solid #1A1A1A' }}
     >
       <div
-        className="flex whitespace-nowrap py-3 animate-marquee"
+        className="flex whitespace-nowrap py-4 animate-marquee"
         style={{ animationPlayState: 'running' }}
         onMouseEnter={e => { e.currentTarget.style.animationPlayState = 'paused' }}
         onMouseLeave={e => { e.currentTarget.style.animationPlayState = 'running' }}

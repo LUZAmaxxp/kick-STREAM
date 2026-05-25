@@ -18,9 +18,9 @@ export default function AdminAnalytics() {
   const total = events.length;
 
   const barColor = (pct) => {
-    if (pct > 0.7) return '#AAFF45';
-    if (pct > 0.4) return '#FFB347';
-    return '#5B9EFF';
+    if (pct > 0.7) return '#E8714F';
+    if (pct > 0.4) return '#1A1A1A';
+    return '#E8714F';
   };
 
   return (
@@ -92,46 +92,47 @@ export default function AdminAnalytics() {
 
 const styles = {
   root: {
-    fontFamily: "'JetBrains Mono', monospace",
-    color: '#F2F0E8',
+    fontFamily: "'DM Sans', sans-serif",
+    color: '#1A1A1A',
     display: 'flex', flexDirection: 'column',
   },
   header: {
     display: 'flex', alignItems: 'center', justifyContent: 'space-between',
     padding: '14px 20px',
-    borderBottom: '1px solid rgba(255,255,255,0.06)',
+    borderBottom: '2px solid #1A1A1A',
   },
   headerLeft: { display: 'flex', alignItems: 'center', gap: 8 },
-  panelTitle: { fontSize: 11, fontWeight: 700, letterSpacing: '0.16em', color: '#F2F0E8' },
+  panelTitle: { fontSize: 11, fontWeight: 700, letterSpacing: '0.16em', color: '#1A1A1A', textTransform: 'uppercase' },
   badge: {
     fontSize: 10, fontWeight: 600,
-    background: 'rgba(255,179,71,0.1)',
-    color: '#FFB347', border: '1px solid rgba(255,179,71,0.2)',
-    borderRadius: 4, padding: '1px 7px',
+    background: 'transparent',
+    color: '#E8714F', border: '2px solid #E8714F',
+    borderRadius: 0, padding: '1px 7px',
   },
   liveTag: {
     display: 'flex', alignItems: 'center', gap: 5,
     fontSize: 10, letterSpacing: '0.1em',
-    color: 'rgba(242,240,232,0.3)',
+    color: 'rgba(26,26,26,0.5)',
+    fontFamily: "'Courier Prime', monospace",
   },
   liveDot: {
     display: 'inline-block',
     width: 5, height: 5, borderRadius: '50%',
-    background: '#FFB347',
+    background: '#E8714F',
   },
   summaryRow: {
     display: 'flex', gap: 0,
-    borderBottom: '1px solid rgba(255,255,255,0.06)',
+    borderBottom: '1px solid rgba(26,26,26,0.1)',
   },
   chip: {
     flex: 1, padding: '12px 16px',
-    borderRight: '1px solid rgba(255,255,255,0.06)',
+    borderRight: '1px solid rgba(26,26,26,0.1)',
     display: 'flex', flexDirection: 'column', gap: 4,
   },
-  chipLabel: { fontSize: 9, letterSpacing: '0.14em', color: 'rgba(242,240,232,0.3)' },
+  chipLabel: { fontSize: 9, letterSpacing: '0.14em', color: 'rgba(26,26,26,0.4)', fontFamily: "'Courier Prime', monospace" },
   chipValue: (color) => ({
     fontSize: 16, fontWeight: 700,
-    fontFamily: "'Syne', sans-serif",
+    fontFamily: "'Anton', sans-serif",
     color, letterSpacing: '-0.01em',
   }),
   chartArea: {
@@ -140,7 +141,7 @@ const styles = {
   },
   emptyState: {
     padding: '24px 0',
-    fontSize: 12, color: 'rgba(242,240,232,0.3)',
+    fontSize: 12, color: 'rgba(26,26,26,0.4)',
     textAlign: 'center',
   },
   barRow: {
@@ -148,22 +149,22 @@ const styles = {
   },
   barLabel: {
     width: 140, fontSize: 11,
-    color: 'rgba(242,240,232,0.7)',
+    color: 'rgba(26,26,26,0.7)',
     whiteSpace: 'nowrap', overflow: 'hidden',
     textOverflow: 'ellipsis', flexShrink: 0,
   },
   barTrack: {
     flex: 1, height: 6,
-    background: 'rgba(255,255,255,0.06)',
-    borderRadius: 3, overflow: 'hidden',
+    background: 'rgba(26,26,26,0.08)',
+    borderRadius: 0, overflow: 'hidden',
   },
   barFill: (pct, color) => ({
     height: '100%',
     width: `${pct * 100}%`,
     background: color,
-    borderRadius: 3,
+    borderRadius: 0,
     transition: 'width 0.6s cubic-bezier(0.4,0,0.2,1)',
-    boxShadow: `0 0 8px ${color}60`,
+    boxShadow: `0 0 8px ${color}40`,
   }),
   barCount: (color) => ({
     width: 28, textAlign: 'right',

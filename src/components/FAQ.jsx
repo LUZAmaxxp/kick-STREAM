@@ -26,6 +26,7 @@ const QUESTIONS = [
 
 function AccordionItem({ item, isOpen, onToggle }) {
   const contentRef = useRef(null)
+
   return (
     <div className="border-b" style={{ borderColor: 'rgba(26,26,26,0.1)' }}>
       <button
@@ -45,6 +46,7 @@ function AccordionItem({ item, isOpen, onToggle }) {
           </svg>
         </span>
       </button>
+
       <AnimatePresence initial={false}>
         {isOpen && (
           <motion.div
