@@ -5,7 +5,7 @@ import { useNextKickoff } from '../hooks/useNextKickoff'
 // Pexels free stadium floodlights video (CC0)
 const HERO_VIDEO = 'src/assets/13433792_3840_2160_30fps.mp4'
 
-const HEADLINE = ['EVERY', 'MATCH.', 'YOUR', 'SERVER.', 'NO', 'COMPROMISE.']
+const HEADLINE = ['THE', 'MATCH', 'STARTS', 'WITH', 'OR', 'WITHOUT', 'YOU.']
 
 const containerVariants = {
   hidden: {},
@@ -83,7 +83,7 @@ export default function Hero() {
             <motion.span
               key={i}
               variants={wordVariants}
-              className={`inline-block mr-[0.1em] ${word === 'NO' || word === 'COMPROMISE.' ? 'text-accent' : ''}`}
+              className={`inline-block mr-[0.1em] ${word === 'YOU.' ? 'text-accent' : ''}`}
             >
               {word}
             </motion.span>
