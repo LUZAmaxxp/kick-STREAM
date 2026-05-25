@@ -25,19 +25,19 @@ const fadeUp = {
 
 export default function HowItWorks() {
   return (
-    <section id="how-it-works" className="py-24 px-6 bg-[#FFF] border-b-2 border-[#1A1A1A]" style={{ borderRadius: 0 }}>
+    <section id="how-it-works" className="py-28 px-6" style={{ backgroundColor: '#F5F3EE' }}>
       <div className="max-w-7xl mx-auto">
         {/* Section label */}
         <motion.p
           variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }}
-          className="font-mono text-[#00A651] text-xs tracking-[0.25em] uppercase mb-4"
+          className="font-data text-black text-xs tracking-[0.25em] uppercase mb-4 opacity-60"
         >
           How It Works
         </motion.p>
         <motion.h2
           variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }}
           transition={{ delay: 0.1 }}
-          className="font-anton text-[clamp(40px,6vw,72px)] text-[#1A1A1A] mb-16 leading-none uppercase"
+          className="font-display text-[clamp(40px,6vw,72px)] text-black mb-16 leading-none"
         >
           THREE STEPS TO EVERY MATCH.
         </motion.h2>
@@ -56,16 +56,16 @@ export default function HowItWorks() {
               >
                 {/* Step number */}
                 <span
-                  className="font-anton text-[80px] md:text-[96px] leading-none text-[#E4E1D8]"
-                  style={{ letterSpacing: '-0.04em' }}
+                  className="font-display text-[80px] md:text-[96px] leading-none"
+                  style={{ color: 'rgba(26,26,26,0.08)', letterSpacing: '-0.04em' }}
                 >
                   {step.num}
                 </span>
                 <div>
-                  <h3 className="font-anton text-2xl md:text-3xl text-[#1A1A1A] tracking-tight mb-2 uppercase">
+                  <h3 className="font-display text-2xl md:text-3xl text-black tracking-wider mb-2">
                     {step.headline}
                   </h3>
-                  <p className="font-dmsans text-[15px] text-[#4A4A44] leading-relaxed max-w-xs">
+                  <p className="font-ui text-sm text-black/60 leading-relaxed max-w-xs">
                     {step.body}
                   </p>
                 </div>
@@ -75,11 +75,13 @@ export default function HowItWorks() {
                 <div className="flex flex-col md:flex-row items-center justify-center px-0 md:px-2 py-0 md:py-12">
                   {/* Vertical on mobile */}
                   <div
-                    className="block md:hidden w-px h-12 ml-[2px] mt-1 bg-[#1A1A1A]"
+                    className="block md:hidden w-px h-12 ml-[2px] mt-1"
+                    style={{ background: 'repeating-linear-gradient(to bottom, rgba(26,26,26,0.4) 0px, rgba(26,26,26,0.4) 4px, transparent 4px, transparent 10px)' }}
                   />
                   {/* Horizontal on desktop */}
                   <div
-                    className="hidden md:block h-px w-12 flex-shrink-0 bg-[#1A1A1A]"
+                    className="hidden md:block h-px w-12 flex-shrink-0"
+                    style={{ background: 'repeating-linear-gradient(to right, rgba(26,26,26,0.4) 0px, rgba(26,26,26,0.4) 4px, transparent 4px, transparent 10px)' }}
                   />
                 </div>
               )}

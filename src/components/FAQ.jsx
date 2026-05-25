@@ -27,21 +27,21 @@ const QUESTIONS = [
 function AccordionItem({ item, isOpen, onToggle }) {
   const contentRef = useRef(null)
   return (
-    <div className="border-b-2 border-[#1A1A1A] bg-[#F5F3EE]" style={{ borderRadius: 0 }}>
+    <div className="border-b" style={{ borderColor: 'rgba(26,26,26,0.1)' }}>
       <button
         className="w-full flex items-center justify-between py-6 text-left group"
         onClick={onToggle}
         aria-expanded={isOpen}
       >
-        <span className="font-anton text-[17px] md:text-[20px] text-[#1A1A1A] group-hover:text-[#00A651] transition-colors pr-8 uppercase tracking-tight">
+        <span className="font-ui text-base md:text-lg text-black/80 group-hover:text-black transition-colors pr-8">
           {item.q}
         </span>
         <span
-          className="flex-shrink-0 w-8 h-8 border-2 border-[#00A651] flex items-center justify-center text-[#00A651] transition-all"
-          style={{ borderRadius: 0, transform: isOpen ? 'rotate(45deg)' : 'rotate(0deg)', transition: 'transform 0.25s ease' }}
+          className="flex-shrink-0 w-8 h-8 border flex items-center justify-center text-accent transition-all"
+          style={{ borderColor: 'rgba(232, 113, 79, 0.3)', transform: isOpen ? 'rotate(45deg)' : 'rotate(0deg)', transition: 'transform 0.25s ease' }}
         >
           <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-            <path d="M6 1v10M1 6h10" stroke="#00A651" strokeWidth="1.6" strokeLinecap="round"/>
+            <path d="M6 1v10M1 6h10" stroke="#E8714F" strokeWidth="1.6" strokeLinecap="round"/>
           </svg>
         </span>
       </button>
@@ -55,7 +55,7 @@ function AccordionItem({ item, isOpen, onToggle }) {
             transition={{ duration: 0.3, ease: 'easeOut' }}
             className="overflow-hidden"
           >
-            <p className="font-dmsans text-[15px] text-[#4A4A44] leading-relaxed pb-6 max-w-2xl">
+            <p className="font-ui text-sm text-black/60 leading-relaxed pb-6 max-w-2xl">
               {item.a}
             </p>
           </motion.div>
@@ -76,19 +76,19 @@ export default function FAQ() {
   const toggle = (i) => setOpenIndex(prev => prev === i ? null : i)
 
   return (
-    <section id="faq" className="py-28 px-6">
+    <section id="faq" className="py-28 px-6" style={{ backgroundColor: '#F5F3EE' }}>
       <div className="max-w-3xl mx-auto">
 
         <motion.p
           variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }}
-          className="font-mono text-green text-xs tracking-[0.25em] uppercase mb-4"
+          className="font-data text-black text-xs tracking-[0.25em] uppercase mb-4 opacity-60"
         >
           FAQ
         </motion.p>
         <motion.h2
           variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }}
           transition={{ delay: 0.1 }}
-          className="font-display text-[clamp(40px,6vw,72px)] text-snow mb-16 leading-none"
+          className="font-display text-[clamp(40px,6vw,72px)] text-black mb-16 leading-none"
         >
           STRAIGHT ANSWERS.
         </motion.h2>

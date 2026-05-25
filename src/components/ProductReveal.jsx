@@ -50,20 +50,30 @@ export default function ProductReveal() {
           viewport={{ once: true, margin: '-80px' }}
           className="relative"
         >
-          {/* Hard border, no glow */}
-          <div className="absolute -inset-2 border-2 border-[#1A1A1A] pointer-events-none" style={{ borderRadius: 0 }} />
+          {/* Outer shadow box */}
+          <div className="absolute -inset-4" style={{ background: 'radial-gradient(ellipse at center, rgba(26,26,26,0.08) 0%, transparent 70%)' }} />
+
           {/* TV / monitor bezel */}
-          <div className="relative bg-[#E4E1D8] border-2 border-[#1A1A1A] p-3" style={{ borderRadius: 0, boxShadow: 'none' }}>
-            <div className="overflow-hidden aspect-video bg-[#D9D7D0] flex items-center justify-center relative" style={{ borderRadius: 0 }}>
+          <div className="relative editorial-box p-3">
+            <div className="overflow-hidden aspect-video bg-cream-light flex items-center justify-center relative">
               {/* Fake match HUD */}
+              <div className="absolute inset-0 bg-gradient-to-br from-[#f0ebe3] via-[#f5f3ee] to-[#f5f3ee]" />
+
               {/* Score bar */}
-              <div className="absolute top-3 left-1/2 -translate-x-1/2 flex items-center gap-3 bg-[#1A1A1A] px-4 py-1.5" style={{ borderRadius: 0 }}>
-                <span className="font-anton text-[#F5F3EE] text-lg tracking-widest">ARS</span>
-                <span className="font-mono text-[#00A651] text-xl font-bold">2 — 1</span>
-                <span className="font-anton text-[#F5F3EE] text-lg tracking-widest">CHE</span>
+              <div className="absolute top-3 left-1/2 -translate-x-1/2 flex items-center gap-3 bg-white/80 px-4 py-1.5 border border-black/10">
+                <span className="font-display text-black text-lg tracking-widest">ARS</span>
+                <span className="font-data text-accent text-xl font-bold">2 — 1</span>
+                <span className="font-display text-black text-lg tracking-widest">CHE</span>
               </div>
+
+              {/* LIVE badge */}
+              <div className="absolute top-3 right-3 flex items-center gap-1.5 bg-accent px-2 py-0.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-cream animate-pulse" />
+                <span className="font-data text-cream text-[10px] font-bold tracking-widest">LIVE</span>
+              </div>
+
               {/* Pitch */}
-              <div className="w-full h-full opacity-10">
+              <div className="w-full h-full opacity-8">
                 <svg viewBox="0 0 320 180" className="w-full h-full" fill="none" stroke="#1A1A1A" strokeWidth="1">
                   <rect x="10" y="10" width="300" height="160"/>
                   <line x1="160" y1="10" x2="160" y2="170"/>
@@ -75,13 +85,24 @@ export default function ProductReveal() {
                 </svg>
               </div>
               {/* HD badge */}
-              <div className="absolute bottom-3 left-3 border border-[#00A651] px-2 py-0.5" style={{ borderRadius: 0 }}>
-                <span className="font-mono text-[#00A651] text-[10px] tracking-widest">4K HD</span>
+              <div className="absolute bottom-3 left-3 border border-black/20 px-2 py-0.5">
+                <span className="font-data text-black text-[10px] tracking-widest">4K HD</span>
+              </div>
+
+              {/* Waveform */}
+              <div className="absolute bottom-3 right-3 flex items-end gap-0.5 h-6">
+                {[3,6,4,8,5,10,7,4,9,5,6,3,8,6,4].map((h, i) => (
+                  <div
+                    key={i}
+                    className="w-0.5 bg-accent/60 rounded-full"
+                    style={{ height: `${h * 2}px`, animationDelay: `${i * 80}ms` }}
+                  />
+                ))}
               </div>
             </div>
             {/* Stand */}
             <div className="flex justify-center mt-2">
-              <div className="w-16 h-1 bg-[#D9D7D0]" style={{ borderRadius: 0 }} />
+              <div className="w-16 h-1 bg-black/10" />
             </div>
           </div>
         </motion.div>
@@ -97,10 +118,16 @@ export default function ProductReveal() {
               className="flex items-start gap-5 border-b border-[#1A1A1A] pb-6 last:border-b-0 last:pb-0"
               style={{ borderRadius: 0 }}
             >
-              <div className="mt-1 text-[#00A651]">{f.icon}</div>
+              <div className="flex-shrink-0 w-10 h-10 border-rule flex items-center justify-center text-accent">
+                {f.icon}
+              </div>
               <div>
-                <div className="font-anton text-[22px] text-[#1A1A1A] mb-1 uppercase tracking-tight">{f.headline}</div>
-                <div className="font-dmsans text-[15px] text-[#4A4A44]">{f.body}</div>
+                <h3 className="font-display text-2xl tracking-wider text-black mb-1">
+                  {f.headline}
+                </h3>
+                <p className="font-ui text-sm text-black/60 leading-relaxed">
+                  {f.body}
+                </p>
               </div>
             </motion.div>
           ))}

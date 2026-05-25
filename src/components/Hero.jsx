@@ -30,109 +30,131 @@ export default function Hero() {
     <section
       ref={ref}
       id="hero"
-      className="relative w-full min-h-[480px] flex items-stretch justify-center bg-[#F5F3EE] grain border-b-2 border-[#1A1A1A] overflow-hidden"
-      style={{ boxShadow: 'none', borderRadius: 0 }}
+      className="relative w-full h-screen min-h-[600px] flex items-center justify-start overflow-hidden texture-overlay"
+      style={{ backgroundColor: '#F5F3EE' }}
     >
-      {/* Background video */}
-      <video
-        className="absolute inset-0 w-full h-full object-cover z-0 pointer-events-none select-none opacity-20"
-        src={HERO_VIDEO}
-        autoPlay
-        loop
-        muted
-        playsInline
-        aria-hidden="true"
+      {/* ── Video background (hidden on mobile) ── */}
+      <motion.div
+        style={{ y: videoY }}
+        className="absolute inset-0 hidden md:block"
+      >
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="w-full h-full object-cover"
+          style={{ filter: 'grayscale(0.3) brightness(1.1) contrast(0.9)' }}
+        >
+          <source src={HERO_VIDEO} type="video/mp4" />
+        </video>
+      </motion.div>
+
+      {/* ── Mobile fallback gradient ── */}
+      <div
+        className="absolute inset-0 md:hidden"
+        style={{ background: 'linear-gradient(160deg, #F5F3EE 0%, #FAFAF8 60%, #F5F3EE 100%)' }}
       />
-      {/* Top thick black rule */}
-      <div className="absolute top-0 left-0 w-full h-1 bg-[#1A1A1A] z-10" />
-      <div className="relative z-20 flex flex-col md:flex-row w-full max-w-7xl mx-auto px-4 md:px-10 py-10 md:py-16 gap-8">
-        {/* Left column: headline, eyebrow, CTAs */}
-        <div className="flex-1 flex flex-col justify-center min-w-[260px] max-w-[54%]">
-          {/* Eyebrow with live dot */}
-          <div className="flex items-center mb-6">
-            <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#D42B2B] mr-2 animate-pulse" style={{ animation: 'pulse 1.5s infinite' }} />
-            <span className="font-mono text-[12px] text-[#888880] tracking-[0.15em] uppercase">LIVE STREAMING PLATFORM — UNITED KINGDOM</span>
-          </div>
-          {/* Headline with wipe animation */}
-          <motion.h1
-            className="font-anton text-[clamp(36px,7vw,80px)] leading-[0.98] text-[#1A1A1A] mb-4"
-            style={{ letterSpacing: '-0.01em', textTransform: 'uppercase' }}
-            variants={containerVariants}
+
+      {/* ── Light editorial vignette ── */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{ background: 'linear-gradient(to right, rgba(245, 243, 238, 0.85) 0%, rgba(245, 243, 238, 0.4) 60%, rgba(245, 243, 238, 0) 100%)' }}
+      />
+
+      {/* ── Content ── */}
+      <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 w-full">
+        {/* Eyebrow */}
+        <p className="font-data text-black text-xs tracking-[0.25em] uppercase mb-6 opacity-70">
+          British Football Streaming
+        </p>
+
+        {/* Headline */}
+        <motion.h1
+          className="font-display text-[clamp(56px,11vw,144px)] leading-[0.92] text-black max-w-3xl"
+          style={{ letterSpacing: '-0.02em' }}
+          variants={containerVariants}
+          initial="hidden"
+          animate="show"
+        >
+          {HEADLINE.map((word, i) => (
+            <motion.span
+              key={i}
+              variants={wordVariants}
+              className={`inline-block mr-[0.1em] ${word === 'NO' || word === 'COMPROMISE.' ? 'text-accent' : ''}`}
+            >
+              {word}
+            </motion.span>
+          ))}
+        </motion.h1>
+
+        {/* Monospace typing line */}
+        <div className="mt-8 mb-10 overflow-hidden">
+          <motion.div
+            variants={typeVariants}
             initial="hidden"
             animate="show"
           >
-            {HEADLINE.map((word, i) => (
-              <motion.span
-                key={i}
-                variants={wordVariants}
-                className={`inline-block mr-[0.1em] ${word === 'NO' || word === 'COMPROMISE.' ? 'text-[#00A651]' : ''}`}
-                style={{
-                  clipPath: 'inset(0 100% 0 0)',
-                  animation: `wipe-reveal 0.6s cubic-bezier(0.25,0.46,0.45,0.94) forwards`,
-                  animationDelay: `${i * 0.06 + 0.2}s`
-                }}
-              >
-                {word}
-              </motion.span>
-            ))}
-          </motion.h1>
-          {/* Subheadline */}
-          <p className="font-librebask text-[15px] text-[#4A4A44] max-w-[420px] leading-[1.6] mb-6">
-            The only match-day streaming platform designed for real fans. Editorial, fast, and always on.
-          </p>
-          {/* Monospace typing line */}
-          <div className="mb-6">
-            <motion.div
-              variants={typeVariants}
-              initial="hidden"
-              animate="show"
-              className="whitespace-nowrap overflow-hidden"
-            >
-              <span className="font-mono text-[#00A651] text-base tracking-wider">
-                Server connected. Firmware loaded.{' '}
-                <span className="text-[#4A4A44]">
-                  {matchName} starting in{' '}
-                </span>
-                <span className="text-[#00A651] font-semibold">
-                  {hh}:{mm}:{ss}
-                </span>
+            <p className="font-data text-black text-sm md:text-base tracking-wider">
+              Server connected. Firmware loaded.{' '}
+              <span className="text-black/60">
+                {matchName} starting in{' '}
               </span>
-            </motion.div>
-          </div>
-          {/* CTA buttons */}
-          <div className="flex gap-3">
-            <a
-              href="#pricing"
-              className="bg-[#1A1A1A] text-[#F5F3EE] font-anton text-[15px] tracking-[0.08em] px-7 py-3 border-0 rounded-none uppercase hover:bg-[#00A651] hover:text-[#F5F3EE] transition"
-              style={{ borderRadius: 0 }}
-            >
-              Get Your Kit Now →
-            </a>
-            <a
-              href="#pricing"
-              className="border-2 border-[#1A1A1A] text-[#1A1A1A] font-anton text-[15px] tracking-[0.08em] px-7 py-3 border-solid rounded-none uppercase hover:bg-[#1A1A1A] hover:text-[#F5F3EE] transition"
-              style={{ borderRadius: 0 }}
-            >
-              See Pricing
-            </a>
-          </div>
+              <span className="text-accent font-semibold">
+                {hh}:{mm}:{ss}
+              </span>
+            </p>
+          </motion.div>
         </div>
-        {/* Right column: decorative watermark and match stats card */}
-        <div className="flex-1 flex flex-col items-center justify-center relative max-w-[46%] min-w-[220px]">
-          {/* Giant 90' watermark, smaller */}
-          <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-anton text-[120px] md:text-[180px] text-[#1A1A1A]/5 select-none pointer-events-none" style={{ zIndex: 0 }}>
-            90'
-          </span>
-          {/* Example match stats card (can be replaced with real data) */}
-          <div className="relative z-10 bg-[#E4E1D8] border-[1.5px] border-[#1A1A1A1A] shadow-[4px_4px_0_rgba(26,26,26,0.15)] px-7 py-6 mt-10" style={{ borderRadius: 0 }}>
-            <div className="font-dmsans text-[13px] text-[#4A4A44] uppercase tracking-[0.08em] mb-2">Next Match</div>
-            <div className="font-anton text-[28px] md:text-[34px] text-[#1A1A1A] mb-1">{matchName}</div>
-            <div className="font-mono text-[14px] text-[#888880]">Kickoff in <span className="text-[#00A651]">{hh}:{mm}:{ss}</span></div>
-          </div>
-        </div>
+
+        {/* CTA */}
+        <motion.a
+          href="#pricing"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.2, duration: 0.4 }}
+          className="
+            inline-flex items-center gap-2
+            px-8 py-4
+            bg-black text-cream
+            font-ui font-semibold text-sm uppercase tracking-[0.14em]
+            transition-all
+            hover:shadow-editorial
+            focus:outline-none focus-visible:ring-2 focus-visible:ring-black
+          "
+          style={{ boxShadow: '4px 4px 0px rgba(26, 26, 26, 0.3)' }}
+          onMouseEnter={e => {
+            e.currentTarget.style.boxShadow = '8px 8px 0px rgba(26, 26, 26, 0.5)'
+          }}
+          onMouseLeave={e => {
+            e.currentTarget.style.boxShadow = '4px 4px 0px rgba(26, 26, 26, 0.3)'
+          }}
+        >
+          Get Your Kit
+          <span className="text-base leading-none">→</span>
+        </motion.a>
+
+        {/* Sub-copy */}
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.5, duration: 0.6 }}
+          className="mt-5 font-ui text-sm text-black/50 tracking-wide"
+        >
+          Ships within 48 hours. No contract. Cancel anytime.
+        </motion.p>
       </div>
-      {/* Bottom black rule */}
-      <div className="absolute bottom-0 left-0 w-full h-0.5 bg-[#1A1A1A] z-10" />
+
+      {/* ── Scroll indicator ── */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 2, duration: 1 }}
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+      >
+        <span className="font-data text-[10px] tracking-[0.2em] text-black/40 uppercase">Scroll</span>
+        <div className="w-px h-10 bg-gradient-to-b from-black/30 to-transparent" />
+      </motion.div>
     </section>
   )
 }

@@ -43,14 +43,16 @@ export default function App() {
         <Route
           path="/*"
           element={
-            <div className="bg-pitch text-snow overflow-x-hidden">
+            <div className="overflow-x-hidden" style={{ backgroundColor: '#F5F3EE', color: '#1A1A1A' }}>
               {/* Scroll progress bar */}
               <div
-                className="fixed top-0 left-0 z-[60] h-[2px] bg-green transition-none"
-                style={{ width: `${scrollPct}%` }}
+                className="fixed top-0 left-0 z-[60] h-[2px] transition-none"
+                style={{ width: `${scrollPct}%`, backgroundColor: '#E8714F' }}
               />
+
               <Nav />
-              <FinalCTA />
+              <Hero />
+
               <Suspense fallback={null}>
                 <TrustBar />
                 <ProductReveal />
@@ -60,7 +62,8 @@ export default function App() {
                 <Testimonials />
                 <LiveMatchTicker />
                 <FAQ />
-                <ContactAdmin />
+                <ContactAdmin /> {/* Retained from main branch */}
+                <FinalCTA /> {/* Moved from top to follow FAQ as in kickstream-redesign structure, but before Footer */}
                 <Footer />
               </Suspense>
             </div>
