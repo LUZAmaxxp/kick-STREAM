@@ -12,14 +12,14 @@ function StatItem({ value, suffix, label, glow }) {
       {glow && (
         <div
           className="absolute inset-0 pointer-events-none"
-          style={{ background: 'radial-gradient(ellipse at center, rgba(232,113,79,0.06) 0%, transparent 65%)' }}
+          style={{ background: 'radial-gradient(ellipse at center, rgba(232,113,79,0.08) 0%, transparent 65%)' }}
         />
       )}
-      <span className="font-display text-[clamp(56px,9vw,112px)] leading-none text-cream relative" style={{ letterSpacing: '-0.03em' }}>
+      <span className="font-display text-[clamp(56px,9vw,112px)] leading-none text-black relative" style={{ letterSpacing: '-0.03em' }}>
         {display}
         <span className="text-accent">{suffix}</span>
       </span>
-      <p className="font-ui text-sm text-cream/60 tracking-wide uppercase text-center">
+      <p className="font-ui text-sm text-black/60 tracking-wide uppercase text-center">
         {label}
       </p>
     </div>
@@ -33,12 +33,12 @@ const fadeUp = {
 
 export default function Stats() {
   return (
-    <section className="py-28 px-6 texture-overlay overflow-hidden rule-top rule-bottom" style={{ background: '#1A1A1A' }}>
+    <section className="py-28 px-6 texture-overlay overflow-hidden" style={{ backgroundColor: '#F5F3EE' }}>
       <div className="max-w-7xl mx-auto">
 
         <motion.p
           variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }}
-          className="font-data text-accent text-xs tracking-[0.25em] uppercase mb-16 text-center"
+          className="font-data text-black text-xs tracking-[0.25em] uppercase mb-16 text-center opacity-60"
         >
           By the numbers
         </motion.p>

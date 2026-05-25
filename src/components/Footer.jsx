@@ -43,7 +43,7 @@ export default function Footer() {
       {/* Thin rule */}
       <div className="rule-top" style={{ borderColor: '#1A1A1A' }} />
 
-      <div className="px-6 py-16" style={{ backgroundColor: '#1A1A1A', color: '#F5F3EE' }}>
+      <div className="px-6 py-16" style={{ backgroundColor: '#F5F3EE', color: '#1A1A1A' }}>
         <div className="max-w-7xl mx-auto">
 
           {/* Top row */}
@@ -51,10 +51,10 @@ export default function Footer() {
 
             {/* Wordmark + tagline */}
             <div>
-              <a href="#" className="font-display text-3xl tracking-widest text-cream">
+              <a href="#" className="font-display text-3xl tracking-widest text-black">
                 KICKSTREAM
               </a>
-              <p className="font-data text-xs text-cream/40 mt-2 tracking-[0.12em]">
+              <p className="font-data text-xs text-black/50 mt-2 tracking-[0.12em]">
                 Every Match. Your Server. No Compromise.
               </p>
             </div>
@@ -65,7 +65,7 @@ export default function Footer() {
                 <a
                   key={l.label}
                   href={l.href}
-                  className="font-ui text-xs font-semibold uppercase tracking-[0.15em] text-cream/50 hover:text-cream/80 transition-colors"
+                  className="font-ui text-xs font-semibold uppercase tracking-[0.15em] text-black/50 hover:text-black/80 transition-colors"
                 >
                   {l.label}
                 </a>
@@ -83,8 +83,8 @@ export default function Footer() {
                   key={s.label}
                   href="#"
                   aria-label={s.label}
-                  className="w-9 h-9 border flex items-center justify-center text-cream/40 hover:text-cream/80 hover:border-cream/30 transition-colors"
-                  style={{ borderColor: 'rgba(245, 243, 238, 0.2)' }}
+                  className="w-9 h-9 border flex items-center justify-center text-black/40 hover:text-black/80 hover:border-black/30 transition-colors"
+                  style={{ borderColor: 'rgba(26, 26, 26, 0.15)' }}
                 >
                   {s.icon}
                 </a>
@@ -93,7 +93,7 @@ export default function Footer() {
           </div>
 
           {/* Divider */}
-          <div className="rule-bottom" style={{ borderColor: 'rgba(245, 243, 238, 0.1)' }} />
+          <div className="rule-bottom" style={{ borderColor: 'rgba(26, 26, 26, 0.15)' }} />
 
           {/* Bottom row */}
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 pt-8">
@@ -104,7 +104,7 @@ export default function Footer() {
                 <a
                   key={l.label}
                   href={l.href}
-                  className="font-ui text-xs text-cream/40 hover:text-cream/70 transition-colors"
+                  className="font-ui text-xs text-black/50 hover:text-black/70 transition-colors"
                 >
                   {l.label}
                 </a>
@@ -112,7 +112,7 @@ export default function Footer() {
             </div>
 
             {/* Tagline */}
-            <p className="font-data text-[11px] text-cream/30 tracking-[0.1em]">
+            <p className="font-data text-[11px] text-black/40 tracking-[0.1em]">
               Built for British fans. Powered by our servers. Not theirs.
             </p>
           </div>
