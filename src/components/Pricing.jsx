@@ -48,9 +48,13 @@ const PLANS = [
   },
 ];
 
+const fadeUp = {
+  hidden: { opacity: 0, y: 32 },
+  show:   { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut' } },
+}
+
 export default function Pricing() {
   return (
-<<<<<<< HEAD
     <section id="pricing" className="py-28 px-6" style={{ backgroundColor: '#F5F3EE' }}>
       <div className="max-w-7xl mx-auto">
         <motion.p
@@ -60,18 +64,14 @@ export default function Pricing() {
           Pricing
         </motion.p>
         <motion.h2
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }}
           transition={{ delay: 0.1 }}
           className="font-display text-[clamp(40px,6vw,72px)] text-black mb-4 leading-none"
         >
           ONE PRICE. EVERY MATCH.
         </motion.h2>
         <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }}
           transition={{ delay: 0.15 }}
           className="font-ui text-sm text-black/60 mb-16 max-w-md"
         >
@@ -81,8 +81,9 @@ export default function Pricing() {
           {PLANS.map((plan, i) => (
             <motion.div
               key={plan.id}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              variants={fadeUp}
+              initial="hidden"
+              whileInView="show"
               viewport={{ once: true, margin: '-60px' }}
               transition={{ delay: i * 0.12 }}
               className={`relative editorial-box p-8 flex flex-col gap-6 ${plan.popular ? 'md:-translate-y-4' : ''}`}

@@ -39,7 +39,6 @@ function YouTubeIcon() {
 
 export default function Footer() {
   return (
-<<<<<<< HEAD
     <footer className="relative pt-px">
       {/* Thin rule */}
       <div className="rule-top" style={{ borderColor: '#1A1A1A' }} />
