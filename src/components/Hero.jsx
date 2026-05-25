@@ -5,7 +5,7 @@ import { useNextKickoff } from '../hooks/useNextKickoff'
 // Pexels free stadium floodlights video (CC0)
 const HERO_VIDEO = 'src/assets/13433792_3840_2160_30fps.mp4'
 
-const HEADLINE = ['THE', 'MATCH', 'STARTS', 'WITH', 'OR', 'WITHOUT', 'YOU.']
+const HEADLINE = ['EVERY', 'MATCH.', 'YOUR', 'SERVER.', 'NO', 'COMPROMISE.']
 
 const containerVariants = {
   hidden: {},
@@ -24,8 +24,9 @@ const typeVariants = {
 
 export default function Hero() {
   const ref = useRef(null)
-  const { scrollYProgress } = useScroll({ target: ref })
-  const videoY = useTransform(scrollYProgress, [0, 1], ['0%', '20%']) // Adjust as needed
+  const { scrollY } = useScroll()
+  const videoY = useTransform(scrollY, [0, 800], [0, 320])
+
   const { hh, mm, ss, matchName } = useNextKickoff()
 
   return (
@@ -83,7 +84,7 @@ export default function Hero() {
             <motion.span
               key={i}
               variants={wordVariants}
-              className={`inline-block mr-[0.1em] ${word === 'YOU.' ? 'text-accent' : ''}`}
+              className={`inline-block mr-[0.1em] ${word === 'NO' || word === 'COMPROMISE.' ? 'text-accent' : ''}`}
             >
               {word}
             </motion.span>
@@ -96,6 +97,7 @@ export default function Hero() {
             variants={typeVariants}
             initial="hidden"
             animate="show"
+            className="whitespace-nowrap overflow-hidden"
           >
             <p className="font-data text-black text-sm md:text-base tracking-wider">
               Server connected. Firmware loaded.{' '}

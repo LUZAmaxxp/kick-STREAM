@@ -24,12 +24,14 @@ export default function FinalCTA() {
       />
 
       <div className="relative z-10 max-w-5xl mx-auto">
+
         <motion.p
           variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }}
           className="font-data text-accent text-xs tracking-[0.25em] uppercase mb-6"
         >
           Final Whistle
         </motion.p>
+
         <motion.h2
           variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }}
           transition={{ delay: 0.1 }}
@@ -40,6 +42,7 @@ export default function FinalCTA() {
           WITH OR WITHOUT<br />
           <span className="text-accent">YOU.</span>
         </motion.h2>
+
         <motion.p
           variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }}
           transition={{ delay: 0.2 }}
@@ -47,6 +50,7 @@ export default function FinalCTA() {
         >
           Join 12,000 fans who chose their own stream. No blackouts, no compromises, no middleman.
         </motion.p>
+
         <motion.div
           variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }}
           transition={{ delay: 0.3 }}
@@ -66,6 +70,7 @@ export default function FinalCTA() {
             See Pricing
           </a>
         </motion.div>
+
         <motion.p
           variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }}
           transition={{ delay: 0.4 }}
@@ -77,4 +82,3 @@ export default function FinalCTA() {
     </section>
   )
 }
-

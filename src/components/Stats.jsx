@@ -35,23 +35,26 @@ export default function Stats() {
   return (
     <section className="py-28 px-6 texture-overlay overflow-hidden" style={{ backgroundColor: '#F5F3EE' }}>
       <div className="max-w-7xl mx-auto">
+
         <motion.p
           variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }}
           className="font-data text-black text-xs tracking-[0.25em] uppercase mb-16 text-center opacity-60"
         >
           By the numbers
         </motion.p>
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-16 md:gap-8">
           <motion.div variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true, margin: '-60px' }} transition={{ delay: 0 }}>
             <StatItem value={4} suffix="K" label="Stream quality. Every match." glow={false} />
           </motion.div>
           <motion.div variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true, margin: '-60px' }} transition={{ delay: 0.12 }}>
-            <StatItem value={3} suffix="s" label="Average latency. Not minutes." glow={false} />
+            <StatItem value={3} suffix="s" label="Average latency. Not minutes." glow={true} />
           </motion.div>
           <motion.div variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true, margin: '-60px' }} transition={{ delay: 0.24 }}>
             <StatItem value={99} suffix=".9%" label="Uptime. Engineered, not promised." glow={false} />
           </motion.div>
         </div>
+
       </div>
     </section>
   )

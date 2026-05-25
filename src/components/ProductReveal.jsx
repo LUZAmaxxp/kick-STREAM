@@ -40,9 +40,10 @@ const fadeUp = {
 
 export default function ProductReveal() {
   return (
-    <section id="product" className="py-20 px-6 max-w-7xl mx-auto border-b-2 border-[#1A1A1A] bg-[#F5F3EE]" style={{ borderRadius: 0 }}>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-        {/* Left: Device mockup, hard-edged */}
+    <section id="product" className="py-24 px-6 max-w-7xl mx-auto">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+
+        {/* ── Left: Device mockup ── */}
         <motion.div
           variants={fadeUp}
           initial="hidden"
@@ -84,6 +85,7 @@ export default function ProductReveal() {
                   <rect x="292" y="70" width="18" height="40"/>
                 </svg>
               </div>
+
               {/* HD badge */}
               <div className="absolute bottom-3 left-3 border border-black/20 px-2 py-0.5">
                 <span className="font-data text-black text-[10px] tracking-widest">4K HD</span>
@@ -100,14 +102,16 @@ export default function ProductReveal() {
                 ))}
               </div>
             </div>
+
             {/* Stand */}
             <div className="flex justify-center mt-2">
               <div className="w-16 h-1 bg-black/10" />
             </div>
           </div>
         </motion.div>
-        {/* Right: Features, editorial style */}
-        <div className="flex flex-col gap-8">
+
+        {/* ── Right: Features ── */}
+        <div className="flex flex-col gap-10">
           {FEATURES.map((f, i) => (
             <motion.div
               key={i}
@@ -115,8 +119,8 @@ export default function ProductReveal() {
               initial="hidden"
               whileInView="show"
               viewport={{ once: true, margin: '-60px' }}
-              className="flex items-start gap-5 border-b border-[#1A1A1A] pb-6 last:border-b-0 last:pb-0"
-              style={{ borderRadius: 0 }}
+              transition={{ delay: i * 0.12 }}
+              className="flex gap-5 items-start"
             >
               <div className="flex-shrink-0 w-10 h-10 border-rule flex items-center justify-center text-accent">
                 {f.icon}
