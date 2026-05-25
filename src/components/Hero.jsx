@@ -24,6 +24,8 @@ const typeVariants = {
 
 export default function Hero() {
   const ref = useRef(null)
+  const { scrollYProgress } = useScroll({ target: ref })
+  const videoY = useTransform(scrollYProgress, [0, 1], ['0%', '20%']) // Adjust as needed
   const { hh, mm, ss, matchName } = useNextKickoff()
 
   return (
