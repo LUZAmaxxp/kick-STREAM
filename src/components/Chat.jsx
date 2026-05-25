@@ -14,13 +14,37 @@ const Chat = ({ user, authToken }) => {
       return;
     }
 
-    // Initialize Ably
     const ablyClient = new Ably.Realtime({
-      authUrl: 'http://localhost:5000/api/ably-token', // Backend endpoint for Ably token
-      authHeaders: {
-        'x-auth-token': authToken // Pass JWT for backend authentication
+      authCallback: async (tokenParams, callback) => {
+        try {
+          const response = await fetch('http://localhost:5000/api/ably-token', {
+            method: 'GET',
+            headers: {
+              'x-auth-token': authToken,
+              'Content-Type': 'application/json',
+            },
+          });
+
+          if (!response.ok) {
+            const err = await response.text();
+            callback(err, null);
+            return;
+          }
+
+       
+const tokenRequest = await response.json();
+console.log('🔑 Full token request:', JSON.stringify(tokenRequest, null, 2));
+console.log('👤 user.id being used for channel:', user.id);
+console.log('🔤 clientId type:', typeof user.id, '| value:', user.id);
+callback(null, tokenRequest);
+          
+        } catch (err) {
+          console.error('Ably auth error:', err);
+          callback(err, null);
+          
+        }
       },
-      echoMessages: false // Don't echo messages sent by this client back to itself
+      echoMessages: false,
     });
 
     ablyClient.connection.once('connected', () => {
@@ -33,34 +57,31 @@ const Chat = ({ user, authToken }) => {
     });
 
     return () => {
-      if (ablyClient) {
-        ablyClient.close();
-      }
+      ablyClient.close();
     };
   }, [user, authToken]);
 
   useEffect(() => {
-    if (ably && user) {
-      // Channel for user-admin private chat. Admin will also subscribe to this channel.
-      const userChannel = ably.channels.get(`private-chat:${user.id}`);
+    if (!ably || !user) return;
 
-      userChannel.subscribe('message', (message) => {
-        setMessages((prevMessages) => [...prevMessages, message]);
-      });
+    const userChannel = ably.channels.get(`private-chat:${user.id}`);
 
-      setChannel(userChannel);
+    userChannel.subscribe('message', (message) => {
+      setMessages(prev => [...prev, message]);
+    });
 
-      return () => {
-        userChannel.unsubscribe();
-      };
-    }
+    setChannel(userChannel);
+
+    return () => {
+      userChannel.unsubscribe();
+    };
   }, [ably, user]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
-  const handleSendMessage = () => {
+  const handleSendMessage = async () => {
     if (messageText.trim() === '' || !channel) return;
 
     const messageData = {
@@ -71,24 +92,30 @@ const Chat = ({ user, authToken }) => {
       isAdmin: user.isAdmin,
     };
 
-    channel.publish('message', messageData, (err) => {
-      if (err) {
-        console.error('Error publishing message:', err);
-      } else {
-        setMessageText('');
-        // Manually add message to state if echoMessages is false
-        setMessages((prevMessages) => [...prevMessages, { data: messageData, connectionId: ably.connection.id }]);
-      }
-    });
+    try {
+      await channel.publish('message', messageData);
+      setMessageText('');
+      setMessages(prev => [...prev, {
+        data: messageData,
+        connectionId: ably.connection.id,
+      }]);
+    } catch (err) {
+      console.error('Error publishing message:', err);
+    }
   };
 
   return (
     <div className="chat-container">
       <div className="messages-list">
         {messages.map((msg, index) => (
-          <div key={index} className={`message ${msg.data.senderId === user.id ? 'sent' : 'received'}`}>
+          <div
+            key={index}
+            className={`message ${msg.data.senderId === user.id ? 'sent' : 'received'}`}
+          >
             <strong>{msg.data.sender}:</strong> {msg.data.text}
-            <span className="timestamp">{new Date(msg.data.timestamp).toLocaleTimeString()}</span>
+            <span className="timestamp">
+              {new Date(msg.data.timestamp).toLocaleTimeString()}
+            </span>
           </div>
         ))}
         <div ref={messagesEndRef} />
@@ -99,9 +126,7 @@ const Chat = ({ user, authToken }) => {
           value={messageText}
           onChange={(e) => setMessageText(e.target.value)}
           onKeyPress={(e) => {
-            if (e.key === 'Enter') {
-              handleSendMessage();
-            }
+            if (e.key === 'Enter') handleSendMessage();
           }}
           placeholder="Type your message..."
         />
