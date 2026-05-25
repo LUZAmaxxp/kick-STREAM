@@ -15,21 +15,21 @@ const TRACK = [...ITEMS, ...ITEMS]
 export default function TrustBar() {
   return (
     <div
-      className="relative overflow-hidden bg-surface border-y"
-      style={{ borderColor: 'rgba(255,255,255,0.06)', borderTopWidth: '1px', borderBottomWidth: '1px' }}
+      className="relative overflow-hidden bg-[#F5F3EE] border-y-2 border-[#1A1A1A]"
+      style={{ borderRadius: 0 }}
     >
       <div
-        className="flex whitespace-nowrap py-4 animate-marquee"
+        className="flex whitespace-nowrap py-3 animate-marquee"
         style={{ animationPlayState: 'running' }}
         onMouseEnter={e => { e.currentTarget.style.animationPlayState = 'paused' }}
         onMouseLeave={e => { e.currentTarget.style.animationPlayState = 'running' }}
       >
         {TRACK.map((item, i) => (
-          <span key={i} className="inline-flex items-center gap-4 mx-4">
-            <span className="font-mono text-xs tracking-[0.18em] text-snow/70 uppercase">
+          <span key={i} className="inline-flex items-center gap-3 mx-6">
+            <span className="font-mono text-[13px] tracking-[0.18em] text-[#1A1A1A] uppercase">
               {item}
             </span>
-            <span className="text-green text-xs leading-none select-none">●</span>
+            <span className="text-[#00A651] text-[13px] leading-none select-none">●</span>
           </span>
         ))}
       </div>

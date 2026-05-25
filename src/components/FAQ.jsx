@@ -26,27 +26,25 @@ const QUESTIONS = [
 
 function AccordionItem({ item, isOpen, onToggle }) {
   const contentRef = useRef(null)
-
   return (
-    <div className="border-b" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>
+    <div className="border-b-2 border-[#1A1A1A] bg-[#F5F3EE]" style={{ borderRadius: 0 }}>
       <button
         className="w-full flex items-center justify-between py-6 text-left group"
         onClick={onToggle}
         aria-expanded={isOpen}
       >
-        <span className="font-body text-base md:text-lg text-snow/80 group-hover:text-snow transition-colors pr-8">
+        <span className="font-anton text-[17px] md:text-[20px] text-[#1A1A1A] group-hover:text-[#00A651] transition-colors pr-8 uppercase tracking-tight">
           {item.q}
         </span>
         <span
-          className="flex-shrink-0 w-8 h-8 rounded-full border flex items-center justify-center text-green transition-all"
-          style={{ borderColor: 'rgba(170,255,69,0.3)', transform: isOpen ? 'rotate(45deg)' : 'rotate(0deg)', transition: 'transform 0.25s ease' }}
+          className="flex-shrink-0 w-8 h-8 border-2 border-[#00A651] flex items-center justify-center text-[#00A651] transition-all"
+          style={{ borderRadius: 0, transform: isOpen ? 'rotate(45deg)' : 'rotate(0deg)', transition: 'transform 0.25s ease' }}
         >
           <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-            <path d="M6 1v10M1 6h10" stroke="#AAFF45" strokeWidth="1.6" strokeLinecap="round"/>
+            <path d="M6 1v10M1 6h10" stroke="#00A651" strokeWidth="1.6" strokeLinecap="round"/>
           </svg>
         </span>
       </button>
-
       <AnimatePresence initial={false}>
         {isOpen && (
           <motion.div
@@ -57,7 +55,7 @@ function AccordionItem({ item, isOpen, onToggle }) {
             transition={{ duration: 0.3, ease: 'easeOut' }}
             className="overflow-hidden"
           >
-            <p className="font-body text-sm text-snow/50 leading-relaxed pb-6 max-w-2xl">
+            <p className="font-dmsans text-[15px] text-[#4A4A44] leading-relaxed pb-6 max-w-2xl">
               {item.a}
             </p>
           </motion.div>

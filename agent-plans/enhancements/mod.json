@@ -1,0 +1,287 @@
+{
+  "meta": {
+    "prompt_title": "KickStream — Match Programme Design Upgrade",
+    "palette_name": "Option 04: Match Programme",
+    "critical_rule": "REDESIGN VISUALS ONLY. Do not touch any logic, functions, event handlers, state, routing, localStorage operations, WhatsApp links, analytics tracking, or admin authentication. Every functional behaviour must remain 100% identical. Only className, inline styles, Tailwind classes, Framer Motion props, and JSX structure for layout purposes may be changed."
+  },
+
+  "design_system": {
+    "palette": {
+      "base_bg": "#F5F3EE",
+      "surface": "#ECEAE3",
+      "card": "#E4E1D8",
+      "card_border": "rgba(26,26,26,0.1)",
+      "accent_primary": "#00A651",
+      "accent_hover": "#007A3D",
+      "accent_muted": "rgba(0,166,81,0.08)",
+      "ink_primary": "#1A1A1A",
+      "ink_secondary": "#4A4A44",
+      "ink_muted": "#888880",
+      "divider": "rgba(26,26,26,0.1)",
+      "highlight_bg": "#1A1A1A",
+      "highlight_text": "#F5F3EE",
+      "red_accent": "#D42B2B"
+    },
+    "typography": {
+      "display_font": "'Anton', sans-serif — import from Google Fonts. Use for all hero headlines, section titles, stat numbers. All caps inherently. This font IS the personality.",
+      "body_font": "'Libre Baskerville', serif — import from Google Fonts. Use for body copy, testimonial quotes, FAQ answers. The serif creates the match-programme editorial feel.",
+      "ui_font": "'DM Sans', sans-serif — import from Google Fonts. Use for navigation, labels, buttons, badges, pricing details, admin UI. Provides modernity to balance the editorial weight.",
+      "mono_font": "'Courier Prime', monospace — import from Google Fonts. Use for live tickers, timestamps, admin data tables, score displays.",
+      "tracking_display": "letter-spacing: -0.01em on Anton headlines",
+      "tracking_ui": "letter-spacing: 0.06em on DM Sans uppercase labels"
+    },
+    "motion": {
+      "easing_default": "cubic-bezier(0.25, 0.46, 0.45, 0.94)",
+      "easing_editorial": "cubic-bezier(0.77, 0, 0.175, 1)",
+      "duration_fast": "0.18s",
+      "duration_medium": "0.45s",
+      "duration_slow": "0.75s",
+      "scroll_reveal": "initial={{ opacity:0, y:24 }} whileInView={{ opacity:1, y:0 }} viewport={{ once:true }} transition={{ duration:0.6, ease:[0.25,0.46,0.45,0.94] }}.",
+      "stagger_children": "staggerChildren: 0.08 for grids and card lists."
+    },
+    "tokens": {
+      "radius_card": "0px — NO border radius on most elements. Hard edges. Match-programme geometry.",
+      "radius_button": "0px — pill shape only for badges: 2px radius.",
+      "radius_badge": "2px",
+      "shadow_card": "4px 4px 0px rgba(26,26,26,0.15)",
+      "shadow_card_hover": "6px 6px 0px rgba(26,26,26,0.25)",
+      "border_standard": "1.5px solid rgba(26,26,26,0.12)",
+      "border_strong": "2px solid #1A1A1A",
+      "border_accent": "2px solid #00A651"
+    }
+  },
+
+  "global_rules": {
+    "texture_overlay": "Apply a paper grain texture using an SVG noise filter or a CSS background with a fine dot pattern at 2% opacity over all major sections — evokes newsprint, tactile warmth. Use: background-image: url(\"data:image/svg+xml,...\").",
+    "ruled_lines": "Horizontal rules throughout the design use border-top: 2px solid #1A1A1A. These are not dividers — they are editorial columns. Use them generously.",
+    "section_numbering": "Each major section has a typographic section number in Anton, 96px, color rgba(26,26,26,0.05), positioned absolute top-right — decorative watermark only.",
+    "selection": "::selection background #1A1A1A, color #F5F3EE.",
+    "focus_ring": "outline: 2px solid #00A651, outline-offset: 3px on focus-visible.",
+    "print_columns": "Some sections use a CSS multi-column layout to mimic a printed spread — specifically testimonials and FAQ.",
+    "live_dot": "For any 'LIVE' indicator: a 6px circle in #D42B2B (red — not green, mirrors broadcast conventions) with a CSS keyframe pulse, 1.5s infinite.",
+    "unexpected_move": "The entire site uses LIGHT MODE — every competitor uses dark mode. This is the design statement. The white/cream base with black ink IS the brand differentiator. Do not add a dark mode toggle."
+  },
+
+  "components": {
+
+    "Nav": {
+      "background": "Background #F5F3EE. Border-bottom: 2px solid #1A1A1A. No blur, no glass — flat, printed.",
+      "brand_wordmark": "Font: Anton, font-size 24px, color #1A1A1A. 'KICK' with a green underline 2px #00A651 beneath just the K. 'STREAM' in #1A1A1A. Pure type, no icon.",
+      "nav_links": "Font: DM Sans 13px, color #4A4A44, text-transform uppercase, letter-spacing 0.08em. Hover: color #1A1A1A, text-decoration underline, text-underline-offset 4px, text-decoration-color #00A651.",
+      "cta_button": "Background #1A1A1A, color #F5F3EE, font Anton 14px, letter-spacing 0.06em, padding 10px 24px, border-radius 0. Hover: background #00A651, color #F5F3EE. Box-shadow: 3px 3px 0 rgba(0,166,81,0.3) on hover.",
+      "mobile_menu": "Full-width dropdown, background #F5F3EE, border-bottom 2px solid #1A1A1A.",
+      "logic_preserved": "All link hrefs, scroll targets, mobile toggle state — untouched."
+    },
+
+    "Hero": {
+      "layout": "Two-column editorial split — left column takes 58% width with headline and CTAs, right column takes 42% with a large typographic block element (a giant '90'' in Anton at 280px, color rgba(26,26,26,0.06), as a decorative watermark behind a match stats card).",
+      "background": "Background #F5F3EE. No video, no gradients. The typography IS the visual.",
+      "top_rule": "A thick 4px black horizontal rule at the very top of the hero under the nav, spanning full width.",
+      "eyebrow": "Font: Courier Prime 12px, color #888880, letter-spacing 0.15em. Text: 'LIVE STREAMING PLATFORM — UNITED KINGDOM'. With the animated live red dot before it.",
+      "headline": "Font: Anton, font-size clamp(64px, 12vw, 160px), color #1A1A1A, line-height 0.88, all caps. Keyword(s) in #00A651.",
+      "headline_animation": "Words arrive left-to-right with a 'wipe' reveal: clipPath from 'inset(0 100% 0 0)' to 'inset(0 0% 0 0)' per word, 60ms stagger. This feels like a printing press revealing type.",
+      "subheadline": "Font: Libre Baskerville 17px, color #4A4A44, max-width 460px, line-height 1.7.",
+      "cta_primary": "Background #1A1A1A, color #F5F3EE, font Anton 16px, letter-spacing 0.08em, padding 16px 40px, border-radius 0. Hover: background #00A651. Transition 0.18s.",
+      "cta_secondary": "Border: 2px solid #1A1A1A, color #1A1A1A, same size. Hover: background #1A1A1A, color #F5F3EE.",
+      "bottom_rule": "A 2px black rule at the bottom of the hero section.",
+      "logic_preserved": "All CTA click handlers — untouched."
+    },
+
+    "TrustBar": {
+      "background": "Background #1A1A1A. This is the ONLY dark element in the user-facing light site — maximum contrast for trust signals.",
+      "ticker_text": "Font: Courier Prime 12px, color #F5F3EE, letter-spacing 0.12em, text-transform uppercase. Separator: '◆' in #00A651.",
+      "animation": "Infinite horizontal scroll left, 35s, paused on hover.",
+      "logic_preserved": "Ticker content — untouched."
+    },
+
+    "ProductReveal": {
+      "section_bg": "#F5F3EE",
+      "top_rule": "2px solid #1A1A1A before section title.",
+      "eyebrow_label": "Font: DM Sans 11px, color #00A651, letter-spacing 0.15em, text-transform uppercase.",
+      "section_headline": "Font: Anton, font-size clamp(40px, 6vw, 72px), color #1A1A1A.",
+      "feature_cards": "Background #ECEAE3, border: 1.5px solid rgba(26,26,26,0.12), border-radius 0, padding 28px. Box-shadow: 3px 3px 0 rgba(26,26,26,0.08). On hover: box-shadow 6px 6px 0 rgba(26,26,26,0.15), transform: translate(-2px,-2px). Transition all 0.2s.",
+      "feature_icon_container": "32px icon in a 48x48 box. Background #1A1A1A, border-radius 0. Icon color #00A651.",
+      "feature_title": "Font: Anton, font-size 22px, color #1A1A1A.",
+      "feature_body": "Font: Libre Baskerville 14px, color #4A4A44, line-height 1.65.",
+      "logic_preserved": "All feature content props — untouched."
+    },
+
+    "HowItWorks": {
+      "section_bg": "#ECEAE3",
+      "top_bottom_rule": "2px solid #1A1A1A above and below section.",
+      "connector": "A solid 2px black horizontal line connecting steps — like a printed timeline, not dashed.",
+      "step_number_display": "Font: Anton, font-size 80px, color #1A1A1A, line-height 1. Displayed prominently as a counter, not decorative.",
+      "step_label": "Font: DM Sans 11px, color #00A651, letter-spacing 0.12em, uppercase. 'STEP 01'.",
+      "step_title": "Font: Anton, font-size 22px, color #1A1A1A.",
+      "step_body": "Font: Libre Baskerville 14px, color #4A4A44.",
+      "step_card": "No card wrapper — steps are open editorial blocks. Hard left-align. Border-left: 3px solid #1A1A1A.",
+      "logic_preserved": "All step content — untouched."
+    },
+
+    "Stats": {
+      "section_bg": "#1A1A1A",
+      "note": "This is the second dark-on-light inversion — creates a visual rhythm of punchy dark bands alternating with light sections.",
+      "stat_number": "Font: Anton, font-size clamp(64px, 10vw, 112px), color #F5F3EE. CountUp on scroll entry.",
+      "stat_label": "Font: DM Sans 13px, color #888880, letter-spacing 0.1em, text-transform uppercase.",
+      "accent_number": "One stat uses color #00A651 for variety — the most impressive number.",
+      "dividers": "Vertical 2px #F5F3EE at 15% opacity between stats.",
+      "logic_preserved": "All stat values and labels — untouched."
+    },
+
+    "LiveMatchTicker": {
+      "section_bg": "#F5F3EE",
+      "section_headline": "Font: Anton, font-size clamp(40px, 7vw, 80px), color #1A1A1A. 'THIS IS WHAT YOU'RE' on line 1, 'MISSING.' on line 2 in #00A651.",
+      "scoreboard_container": "Background #ECEAE3, border: 2px solid #1A1A1A, border-radius 0. Box-shadow: 4px 4px 0 rgba(26,26,26,0.15).",
+      "scoreboard_header": "Background #1A1A1A, padding 10px 16px. Font: Courier Prime 11px, color #F5F3EE, letter-spacing 0.12em. 'PREMIER LEAGUE — MATCHDAY LIVE'.",
+      "match_row": "Padding 14px 20px, border-bottom: 1px solid rgba(26,26,26,0.1). Hover: background rgba(0,166,81,0.05).",
+      "team_name": "Font: DM Sans 500, font-size 15px, color #1A1A1A.",
+      "score": "Font: Courier Prime 700, font-size 18px, color #1A1A1A.",
+      "live_badge": "Background #D42B2B, color #FFFFFF, font Courier Prime 10px, letter-spacing 0.1em, border-radius 2px, padding 2px 6px. With animated red live dot.",
+      "ft_badge": "Background #1A1A1A, color #F5F3EE. Same sizing.",
+      "hover_cta": "'STREAMING NOW →' slides in on hover in #00A651.",
+      "logic_preserved": "All match data, state, click handlers — untouched."
+    },
+
+    "Pricing": {
+      "section_bg": "#ECEAE3",
+      "top_rule": "2px solid #1A1A1A.",
+      "section_headline": "Font: Anton, color #1A1A1A.",
+      "card_base": "Background #F5F3EE, border: 1.5px solid rgba(26,26,26,0.15), border-radius 0, padding 32px. Box-shadow: 3px 3px 0 rgba(26,26,26,0.1).",
+      "card_featured": "Background #1A1A1A, border: 2px solid #1A1A1A, border-radius 0, padding 32px. Box-shadow: 5px 5px 0 rgba(0,166,81,0.4). Transform: scale(1.03). The featured card is INVERTED — dark background with light text. Breathing animation on box-shadow: 5px 5px 0 rgba(0,166,81,0.2) → 5px 5px 0 rgba(0,166,81,0.5), 2.5s infinite alternate.",
+      "featured_badge": "Background #00A651, color #F5F3EE, font Anton 11px, letter-spacing 0.08em, padding 4px 12px, border-radius 2px. Text: 'MOST POPULAR'.",
+      "plan_name_base": "Font: Anton, font-size 22px, color #1A1A1A.",
+      "plan_name_featured": "Font: Anton, font-size 22px, color #F5F3EE.",
+      "plan_price_base": "Font: Anton, font-size 52px, color #1A1A1A.",
+      "plan_price_featured": "Font: Anton, font-size 52px, color #00A651.",
+      "feature_list_item_base": "Font: Libre Baskerville 14px, color #4A4A44. Checkmark in #00A651.",
+      "feature_list_item_featured": "Font: Libre Baskerville 14px, color #ECEAE3. Checkmark in #00A651.",
+      "cta_base": "Background transparent, border: 2px solid #1A1A1A, color #1A1A1A, font Anton 14px, letter-spacing 0.06em, padding 14px 28px, border-radius 0, width 100%. Hover: background #1A1A1A, color #F5F3EE.",
+      "cta_featured": "Background #00A651, color #F5F3EE, font Anton 14px, letter-spacing 0.06em, padding 14px 28px, border-radius 0, width 100%. Hover: background #007A3D. Box-shadow: 3px 3px 0 rgba(0,0,0,0.3).",
+      "whatsapp_note": "Font: DM Sans 12px, color #888880. 'Opens WhatsApp to complete purchase'.",
+      "logic_preserved": "ALL WhatsApp href generation, phone number, pre-filled message text, onClick handlers — completely untouched. Only visual style changes."
+    },
+
+    "Testimonials": {
+      "section_bg": "#F5F3EE",
+      "layout": "CSS columns: 2 on desktop (column-count: 2, column-gap: 48px) — mimics a printed press clippings spread.",
+      "quote_mark": "Font: Anton, font-size 80px, color rgba(0,166,81,0.2), line-height 1.",
+      "quote_text": "Font: Libre Baskerville italic, font-size 17px, color #1A1A1A, line-height 1.75.",
+      "attribution_name": "Font: DM Sans 500, font-size 14px, color #1A1A1A.",
+      "attribution_detail": "Font: Courier Prime 12px, color #888880.",
+      "card_wrapper": "Border-top: 2px solid #1A1A1A, padding-top 24px, break-inside: avoid.",
+      "logic_preserved": "All testimonial data — untouched."
+    },
+
+    "FAQ": {
+      "section_bg": "#ECEAE3",
+      "accordion_item": "Border-top: 1.5px solid rgba(26,26,26,0.15). No other borders.",
+      "question": "Font: Anton, font-size 18px, color #1A1A1A, padding 18px 0, text-transform uppercase.",
+      "expand_icon": "Font-size 20px, color #00A651. Rotates 45deg when open.",
+      "answer": "Font: Libre Baskerville 15px, color #4A4A44, line-height 1.7, padding-bottom 18px.",
+      "animation": "height 0→auto, opacity 0→1, Framer Motion, 0.3s.",
+      "logic_preserved": "FAQ data, open/close state — untouched."
+    },
+
+    "ContactAdmin": {
+      "section_bg": "#F5F3EE",
+      "top_rule": "2px solid #1A1A1A above section.",
+      "form_container": "No card wrapper. Form lives on the open page surface, editorial-style. Max-width 600px.",
+      "input_field": "Background transparent, border-bottom: 2px solid rgba(26,26,26,0.2), border-top: none, border-left: none, border-right: none, border-radius 0, color #1A1A1A, font Libre Baskerville 15px, padding 12px 0. Focus: border-bottom-color #00A651. No box-shadow — flat, like a printed form.",
+      "label": "Font: DM Sans 11px, color #888880, letter-spacing 0.12em, text-transform uppercase.",
+      "submit_button": "Same as Pricing cta_featured — black background with green hover, full width, Anton font.",
+      "logic_preserved": "ALL form state, validation, localStorage save — untouched."
+    },
+
+    "FinalCTA": {
+      "section_bg": "#1A1A1A",
+      "note": "Third dark inversion — the page ends with power, not a whisper.",
+      "headline": "Font: Anton, font-size clamp(52px, 9vw, 104px), color #F5F3EE, line-height 0.9. Key phrase in #00A651.",
+      "subheadline": "Font: Libre Baskerville 17px, color #888880.",
+      "cta_primary": "Background #00A651, color #F5F3EE, font Anton 16px, letter-spacing 0.08em, padding 18px 48px, border-radius 0. Hover: background #007A3D. Box-shadow: 4px 4px 0 rgba(0,0,0,0.4).",
+      "cta_secondary": "Border: 2px solid rgba(245,243,238,0.3), color #F5F3EE, same size. Hover: border-color #F5F3EE.",
+      "fine_print": "Font: Courier Prime 12px, color #888880.",
+      "bottom_rule": "4px solid #00A651, full width, at bottom of section.",
+      "logic_preserved": "All CTA handlers — untouched."
+    },
+
+    "Footer": {
+      "background": "#0F0F0F",
+      "top_border": "4px solid #00A651.",
+      "wordmark": "Same Anton spec as Nav, color #F5F3EE.",
+      "link_color": "#888880, hover #F5F3EE. Transition 0.18s.",
+      "social_icons": "color #888880, hover #00A651.",
+      "bottom_line": "Font: Courier Prime 11px, color #4A4A44. 'BUILT FOR BRITISH FANS. POWERED BY OUR SERVERS. NOT THEIRS.'",
+      "logic_preserved": "All links and hrefs — untouched."
+    },
+
+    "AdminLogin": {
+      "page_bg": "#F5F3EE",
+      "note": "Admin uses light mode too — consistent with brand. But with a harder, more functional edge.",
+      "top_rule": "4px solid #1A1A1A at top of page.",
+      "card": "Background #ECEAE3, border: 1.5px solid rgba(26,26,26,0.15), border-radius 0, padding 40px, max-width 400px, margin auto. Box-shadow: 5px 5px 0 rgba(26,26,26,0.12).",
+      "headline": "Font: Anton, font-size 28px, color #1A1A1A.",
+      "inputs": "Same spec as ContactAdmin inputs — bottom-border only, editorial.",
+      "submit_button": "Background #1A1A1A, color #F5F3EE, font Anton, width 100%, padding 14px. Hover: background #00A651.",
+      "error_state": "Border-bottom-color #D42B2B. Error text: DM Sans 13px, color #D42B2B.",
+      "logic_preserved": "ALL credential checking, localStorage session, redirect — untouched."
+    },
+
+    "AdminDashboard": {
+      "design_principle": "Light-mode admin with a newspaper/data-table aesthetic. Dense, functional, editorial.",
+      "page_bg": "#F5F3EE",
+      "sidebar": "Background #ECEAE3, border-right: 1.5px solid rgba(26,26,26,0.12). Nav items: DM Sans 14px, color #4A4A44. Active: color #1A1A1A, background rgba(26,26,26,0.06), border-left: 3px solid #00A651.",
+      "main_area": "Background #F5F3EE.",
+      "stat_cards": "Background #ECEAE3, border: 1.5px solid rgba(26,26,26,0.12), border-radius 0, box-shadow: 3px 3px 0 rgba(26,26,26,0.08). Number: Anton, font-size 40px, color #1A1A1A. Label: DM Sans 11px, color #888880.",
+      "data_table": "Background #F5F3EE, border: 1.5px solid rgba(26,26,26,0.15), border-radius 0. Header row: background #1A1A1A. Header text: DM Sans 11px, color #F5F3EE, letter-spacing 0.08em, uppercase. Body text: Libre Baskerville 14px, color #1A1A1A. Row hover: background rgba(0,166,81,0.04). Row border-bottom: 1px solid rgba(26,26,26,0.08).",
+      "logout_button": "Border: 1.5px solid #D42B2B, color #D42B2B, font Anton 13px, padding 8px 20px, border-radius 0. Hover: background #D42B2B, color #F5F3EE.",
+      "logic_preserved": "ALL localStorage reads, user data, analytics data, email display, session clear — completely untouched."
+    },
+
+    "AnalyticsTracker": {
+      "note": "Non-visual component. No changes. Logic 100% preserved.",
+      "logic_preserved": "ALL data-analytics tracking and localStorage writes — untouched."
+    }
+  },
+
+  "tailwind_config_additions": {
+    "note": "Add to tailwind.config.js extend block.",
+    "colors": {
+      "brand": {
+        "base": "#F5F3EE",
+        "surface": "#ECEAE3",
+        "card": "#E4E1D8",
+        "ink": "#1A1A1A",
+        "accent": "#00A651",
+        "accent-hover": "#007A3D",
+        "muted": "#888880",
+        "red": "#D42B2B"
+      }
+    },
+    "fontFamily": {
+      "display": ["'Anton'", "sans-serif"],
+      "body": ["'Libre Baskerville'", "serif"],
+      "ui": ["'DM Sans'", "sans-serif"],
+      "mono": ["'Courier Prime'", "monospace"]
+    },
+    "boxShadow": {
+      "editorial": "3px 3px 0 rgba(26,26,26,0.1)",
+      "editorial-hover": "6px 6px 0 rgba(26,26,26,0.18)",
+      "editorial-accent": "5px 5px 0 rgba(0,166,81,0.3)"
+    }
+  },
+
+  "google_fonts_import": "Add to index.html <head>: <link rel='preconnect' href='https://fonts.googleapis.com'><link rel='preconnect' href='https://fonts.gstatic.com' crossorigin><link href='https://fonts.googleapis.com/css2?family=Anton&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&family=Courier+Prime:wght@400;700&display=swap' rel='stylesheet'>",
+
+  "framer_motion_upgrades": {
+    "page_load": "Wrap App.jsx in AnimatePresence. Route transitions: opacity 0→1, 0.25s.",
+    "section_reveal": "Each section: initial={{ opacity:0, y:24 }} whileInView={{ opacity:1, y:0 }} viewport={{ once:true, margin:'-60px' }} transition={{ duration:0.6, ease:[0.25,0.46,0.45,0.94] }}.",
+    "headline_wipe": "Hero words: use clipPath variants — initial={{ clipPath:'inset(0 100% 0 0)' }} animate={{ clipPath:'inset(0 0% 0 0)' }}. Stagger 60ms per word. This is the signature reveal.",
+    "card_hover_editorial": "All cards: whileHover={{ x:-2, y:-2, boxShadow:'6px 6px 0 rgba(26,26,26,0.18)' }}. No y-only movement — the diagonal shift reinforces the offset shadow aesthetic.",
+    "cta_press": "whileTap={{ scale:0.97 }} on all buttons.",
+    "stagger_grids": "Grid containers use staggerChildren: 0.08."
+  },
+
+  "design_philosophy_note": "This is a LIGHT MODE site in an industry of dark mode competitors. The editorial, printed aesthetic is the entire differentiator — lean into it fully. Every hard edge, every black rule, every serif body font is a deliberate statement: this brand has character. Resist any temptation to soften corners, add gradients, or introduce dark cards on the light base. The contrast IS the identity.",
+
+  "delivery_instruction": "Apply every style change described above, component by component. Do not regenerate logic. Do not change any prop names, function names, variable names, or imported utilities unless they are purely styling utilities. Where Tailwind classes are used, replace with the new palette classes or inline style where Tailwind cannot express the value. Pay special attention to the hard border-radius: 0 rule and the offset box-shadow pattern on cards. Import all four Google Fonts in index.html. Add the Tailwind config extensions. Output each updated component file in full."
+}

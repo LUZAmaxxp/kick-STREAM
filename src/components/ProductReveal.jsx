@@ -40,10 +40,9 @@ const fadeUp = {
 
 export default function ProductReveal() {
   return (
-    <section id="product" className="py-24 px-6 max-w-7xl mx-auto">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
-
-        {/* ── Left: Device mockup ── */}
+    <section id="product" className="py-20 px-6 max-w-7xl mx-auto border-b-2 border-[#1A1A1A] bg-[#F5F3EE]" style={{ borderRadius: 0 }}>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+        {/* Left: Device mockup, hard-edged */}
         <motion.div
           variants={fadeUp}
           initial="hidden"
@@ -51,31 +50,21 @@ export default function ProductReveal() {
           viewport={{ once: true, margin: '-80px' }}
           className="relative"
         >
-          {/* Outer glow */}
-          <div className="absolute -inset-4 rounded-2xl" style={{ background: 'radial-gradient(ellipse at center, rgba(170,255,69,0.06) 0%, transparent 70%)' }} />
-
+          {/* Hard border, no glow */}
+          <div className="absolute -inset-2 border-2 border-[#1A1A1A] pointer-events-none" style={{ borderRadius: 0 }} />
           {/* TV / monitor bezel */}
-          <div className="relative surface-card rounded-2xl p-3 shadow-2xl">
-            <div className="rounded-xl overflow-hidden aspect-video bg-pitch flex items-center justify-center relative">
+          <div className="relative bg-[#E4E1D8] border-2 border-[#1A1A1A] p-3" style={{ borderRadius: 0, boxShadow: 'none' }}>
+            <div className="overflow-hidden aspect-video bg-[#D9D7D0] flex items-center justify-center relative" style={{ borderRadius: 0 }}>
               {/* Fake match HUD */}
-              <div className="absolute inset-0 bg-gradient-to-br from-[#0d1a0d] via-[#0A0A0B] to-[#0A0A0B]" />
-
               {/* Score bar */}
-              <div className="absolute top-3 left-1/2 -translate-x-1/2 flex items-center gap-3 bg-black/70 rounded px-4 py-1.5">
-                <span className="font-display text-snow text-lg tracking-widest">ARS</span>
-                <span className="font-mono text-green text-xl font-bold">2 — 1</span>
-                <span className="font-display text-snow text-lg tracking-widest">CHE</span>
+              <div className="absolute top-3 left-1/2 -translate-x-1/2 flex items-center gap-3 bg-[#1A1A1A] px-4 py-1.5" style={{ borderRadius: 0 }}>
+                <span className="font-anton text-[#F5F3EE] text-lg tracking-widest">ARS</span>
+                <span className="font-mono text-[#00A651] text-xl font-bold">2 — 1</span>
+                <span className="font-anton text-[#F5F3EE] text-lg tracking-widest">CHE</span>
               </div>
-
-              {/* LIVE badge */}
-              <div className="absolute top-3 right-3 flex items-center gap-1.5 bg-green rounded px-2 py-0.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-pitch animate-pulse" />
-                <span className="font-mono text-pitch text-[10px] font-bold tracking-widest">LIVE</span>
-              </div>
-
               {/* Pitch */}
               <div className="w-full h-full opacity-10">
-                <svg viewBox="0 0 320 180" className="w-full h-full" fill="none" stroke="white" strokeWidth="1">
+                <svg viewBox="0 0 320 180" className="w-full h-full" fill="none" stroke="#1A1A1A" strokeWidth="1">
                   <rect x="10" y="10" width="300" height="160"/>
                   <line x1="160" y1="10" x2="160" y2="170"/>
                   <circle cx="160" cy="90" r="28"/>
@@ -85,33 +74,19 @@ export default function ProductReveal() {
                   <rect x="292" y="70" width="18" height="40"/>
                 </svg>
               </div>
-
               {/* HD badge */}
-              <div className="absolute bottom-3 left-3 border border-green/40 rounded px-2 py-0.5">
-                <span className="font-mono text-green text-[10px] tracking-widest">4K HD</span>
-              </div>
-
-              {/* Waveform */}
-              <div className="absolute bottom-3 right-3 flex items-end gap-0.5 h-6">
-                {[3,6,4,8,5,10,7,4,9,5,6,3,8,6,4].map((h, i) => (
-                  <div
-                    key={i}
-                    className="w-0.5 bg-green/60 rounded-full"
-                    style={{ height: `${h * 2}px`, animationDelay: `${i * 80}ms` }}
-                  />
-                ))}
+              <div className="absolute bottom-3 left-3 border border-[#00A651] px-2 py-0.5" style={{ borderRadius: 0 }}>
+                <span className="font-mono text-[#00A651] text-[10px] tracking-widest">4K HD</span>
               </div>
             </div>
-
             {/* Stand */}
             <div className="flex justify-center mt-2">
-              <div className="w-16 h-1 rounded-full bg-surface" />
+              <div className="w-16 h-1 bg-[#D9D7D0]" style={{ borderRadius: 0 }} />
             </div>
           </div>
         </motion.div>
-
-        {/* ── Right: Features ── */}
-        <div className="flex flex-col gap-10">
+        {/* Right: Features, editorial style */}
+        <div className="flex flex-col gap-8">
           {FEATURES.map((f, i) => (
             <motion.div
               key={i}
@@ -119,19 +94,13 @@ export default function ProductReveal() {
               initial="hidden"
               whileInView="show"
               viewport={{ once: true, margin: '-60px' }}
-              transition={{ delay: i * 0.12 }}
-              className="flex gap-5 items-start"
+              className="flex items-start gap-5 border-b border-[#1A1A1A] pb-6 last:border-b-0 last:pb-0"
+              style={{ borderRadius: 0 }}
             >
-              <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-green/10 border border-green/20 flex items-center justify-center text-green">
-                {f.icon}
-              </div>
+              <div className="mt-1 text-[#00A651]">{f.icon}</div>
               <div>
-                <h3 className="font-display text-2xl tracking-wider text-snow mb-1">
-                  {f.headline}
-                </h3>
-                <p className="font-body text-sm text-snow/50 leading-relaxed">
-                  {f.body}
-                </p>
+                <div className="font-anton text-[22px] text-[#1A1A1A] mb-1 uppercase tracking-tight">{f.headline}</div>
+                <div className="font-dmsans text-[15px] text-[#4A4A44]">{f.body}</div>
               </div>
             </motion.div>
           ))}

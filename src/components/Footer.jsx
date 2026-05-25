@@ -39,22 +39,17 @@ function YouTubeIcon() {
 
 export default function Footer() {
   return (
-    <footer className="relative pt-px">
-      {/* Thin green rule */}
-      <div className="h-px w-full bg-green/30" />
-
-      <div className="bg-pitch px-6 py-16">
+    <footer className="relative pt-0 border-t-2 border-[#1A1A1A] bg-[#F5F3EE]" style={{ borderRadius: 0 }}>
+      <div className="px-6 py-16">
         <div className="max-w-7xl mx-auto">
-
           {/* Top row */}
           <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-10 mb-16">
-
             {/* Wordmark + tagline */}
             <div>
-              <a href="#" className="font-display text-3xl tracking-widest text-snow">
+              <a href="#" className="font-anton text-3xl tracking-widest text-[#1A1A1A]">
                 KICKSTREAM
               </a>
-              <p className="font-mono text-xs text-snow/30 mt-2 tracking-[0.12em]">
+              <p className="font-mono text-xs text-[#4A4A44] mt-2 tracking-[0.12em]">
                 Every Match. Your Server. No Compromise.
               </p>
             </div>

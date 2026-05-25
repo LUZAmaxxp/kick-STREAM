@@ -31,23 +31,21 @@ const fadeUp = {
 
 export default function Testimonials() {
   return (
-    <section className="py-28 px-6">
+    <section className="py-24 px-6 bg-[#F5F3EE] border-b-2 border-[#1A1A1A]" style={{ borderRadius: 0 }}>
       <div className="max-w-7xl mx-auto">
-
         <motion.p
           variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }}
-          className="font-mono text-green text-xs tracking-[0.25em] uppercase mb-4"
+          className="font-mono text-[#00A651] text-xs tracking-[0.25em] uppercase mb-4"
         >
           From the Terraces
         </motion.p>
         <motion.h2
           variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }}
           transition={{ delay: 0.1 }}
-          className="font-display text-[clamp(40px,6vw,72px)] text-snow mb-16 leading-none"
+          className="font-anton text-[clamp(40px,6vw,72px)] text-[#1A1A1A] mb-16 leading-none uppercase"
         >
           FANS DON'T LIE.
         </motion.h2>
-
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {QUOTES.map((q, i) => (
             <motion.div
@@ -57,28 +55,26 @@ export default function Testimonials() {
               whileInView="show"
               viewport={{ once: true, margin: '-60px' }}
               transition={{ delay: i * 0.13 }}
-              className="relative p-8 rounded-2xl border"
-              style={{ background: q.bg, borderColor: 'rgba(255,255,255,0.06)' }}
+              className="relative p-8 border-2 border-[#1A1A1A]"
+              style={{ background: '#FFF', borderRadius: 0 }}
             >
               {/* Large opening quote */}
               <span
-                className="block font-display leading-none text-green mb-4 select-none"
+                className="block font-anton leading-none text-[#00A651] mb-4 select-none"
                 style={{ fontSize: '96px', lineHeight: '0.7', opacity: 0.7 }}
               >
                 "
               </span>
-
               {/* Quote body */}
               <p
-                className="font-body text-base text-snow/80 leading-relaxed mb-8"
+                className="font-dmsans text-base text-[#1A1A1A] leading-relaxed mb-8"
                 style={{ fontStyle: 'italic' }}
               >
                 {q.text}
               </p>
-
               {/* Attribution */}
-              <div className="pitch-line pt-5">
-                <p className="font-mono text-[11px] tracking-[0.18em] text-snow/50 uppercase">
+              <div className="pt-5 border-t border-[#E4E1D8]">
+                <p className="font-mono text-[11px] tracking-[0.18em] text-[#4A4A44] uppercase">
                   {q.name} — {q.club} Fan, {q.location}
                 </p>
               </div>
