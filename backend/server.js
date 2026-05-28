@@ -11,7 +11,7 @@ const PORT = process.env.PORT || 5000; // Use port from environment variables or
 
 // Middleware
 app.use(cors({
-  origin: process.env.CLIENT_URL || true,
+  origin: process.env.CLIENT_URL,
   credentials: true,
 }));
 app.use(express.json());
