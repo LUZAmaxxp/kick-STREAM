@@ -6,14 +6,7 @@ const AnalyticsTracker = () => {
     const handleClick = (e) => {
       const target = e.target.closest('[data-analytics]');
       if (target) {
-        const event = {
-          type: 'click',
-          label: target.getAttribute('data-analytics'),
-          timestamp: Date.now(),
-        };
-        let events = JSON.parse(localStorage.getItem('analytics_events') || '[]');
-        events.push(event);
-        localStorage.setItem('analytics_events', JSON.stringify(events));
+        // TODO: Send analytics event to backend or store in cookie if needed
       }
     };
     document.addEventListener('click', handleClick);

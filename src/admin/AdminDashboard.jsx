@@ -1,14 +1,32 @@
-import { useState } from 'react';
 import AdminUsers from './AdminUsers';
 import AdminAnalytics from './AdminAnalytics';
 import AdminEmails from './AdminEmails';
-
-export default function AdminDashboard() {
+import useAdminNotifications from './useAdminNotifications';
+import React, { useState, useEffect } from 'react';
+export default function AdminDashboard({ user }) {
   const [activeTab, setActiveTab] = useState('overview');
+  const [showDropdown, setShowDropdown] = useState(false);
+  // Pop open dropdown on notification
+  const notifications = useAdminNotifications(user, () => setShowDropdown(true));
+  const [stats, setStats] = useState({ totalUsers: '—', emailsQueued: '—', clickEvents: '—' });
+  useEffect(() => {
+    fetch('/api/admin/stats', { credentials: 'include' })
+      .then(res => res.json())
+      .then(data => {
+        setStats({
+          totalUsers: data.totalUsers ?? '—',
+          emailsQueued: data.emailsQueued ?? '—',
+          clickEvents: data.clickEvents ?? '—',
+        });
+      })
+      .catch(() => setStats({ totalUsers: '—', emailsQueued: '—', clickEvents: '—' }));
+  }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem('admin_logged_in');
-    window.location.reload();
+    // Optionally, call backend to clear cookie
+    fetch('/api/auth/logout', { method: 'POST', credentials: 'include' }).then(() => {
+      window.location.reload();
+    });
   };
 
   const now = new Date();
@@ -21,45 +39,19 @@ export default function AdminDashboard() {
       <div style={styles.grid} />
 
       {/* Top bar */}
+
       <header style={styles.topbar}>
         <div style={styles.topLeft}>
-          <div style={styles.statusDot} />
-          <span style={styles.siteLabel}>KICKSTREAM</span>
-          <span style={styles.slash}>/</span>
-          <span style={styles.pageLabel}>admin console</span>
-        </div>
-        <div style={styles.topCenter}>
-          <span style={styles.timeLabel}>{timeStr}</span>
-          <span style={styles.dateLabel}>{dateStr}</span>
-        </div>
-        <div style={styles.topRight}>
-          <div style={styles.sessionPill}>
-            <div style={styles.sessionDot} />
-            SESSION ACTIVE
-          </div>
-          <button onClick={handleLogout} style={styles.logoutBtn}>
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-              <polyline points="16 17 21 12 16 7" />
-              <line x1="21" y1="12" x2="9" y2="12" />
-            </svg>
-            LOGOUT
-          </button>
+          {/* Add any top bar content here, e.g. logo, nav, etc. */}
         </div>
       </header>
 
-      {/* Page heading */}
-      <div style={styles.pageHead}>
-        <h1 style={styles.pageTitle}>COMMAND CENTER</h1>
-        <p style={styles.pageSub}>// real-time platform overview &amp; management</p>
-      </div>
-
-      {/* Stats row */}
+      {/* Stats row - now below top bar */}
       <div style={styles.statsRow}>
         {[
-          { label: 'TOTAL USERS', value: '—', icon: '◈', color: '#E8714F' },
-          { label: 'EMAILS QUEUED', value: '—', icon: '◉', color: '#1A1A1A' },
-          { label: 'CLICK EVENTS', value: '—', icon: '◆', color: '#E8714F' },
+          { label: 'TOTAL USERS', value: stats.totalUsers, icon: '◈', color: '#E8714F' },
+          { label: 'EMAILS QUEUED', value: stats.emailsQueued, icon: '◉', color: '#1A1A1A' },
+          { label: 'CLICK EVENTS', value: stats.clickEvents, icon: '◆', color: '#E8714F' },
           { label: 'UPTIME', value: '99.9%', icon: '▲', color: '#1A1A1A' },
         ].map((s) => (
           <div key={s.label} style={styles.statCard}>
@@ -71,6 +63,12 @@ export default function AdminDashboard() {
             <div style={{ height: 2, background: s.color, opacity: 0.3, borderRadius: 0, marginTop: 12 }} />
           </div>
         ))}
+      </div>
+
+      {/* Page heading */}
+      <div style={styles.pageHead}>
+        <h1 style={styles.pageTitle}>COMMAND CENTER</h1>
+        <p style={styles.pageSub}>// real-time platform overview &amp; management</p>
       </div>
 
       {/* Main grid */}

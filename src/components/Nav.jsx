@@ -1,15 +1,18 @@
-import { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+
+import { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Link } from 'react-router-dom';
 
 const NAV_LINKS = [
   { label: 'How It Works', href: '#how-it-works' },
   { label: 'Pricing',      href: '#pricing' },
-  { label: 'Sign In',      href: '#' },
-]
+  { label: 'Sign In',      href: '/auth' },
+];
 
-export default function Nav() {
-  const [visible, setVisible] = useState(false)
-  const [menuOpen, setMenuOpen] = useState(false)
+
+export default function Nav({ user, logout }) {
+  const [visible, setVisible] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setVisible(window.scrollY > window.innerHeight * 0.8)
@@ -36,15 +39,36 @@ export default function Nav() {
 
             {/* Desktop links */}
             <div className="hidden md:flex items-center gap-8">
-              {NAV_LINKS.map(l => (
-                <a
-                  key={l.label}
-                  href={l.href}
+              <a
+                href="#how-it-works"
+                className="text-xs font-ui font-semibold uppercase tracking-[0.15em] text-black/60 hover:text-black transition-colors"
+              >
+                How It Works
+              </a>
+              <a
+                href="#pricing"
+                className="text-xs font-ui font-semibold uppercase tracking-[0.15em] text-black/60 hover:text-black transition-colors"
+              >
+                Pricing
+              </a>
+              {!user ? (
+                <Link
+                  to="/auth"
                   className="text-xs font-ui font-semibold uppercase tracking-[0.15em] text-black/60 hover:text-black transition-colors"
                 >
-                  {l.label}
-                </a>
-              ))}
+                  Sign In
+                </Link>
+              ) : (
+                <>
+                  <span className="text-xs font-ui font-semibold uppercase tracking-[0.15em] text-black/80">{user.email || user.username || 'Account'}</span>
+                  <button
+                    onClick={logout}
+                    className="ml-2 text-xs font-ui font-semibold uppercase tracking-[0.15em] text-red-600 hover:text-black transition-colors"
+                  >
+                    Logout
+                  </button>
+                </>
+              )}
               <a
                 href="#pricing"
                 className="px-5 py-2 bg-black text-cream text-xs font-ui font-semibold uppercase tracking-[0.12em] hover:bg-black-light transition"
@@ -77,16 +101,39 @@ export default function Nav() {
                 style={{ borderColor: '#1A1A1A' }}
               >
                 <div className="flex flex-col gap-4 px-6 py-6">
-                  {NAV_LINKS.map(l => (
-                    <a
-                      key={l.label}
-                      href={l.href}
+                  <a
+                    href="#how-it-works"
+                    onClick={() => setMenuOpen(false)}
+                    className="text-sm font-ui font-semibold uppercase tracking-widest text-black/60 hover:text-black"
+                  >
+                    How It Works
+                  </a>
+                  <a
+                    href="#pricing"
+                    onClick={() => setMenuOpen(false)}
+                    className="text-sm font-ui font-semibold uppercase tracking-widest text-black/60 hover:text-black"
+                  >
+                    Pricing
+                  </a>
+                  {!user ? (
+                    <Link
+                      to="/auth"
                       onClick={() => setMenuOpen(false)}
                       className="text-sm font-ui font-semibold uppercase tracking-widest text-black/60 hover:text-black"
                     >
-                      {l.label}
-                    </a>
-                  ))}
+                      Sign In
+                    </Link>
+                  ) : (
+                    <>
+                      <span className="text-sm font-ui font-semibold uppercase tracking-widest text-black/80">{user.email || user.username || 'Account'}</span>
+                      <button
+                        onClick={() => { setMenuOpen(false); logout(); }}
+                        className="ml-2 text-sm font-ui font-semibold uppercase tracking-widest text-red-600 hover:text-black"
+                      >
+                        Logout
+                      </button>
+                    </>
+                  )}
                   <a
                     href="#pricing"
                     onClick={() => setMenuOpen(false)}

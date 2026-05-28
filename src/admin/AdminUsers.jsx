@@ -2,10 +2,27 @@ import { useEffect, useState } from 'react';
 
 export default function AdminUsers() {
   const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
   useEffect(() => {
-    const stored = localStorage.getItem('site_users');
-    if (stored) setUsers(JSON.parse(stored));
+    const fetchUsers = async () => {
+      setLoading(true);
+      setError('');
+      try {
+        const res = await fetch('/api/admin/users', {
+          credentials: 'include',
+        });
+        if (!res.ok) throw new Error('Failed to fetch users');
+        const data = await res.json();
+        setUsers(data);
+      } catch (err) {
+        setError('Could not load users');
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchUsers();
   }, []);
 
   return (
@@ -37,21 +54,25 @@ export default function AdminUsers() {
 
       {/* Rows */}
       <div style={styles.list}>
-        {users.length === 0 ? (
+        {loading ? (
+          <div style={styles.emptyState}>Loading users...</div>
+        ) : error ? (
+          <div style={styles.emptyState}>{error}</div>
+        ) : users.length === 0 ? (
           <div style={styles.emptyState}>
             <span style={{ color: '#5B9EFF', marginRight: 8 }}>◈</span>
             no users registered yet
           </div>
         ) : (
           users.map((u, i) => (
-            <div key={i} style={styles.row(i)}>
+            <div key={u._id || i} style={styles.row(i)}>
               <div style={{ flex: 2, display: 'flex', alignItems: 'center', gap: 10 }}>
                 <div style={styles.avatar(i)}>
                   {(u.email || 'A')[0].toUpperCase()}
                 </div>
                 <div>
                   <div style={styles.emailText}>{u.email || 'anonymous@unknown'}</div>
-                  <div style={styles.uidText}>uid_{String(i + 1).padStart(4, '0')}</div>
+                  <div style={styles.uidText}>uid_{u._id ? u._id.slice(-4) : String(i + 1).padStart(4, '0')}</div>
                 </div>
               </div>
               <div style={{ flex: 1, textAlign: 'center' }}>

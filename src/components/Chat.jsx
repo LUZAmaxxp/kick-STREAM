@@ -1,26 +1,46 @@
 import React, { useState, useEffect, useRef } from 'react';
 import * as Ably from 'ably';
 
-const Chat = ({ user, authToken }) => {
+const Chat = ({ user }) => {
   const [ably, setAbly] = useState(null);
   const [channel, setChannel] = useState(null);
   const [messageText, setMessageText] = useState('');
   const [messages, setMessages] = useState([]);
   const messagesEndRef = useRef(null);
+  // Track loading state for history
+  const [loading, setLoading] = useState(true);
+  // Fetch conversation history on mount
+  useEffect(() => {
+    if (!user) return;
+    setLoading(true);
+    fetch('/api/admin/conversation', {
+      credentials: 'include',
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.conversation && Array.isArray(data.conversation.messages)) {
+          setMessages(data.conversation.messages.map(m => ({ data: m })));
+        } else {
+          setMessages([]);
+        }
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  }, [user]);
 
   useEffect(() => {
-    if (!user || !authToken) {
-      console.log('User or Auth Token not available for Ably');
+    if (!user) {
+      console.log('User not available for Ably');
       return;
     }
 
     const ablyClient = new Ably.Realtime({
       authCallback: async (tokenParams, callback) => {
         try {
-          const response = await fetch('http://localhost:5000/api/ably-token', {
+          const response = await fetch('/api/ably-token', {
             method: 'GET',
+            credentials: 'include',
             headers: {
-              'x-auth-token': authToken,
               'Content-Type': 'application/json',
             },
           });
@@ -31,17 +51,14 @@ const Chat = ({ user, authToken }) => {
             return;
           }
 
-       
-const tokenRequest = await response.json();
-console.log('🔑 Full token request:', JSON.stringify(tokenRequest, null, 2));
-console.log('👤 user.id being used for channel:', user.id);
-console.log('🔤 clientId type:', typeof user.id, '| value:', user.id);
-callback(null, tokenRequest);
-          
+          const tokenRequest = await response.json();
+          console.log('🔑 Full token request:', JSON.stringify(tokenRequest, null, 2));
+          console.log('👤 user.id being used for channel:', user.id);
+          console.log('🔤 clientId type:', typeof user.id, '| value:', user.id);
+          callback(null, tokenRequest);
         } catch (err) {
           console.error('Ably auth error:', err);
           callback(err, null);
-          
         }
       },
       echoMessages: false,
@@ -59,7 +76,7 @@ callback(null, tokenRequest);
     return () => {
       ablyClient.close();
     };
-  }, [user, authToken]);
+  }, [user]);
 
   useEffect(() => {
     if (!ably || !user) return;
@@ -82,45 +99,79 @@ callback(null, tokenRequest);
   }, [messages]);
 
   const handleSendMessage = async () => {
-    if (messageText.trim() === '' || !channel) return;
-
-    const messageData = {
-      text: messageText,
-      sender: user.username,
-      senderId: user.id,
-      timestamp: Date.now(),
-      isAdmin: user.isAdmin,
-    };
+    if (messageText.trim() === '') return;
 
     try {
-      await channel.publish('message', messageData);
+      // Persist to backend (creates/updates conversation)
+      const res = await fetch('/api/admin/conversation/message', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ text: messageText })
+      });
+      if (!res.ok) throw new Error('Failed to send');
+      const data = await res.json();
+      if (data.conversation && Array.isArray(data.conversation.messages)) {
+        setMessages(data.conversation.messages.map(m => ({ data: m })));
+      }
       setMessageText('');
-      setMessages(prev => [...prev, {
-        data: messageData,
-        connectionId: ably.connection.id,
-      }]);
+      // Optionally, publish to Ably for real-time update
+      if (channel) {
+        await channel.publish('message', {
+          text: messageText,
+          sender: user.username,
+          senderId: user.id,
+          timestamp: Date.now(),
+          isAdmin: user.isAdmin,
+        });
+      }
     } catch (err) {
-      console.error('Error publishing message:', err);
+      console.error('Error sending message:', err);
     }
   };
 
   return (
-    <div className="chat-container">
-      <div className="messages-list">
-        {messages.map((msg, index) => (
-          <div
-            key={index}
-            className={`message ${msg.data.senderId === user.id ? 'sent' : 'received'}`}
-          >
-            <strong>{msg.data.sender}:</strong> {msg.data.text}
-            <span className="timestamp">
-              {new Date(msg.data.timestamp).toLocaleTimeString()}
-            </span>
-          </div>
-        ))}
+    <div style={{ display: 'flex', flexDirection: 'column', height: 400, background: '#fff', borderRadius: 12, boxShadow: '0 2px 16px 0 rgba(26,26,26,0.06)' }}>
+      <div style={{ flex: 1, overflowY: 'auto', padding: '18px 12px 8px 12px', display: 'flex', flexDirection: 'column', gap: 8 }}>
+        {loading ? (
+          <div style={{ textAlign: 'center', color: '#888', margin: 16 }}>Loading chat...</div>
+        ) : messages.length === 0 ? (
+          <div style={{ textAlign: 'center', color: '#888', margin: 16 }}>No messages yet.</div>
+        ) : (
+          messages.map((msg, index) => {
+            const isAdmin = msg.data.isAdmin;
+            const isSelf = msg.data.senderId === user.id;
+            return (
+              <div
+                key={index}
+                style={{
+                  alignSelf: isAdmin ? 'flex-end' : (isSelf ? 'flex-end' : 'flex-start'),
+                  maxWidth: '75%',
+                  background: isAdmin ? '#E8714F' : (isSelf ? '#00A651' : '#F5F3EE'),
+                  color: isAdmin || isSelf ? '#fff' : '#1A1A1A',
+                  borderRadius: isAdmin ? '16px 16px 4px 16px' : (isSelf ? '16px 16px 4px 16px' : '16px 16px 16px 4px'),
+                  padding: '10px 16px',
+                  marginBottom: 2,
+                  boxShadow: isAdmin ? '0 2px 8px 0 rgba(232,113,79,0.08)' : (isSelf ? '0 2px 8px 0 rgba(0,166,81,0.08)' : '0 2px 8px 0 rgba(26,26,26,0.04)'),
+                  fontSize: 14,
+                  position: 'relative',
+                  wordBreak: 'break-word',
+                }}
+              >
+                <div style={{ fontWeight: 600, fontSize: 12, marginBottom: 2, opacity: 0.7 }}>
+                  {msg.data.senderName || msg.data.sender || (isAdmin ? 'Admin' : 'You')}
+                </div>
+                <div>{msg.data.text}</div>
+                <div style={{ fontSize: 10, color: isAdmin || isSelf ? 'rgba(255,255,255,0.7)' : '#888', marginTop: 4, textAlign: 'right' }}>
+                  {msg.data.timestamp ? new Date(msg.data.timestamp).toLocaleTimeString() : ''}
+                </div>
+              </div>
+            );
+          })
+        )}
         <div ref={messagesEndRef} />
       </div>
-      <div className="message-input">
+      <div style={{ display: 'flex', alignItems: 'center', borderTop: '1.5px solid #F5F3EE', padding: '10px 12px', background: '#FAFAF8', borderRadius: '0 0 12px 12px' }}>
         <input
           type="text"
           value={messageText}
@@ -129,8 +180,33 @@ callback(null, tokenRequest);
             if (e.key === 'Enter') handleSendMessage();
           }}
           placeholder="Type your message..."
+          style={{
+            flex: 1,
+            border: 'none',
+            outline: 'none',
+            background: 'transparent',
+            fontSize: 15,
+            padding: '8px 0',
+            color: '#1A1A1A',
+          }}
         />
-        <button onClick={handleSendMessage}>Send</button>
+        <button
+          onClick={handleSendMessage}
+          style={{
+            marginLeft: 8,
+            background: '#00A651',
+            color: '#fff',
+            border: 'none',
+            borderRadius: 8,
+            padding: '8px 18px',
+            fontWeight: 600,
+            fontSize: 15,
+            cursor: 'pointer',
+            transition: 'background 0.2s',
+          }}
+        >
+          Send
+        </button>
       </div>
     </div>
   );

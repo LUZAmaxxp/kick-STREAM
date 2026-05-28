@@ -1,30 +1,68 @@
+
 import { useEffect, useState } from 'react';
 
 export default function AdminEmails() {
-  const [emails, setEmails] = useState([]);
+  const [conversations, setConversations] = useState([]);
   const [selected, setSelected] = useState(null);
+  const [reply, setReply] = useState("");
+  const [replyStatus, setReplyStatus] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const stored = localStorage.getItem('client_emails');
-    if (stored) {
-      const parsed = JSON.parse(stored);
-      setEmails(parsed);
-      if (parsed.length > 0) setSelected(0);
-    }
+    setLoading(true);
+    fetch("/api/admin/conversations", {
+      credentials: 'include',
+    })
+      .then(res => res.json())
+      .then(data => {
+        setConversations(data.conversations || []);
+        if ((data.conversations || []).length > 0) setSelected(0);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
   }, []);
-
-  const deleteEmail = (i) => {
-    const updated = emails.filter((_, idx) => idx !== i);
-    setEmails(updated);
-    localStorage.setItem('client_emails', JSON.stringify(updated));
-    setSelected(updated.length > 0 ? Math.min(i, updated.length - 1) : null);
-  };
 
   const fmt = (ts) =>
     new Date(ts).toLocaleString('en-US', {
       month: 'short', day: 'numeric',
       hour: '2-digit', minute: '2-digit',
     });
+
+  const handleReply = async () => {
+    if (!reply.trim() || selected === null) return;
+    setReplyStatus("Sending...");
+    setError("");
+    const convo = conversations[selected];
+    if (!convo || !convo.participants || convo.participants.length === 0) return;
+    const userId = convo.participants[0]._id || convo.participants[0].id;
+    try {
+      const res = await fetch(`/api/admin/conversation/${userId}/reply`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ text: reply }),
+        credentials: 'include',
+      });
+      if (!res.ok) {
+        const data = await res.json();
+        setError(data.msg || "Failed to send reply");
+        setReplyStatus("");
+        return;
+      }
+      // Update conversation with new message
+      const data = await res.json();
+      const updated = [...conversations];
+      updated[selected] = data.conversation;
+      setConversations(updated);
+      setReplyStatus("Reply sent!");
+      setReply("");
+    } catch (e) {
+      setError("Failed to send reply");
+      setReplyStatus("");
+    }
+  };
 
   return (
     <div style={styles.root}>
@@ -35,9 +73,9 @@ export default function AdminEmails() {
             <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
             <polyline points="22,6 12,13 2,6" />
           </svg>
-          <span style={styles.panelTitle}>CLIENT MESSAGES</span>
-          {emails.length > 0 && (
-            <span style={styles.unreadBadge}>{emails.length} unread</span>
+          <span style={styles.panelTitle}>CLIENT CONVERSATIONS</span>
+          {conversations.length > 0 && (
+            <span style={styles.unreadBadge}>{conversations.length} users</span>
           )}
         </div>
         <span style={styles.liveTag}>
@@ -46,71 +84,105 @@ export default function AdminEmails() {
         </span>
       </div>
 
-      {emails.length === 0 ? (
+      {loading ? (
+        <div style={styles.emptyState}>Loading conversations...</div>
+      ) : conversations.length === 0 ? (
         <div style={styles.emptyState}>
           <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="rgba(242,240,232,0.15)" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round" style={{ marginBottom: 12 }}>
             <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
             <polyline points="22,6 12,13 2,6" />
           </svg>
-          <span>inbox is empty</span>
+          <span>No conversations yet</span>
         </div>
       ) : (
         <div style={styles.splitPane}>
-          {/* Sidebar */}
+          {/* Sidebar: list of conversations by user */}
           <div style={styles.sidebar}>
-            {emails.map((e, i) => (
-              <div
-                key={i}
-                onClick={() => setSelected(i)}
-                style={styles.mailItem(i === selected)}
-              >
-                <div style={styles.mailItemTop}>
-                  <div style={styles.senderAvatar(i)}>{e.email[0].toUpperCase()}</div>
-                  <div style={styles.senderInfo}>
-                    <div style={styles.senderEmail}>{e.email}</div>
-                    <div style={styles.senderTime}>{fmt(e.timestamp)}</div>
+            {conversations.map((c, i) => {
+              const user = c.participants && c.participants[0];
+              return (
+                <div
+                  key={c._id || i}
+                  onClick={() => setSelected(selected === i ? null : i)}
+                  style={styles.mailItem(i === selected)}
+                >
+                  <div style={styles.mailItemTop}>
+                    <div style={styles.senderAvatar(i)}>{(user?.email || user?.username || 'U')[0].toUpperCase()}</div>
+                    <div style={styles.senderInfo}>
+                      <div style={styles.senderEmail}>{user?.email || user?.username || 'Unknown'}</div>
+                      <div style={styles.senderTime}>{c.lastUpdated ? fmt(c.lastUpdated) : ''}</div>
+                    </div>
+                    {i === selected && <div style={styles.activeIndicator} />}
                   </div>
-                  {i === selected && <div style={styles.activeIndicator} />}
+                  <div style={styles.msgPreview}>{c.messages && c.messages.length > 0 ? c.messages[c.messages.length - 1].text : 'No messages yet'}</div>
                 </div>
-                <div style={styles.msgPreview}>{e.message}</div>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
-          {/* Detail pane */}
-          {selected !== null && emails[selected] && (
+          {/* Detail pane: full conversation thread */}
+          {selected !== null && conversations[selected] && (
             <div style={styles.detail}>
               <div style={styles.detailHeader}>
-                <div style={styles.detailAvatar}>{emails[selected].email[0].toUpperCase()}</div>
+                <div style={styles.detailAvatar}>{(conversations[selected].participants[0]?.email || conversations[selected].participants[0]?.username || 'U')[0].toUpperCase()}</div>
                 <div style={{ flex: 1 }}>
-                  <div style={styles.detailEmail}>{emails[selected].email}</div>
-                  <div style={styles.detailTime}>{fmt(emails[selected].timestamp)}</div>
+                  <div style={styles.detailEmail}>{conversations[selected].participants[0]?.email || conversations[selected].participants[0]?.username || 'Unknown'}</div>
+                  <div style={styles.detailTime}>{conversations[selected].lastUpdated ? fmt(conversations[selected].lastUpdated) : ''}</div>
                 </div>
-                <button
-                  onClick={() => deleteEmail(selected)}
-                  style={styles.deleteBtn}
-                  title="Delete message"
-                >
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <polyline points="3 6 5 6 21 6" />
-                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" />
-                  </svg>
-                  DELETE
-                </button>
               </div>
 
               <div style={styles.detailDivider} />
 
-              <div style={styles.msgLabel}>MESSAGE</div>
-              <div style={styles.msgBody}>{emails[selected].message}</div>
-
-              <div style={styles.replyHint}>
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#AAFF45" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <polyline points="9 17 4 12 9 7" />
-                  <path d="M20 18v-2a4 4 0 0 0-4-4H4" />
-                </svg>
-                reply externally via email client
+              <div style={styles.msgLabel}>CONVERSATION</div>
+              <div style={{ flex: 1, overflowY: 'auto', marginBottom: 16, display: 'flex', flexDirection: 'column', gap: 8, maxHeight: '40vh' }}>
+                {conversations[selected].messages && conversations[selected].messages.length > 0 ? (
+                  conversations[selected].messages.map((m, idx) => (
+                    <div
+                      key={idx}
+                      style={{
+                        alignSelf: m.isAdmin ? 'flex-end' : 'flex-start',
+                        maxWidth: '70%',
+                        background: m.isAdmin ? '#E8714F' : '#F5F3EE',
+                        color: m.isAdmin ? '#fff' : '#1A1A1A',
+                        borderRadius: m.isAdmin ? '16px 16px 4px 16px' : '16px 16px 16px 4px',
+                        padding: '10px 16px',
+                        marginBottom: 2,
+                        boxShadow: m.isAdmin ? '0 2px 8px 0 rgba(232,113,79,0.08)' : '0 2px 8px 0 rgba(26,26,26,0.04)',
+                        fontSize: 14,
+                        position: 'relative',
+                      }}
+                    >
+                      <div style={{ fontWeight: 600, fontSize: 12, marginBottom: 2, opacity: 0.7 }}>
+                        {m.senderName || (m.isAdmin ? 'Admin' : 'User')}
+                      </div>
+                      <div>{m.text}</div>
+                      <div style={{ fontSize: 10, color: m.isAdmin ? 'rgba(255,255,255,0.7)' : '#888', marginTop: 4, textAlign: 'right' }}>
+                        {m.timestamp ? fmt(m.timestamp) : ''}
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <div style={{ color: '#888', fontSize: 13 }}>No messages yet.</div>
+                )}
               </div>
+
+              <div style={styles.msgLabel}>REPLY</div>
+              <textarea
+                value={reply}
+                onChange={e => setReply(e.target.value)}
+                rows={3}
+                style={{ width: '100%', padding: 8, borderRadius: 6, border: '1px solid #eee', marginBottom: 8 }}
+                placeholder="Type your reply here..."
+              />
+              <button
+                onClick={handleReply}
+                style={{ ...styles.deleteBtn, background: '#AAFF45', color: '#1A1A1A', border: 'none', marginRight: 8 }}
+                disabled={!reply.trim() || replyStatus === 'Sending...'}
+              >
+                {replyStatus === 'Sending...' ? 'Sending...' : 'Send Reply'}
+              </button>
+              {replyStatus && replyStatus !== 'Sending...' && <span style={{ color: '#00A651', marginLeft: 8 }}>{replyStatus}</span>}
+              {error && <span style={{ color: 'red', marginLeft: 8 }}>{error}</span>}
             </div>
           )}
         </div>
@@ -157,12 +229,21 @@ const styles = {
     letterSpacing: '0.06em',
   },
   splitPane: {
-    display: 'flex', minHeight: 320,
+    display: 'flex',
+    minHeight: 480,
+    height: '60vh',
+    background: '#fff',
+    borderRadius: 12,
+    boxShadow: '0 2px 16px 0 rgba(26,26,26,0.06)',
+    overflow: 'hidden',
   },
   sidebar: {
-    width: 260, flexShrink: 0,
-    borderRight: '1px solid rgba(26,26,26,0.1)',
+    width: 280,
+    flexShrink: 0,
+    borderRight: '1.5px solid #F5F3EE',
+    background: '#FAFAF8',
     overflowY: 'auto',
+    paddingTop: 8,
   },
   mailItem: (active) => ({
     padding: '14px 16px',
@@ -194,8 +275,14 @@ const styles = {
     paddingLeft: 34,
   },
   detail: {
-    flex: 1, padding: '20px 24px',
-    display: 'flex', flexDirection: 'column',
+    flex: 1,
+    padding: '32px 32px 16px 32px',
+    display: 'flex',
+    flexDirection: 'column',
+    background: '#fff',
+    minWidth: 0,
+    height: '100%',
+    justifyContent: 'flex-end',
   },
   detailHeader: { display: 'flex', alignItems: 'center', gap: 12 },
   detailAvatar: {

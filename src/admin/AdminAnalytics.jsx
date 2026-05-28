@@ -1,31 +1,48 @@
+
 import { useEffect, useState } from 'react';
 
 export default function AdminAnalytics() {
-  const [events, setEvents] = useState([]);
+  const [analytics, setAnalytics] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
-    const stored = localStorage.getItem('analytics_events');
-    if (stored) setEvents(JSON.parse(stored));
+    fetch('/api/admin/analytics/users', {
+      credentials: 'include',
+    })
+      .then(res => res.json())
+      .then(data => {
+        setAnalytics(data.analytics || []);
+        setLoading(false);
+      })
+      .catch(() => {
+        setError('Failed to load analytics');
+        setLoading(false);
+      });
   }, []);
 
-  const countByLabel = events.reduce((acc, e) => {
-    acc[e.label] = (acc[e.label] || 0) + 1;
-    return acc;
-  }, {});
-
-  const sorted = Object.entries(countByLabel).sort((a, b) => b[1] - a[1]);
-  const max = sorted[0]?.[1] || 1;
-  const total = events.length;
-
-  const barColor = (pct) => {
-    if (pct > 0.7) return '#E8714F';
-    if (pct > 0.4) return '#1A1A1A';
-    return '#E8714F';
+  const handleExport = () => {
+    fetch('/api/admin/analytics/export', {
+      credentials: 'include',
+    })
+      .then(res => res.blob())
+      .then(blob => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'user-analytics.xlsx';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        window.URL.revokeObjectURL(url);
+      })
+      .catch(() => {
+        setError('Failed to export analytics');
+      });
   };
 
   return (
     <div style={styles.root}>
-      {/* Panel header */}
       <div style={styles.header}>
         <div style={styles.headerLeft}>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FFB347" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
@@ -33,57 +50,55 @@ export default function AdminAnalytics() {
             <line x1="12" y1="20" x2="12" y2="4" />
             <line x1="6" y1="20" x2="6" y2="14" />
           </svg>
-          <span style={styles.panelTitle}>CLICK ANALYTICS</span>
-          <span style={styles.badge}>{total} events</span>
+          <span style={styles.panelTitle}>USER ANALYTICS</span>
+          <span style={styles.badge}>{analytics.length} users</span>
         </div>
         <span style={styles.liveTag}>
           <span style={styles.liveDot} />
           TELEMETRY
         </span>
+        <button onClick={handleExport} style={{ marginLeft: 16, background: '#FFB347', color: '#1A1A1A', border: 'none', borderRadius: 6, padding: '6px 16px', fontWeight: 700, cursor: 'pointer' }}>
+          Export to Excel
+        </button>
       </div>
-
-      {/* Summary chips */}
-      <div style={styles.summaryRow}>
-        <div style={styles.chip}>
-          <span style={styles.chipLabel}>UNIQUE ELEMENTS</span>
-          <span style={styles.chipValue('#FFB347')}>{sorted.length}</span>
-        </div>
-        <div style={styles.chip}>
-          <span style={styles.chipLabel}>TOP EVENT</span>
-          <span style={styles.chipValue('#AAFF45')}>{sorted[0]?.[0] ?? '—'}</span>
-        </div>
-        <div style={styles.chip}>
-          <span style={styles.chipLabel}>TOTAL CLICKS</span>
-          <span style={styles.chipValue('#5B9EFF')}>{total}</span>
-        </div>
-      </div>
-
-      {/* Bar chart */}
       <div style={styles.chartArea}>
-        {sorted.length === 0 ? (
-          <div style={styles.emptyState}>
-            <span style={{ color: '#FFB347', marginRight: 8 }}>◆</span>
-            no click events recorded yet
-          </div>
+        {loading ? (
+          <div style={styles.emptyState}>Loading analytics...</div>
+        ) : error ? (
+          <div style={styles.emptyState}>{error}</div>
+        ) : analytics.length === 0 ? (
+          <div style={styles.emptyState}>No analytics data</div>
         ) : (
-          sorted.map(([label, count], i) => {
-            const pct = count / max;
-            const color = barColor(pct);
-            return (
-              <div key={label} style={styles.barRow}>
-                <div style={styles.barLabel}>
-                  <span style={{ color: 'rgba(242,240,232,0.4)', marginRight: 6, fontSize: 10 }}>
-                    {String(i + 1).padStart(2, '0')}
-                  </span>
-                  {label}
-                </div>
-                <div style={styles.barTrack}>
-                  <div style={styles.barFill(pct, color)} />
-                </div>
-                <div style={styles.barCount(color)}>{count}</div>
-              </div>
-            );
-          })
+          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
+            <thead>
+              <tr style={{ background: '#F5F3EE', borderBottom: '2px solid #FFB347' }}>
+                <th style={{ textAlign: 'left', padding: 8 }}>Name</th>
+                <th style={{ textAlign: 'left', padding: 8 }}>Email</th>
+                <th style={{ textAlign: 'left', padding: 8 }}>Plan</th>
+                <th style={{ textAlign: 'left', padding: 8 }}>First Visit</th>
+                <th style={{ textAlign: 'left', padding: 8 }}>Last Visit</th>
+                <th style={{ textAlign: 'right', padding: 8 }}>Total Visits</th>
+                <th style={{ textAlign: 'right', padding: 8 }}>Pages Viewed</th>
+                <th style={{ textAlign: 'right', padding: 8 }}>Matches Watched</th>
+                <th style={{ textAlign: 'left', padding: 8 }}>Country</th>
+              </tr>
+            </thead>
+            <tbody>
+              {analytics.map((row, i) => (
+                <tr key={row._id || i} style={{ borderBottom: '1px solid #f0f0f0' }}>
+                  <td style={{ padding: 8 }}>{row.name || '—'}</td>
+                  <td style={{ padding: 8 }}>{row.email || '—'}</td>
+                  <td style={{ padding: 8 }}>{row.planType || '—'}</td>
+                  <td style={{ padding: 8 }}>{row.firstVisit ? new Date(row.firstVisit).toLocaleString() : '—'}</td>
+                  <td style={{ padding: 8 }}>{row.lastVisit ? new Date(row.lastVisit).toLocaleString() : '—'}</td>
+                  <td style={{ padding: 8, textAlign: 'right' }}>{row.totalVisits ?? '—'}</td>
+                  <td style={{ padding: 8, textAlign: 'right' }}>{row.pagesViewed ?? '—'}</td>
+                  <td style={{ padding: 8, textAlign: 'right' }}>{row.matchesWatched ?? '—'}</td>
+                  <td style={{ padding: 8 }}>{row.country || '—'}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         )}
       </div>
     </div>

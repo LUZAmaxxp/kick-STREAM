@@ -1,3 +1,12 @@
+// Helper: set JWT cookie
+function setTokenCookie(res, token) {
+  res.cookie('token', token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+    maxAge: 60 * 60 * 1000, // 1 hour
+  });
+}
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
@@ -37,10 +46,11 @@ router.post('/register', async (req, res) => {
     jwt.sign(
       payload,
       process.env.JWT_SECRET,
-      { expiresIn: '1h' }, // Token expires in 1 hour
+      { expiresIn: '1h' },
       (err, token) => {
         if (err) throw err;
-        res.json({ token, user: { id: user.id, username: user.username, email: user.email, isAdmin: user.isAdmin } });
+        setTokenCookie(res, token);
+        res.json({ user: { id: user.id, username: user.username, email: user.email, isAdmin: user.isAdmin } });
       }
     );
   } catch (err) {
@@ -82,9 +92,19 @@ router.post('/login', async (req, res) => {
       { expiresIn: '1h' },
       (err, token) => {
         if (err) throw err;
-        res.json({ token, user: { id: user.id, username: user.username, email: user.email, isAdmin: user.isAdmin } });
+        setTokenCookie(res, token);
+        res.json({ user: { id: user.id, username: user.username, email: user.email, isAdmin: user.isAdmin } });
       }
     );
+  // POST /api/auth/logout - clear the JWT cookie
+  router.post('/logout', (req, res) => {
+    res.clearCookie('token', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+    });
+    res.json({ msg: 'Logged out' });
+  });
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server Error');

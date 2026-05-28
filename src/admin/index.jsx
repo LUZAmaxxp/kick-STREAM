@@ -2,18 +2,33 @@ import React, { useState, useEffect } from 'react';
 import AdminDashboard from './AdminDashboard';
 import AdminLogin from './AdminLogin';
 
+
 const AdminApp = () => {
-  const [loggedIn, setLoggedIn] = useState(false);
+  const [adminUser, setAdminUser] = useState(null);
 
   useEffect(() => {
-    if (localStorage.getItem('admin_logged_in') === 'true') {
-      setLoggedIn(true);
-    }
+    // Check admin session from backend
+    fetch('/api/session', { credentials: 'include' })
+      .then(res => res.ok ? res.json() : Promise.reject())
+      .then(data => {
+        if (data.user && data.user.isAdmin) setAdminUser(data.user);
+        else setAdminUser(null);
+      })
+      .catch(() => setAdminUser(null));
   }, []);
 
-  const handleLogin = () => setLoggedIn(true);
+  const handleLogin = () => {
+    // After login, re-fetch user
+    fetch('/api/session', { credentials: 'include' })
+      .then(res => res.ok ? res.json() : Promise.reject())
+      .then(data => {
+        if (data.user && data.user.isAdmin) setAdminUser(data.user);
+        else setAdminUser(null);
+      })
+      .catch(() => setAdminUser(null));
+  };
 
-  return loggedIn ? <AdminDashboard /> : <AdminLogin onLogin={handleLogin} />;
+  return adminUser ? <AdminDashboard user={adminUser} /> : <AdminLogin onLogin={handleLogin} />;
 };
 
 export default AdminApp;

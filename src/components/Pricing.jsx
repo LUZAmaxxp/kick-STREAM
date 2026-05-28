@@ -132,7 +132,9 @@ export default function Pricing() {
 
               {/* CTA */}
               <a
-                href="#"
+                href={`https://wa.me/212631604905?text=${encodeURIComponent(`Hello, I am interested in the ${plan.name} plan.`)}`}
+                target="_blank"
+                rel="noopener noreferrer"
                 className={`
                   mt-auto text-center py-3.5 text-sm font-ui font-semibold uppercase tracking-[0.12em] transition-all
                   ${plan.ctaStyle === 'border'      ? 'border-rule text-black/70 hover:text-black hover:bg-cream' : ''}

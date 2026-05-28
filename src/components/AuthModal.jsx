@@ -14,8 +14,7 @@ export default function AuthModal({ open, onClose, onAuth }) {
       return;
     }
     setError('');
-    // Demo: just store user in localStorage
-    localStorage.setItem('user', JSON.stringify({ email }));
+    // Demo: just use in-memory user
     onAuth({ email });
     onClose();
   };

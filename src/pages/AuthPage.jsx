@@ -30,22 +30,21 @@ export default function AuthPage({ onAuth }) {
     setError('');
     setSubmitted(true);
     try {
-      const endpoint = isLogin ? '/api/auth/login' : '/api/auth/register';
-      const res = await fetch(endpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(isLogin ? { email, password } : { email, password, username: email.split('@')[0] }),
-      });
+        const endpoint = isLogin ? '/api/auth/login' : '/api/auth/register';
+        const res = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(isLogin ? { email, password } : { email, password, username: email.split('@')[0] }),
+          credentials: 'include',
+        });
       const data = await res.json();
       if (!res.ok) {
         setError(data.msg || 'Authentication failed');
         setSubmitted(false);
         return;
       }
-      // Save JWT and user info
-      localStorage.setItem('user', JSON.stringify(data.user));
-      localStorage.setItem('authToken', data.token);
-      onAuth({ ...data.user, authToken: data.token });
+        // Assume backend sets cookie; just update user state
+        onAuth(data.user);
       navigate('/');
     } catch (err) {
       setError('Server error. Please try again.');

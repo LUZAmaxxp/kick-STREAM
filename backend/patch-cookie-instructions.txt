@@ -1,0 +1,14 @@
+1. Add cookie-parser to dependencies if not present: npm install cookie-parser
+2. In server.js, add:
+   const cookieParser = require('cookie-parser');
+   app.use(cookieParser());
+   app.use(cors({ origin: true, credentials: true }));
+3. In routes/auth.js, add a helper to set the JWT as an HTTP-only cookie:
+   function setTokenCookie(res, token) {
+     res.cookie('token', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'lax', maxAge: 60 * 60 * 1000 });
+   }
+4. In /register and /login, after jwt.sign, call setTokenCookie(res, token) and only return user info in JSON (not the token).
+5. Add POST /api/auth/logout to clear the cookie:
+   router.post('/logout', (req, res) => { res.clearCookie('token', { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'lax' }); res.json({ msg: 'Logged out' }); });
+6. In middleware/authMiddleware.js, read token from req.cookies.token (preferred) or x-auth-token (fallback).
+7. Add GET /api/session (with authMiddleware) to return user info if authenticated.

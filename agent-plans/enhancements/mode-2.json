@@ -1,0 +1,127 @@
+{
+  "task": "Admin Dashboard Enhancement",
+  "project": "Kick Stream Platform",
+  "priority": "high",
+  "context": {
+    "stack_assumption": "Infer from existing codebase (React/Next.js or similar frontend, Node.js/Express or similar backend, existing DB such as MongoDB/PostgreSQL/Firebase)",
+    "existing_features": [
+      "User Authentication",
+      "Admin User Management",
+      "Admin Email Management",
+      "Analytics Dashboard (Admin)",
+      "Chat Widget",
+      "FAQ and Contact Admin"
+    ]
+  },
+  "implementation_tasks": [
+    {
+      "id": 1,
+      "feature": "Admin Message Inbox",
+      "description": "Display all messages and contact form submissions sent by users to the admin inside the admin dashboard.",
+      "requirements": [
+        "Create a dedicated 'Messages' section/tab in the admin dashboard",
+        "Fetch and list all user-submitted messages (from contact form or chat) stored in the database",
+        "Each message entry must show: sender name, sender email, message body, timestamp, and read/unread status",
+        "Mark messages as read when admin opens/views them",
+        "Support search and filter by user, date range, and read/unread status",
+        "Show message count badge on the sidebar nav item"
+      ],
+      "database": "Add a 'messages' collection/table with fields: id, userId, senderName, senderEmail, subject, body, timestamp, isRead, repliedAt"
+    },
+    {
+      "id": 2,
+      "feature": "Detailed Per-User Analytics",
+      "description": "Admins can view full analytics broken down per user who has visited the site, with export to Excel.",
+      "requirements": [
+        "Track and store per-user analytics: userId, name, email, firstVisit, lastVisit, totalVisits, pagesViewed, matchesWatched, planType, country/IP",
+        "Display an analytics table in the admin dashboard with one row per user",
+        "Columns: User Name, Email, Plan, First Visit, Last Visit, Total Visits, Pages Viewed, Matches Watched, Country",
+        "Support sorting by any column and filtering by date range or plan type",
+        "Add an 'Export to Excel' button that downloads the full analytics table as a .xlsx file using a library such as SheetJS (xlsx) or exceljs",
+        "Include a summary row at the top with totals and averages",
+        "Show a per-user detail view (modal or page) with a chart of their visit history over time"
+      ],
+      "library_suggestions": ["SheetJS / xlsx", "exceljs", "chart.js or recharts for visit history chart"]
+    },
+    {
+      "id": 3,
+      "feature": "Admin Notification System",
+      "description": "Real-time or near-real-time notifications to the admin when a user sends a message or email.",
+      "requirements": [
+        "Show a notification bell icon in the admin dashboard header with an unread count badge",
+        "When a user submits a contact form or sends a chat message, trigger a notification to the admin",
+        "Notification payload must include: type (message | email), senderName, preview of the message, timestamp",
+        "Implement using WebSockets (Socket.io preferred) OR polling every 30 seconds as a fallback",
+        "Clicking a notification should navigate the admin directly to that message in the inbox",
+        "Store notifications in the database with fields: id, type, messageId, isRead, createdAt",
+        "Admin can mark individual notifications or all as read",
+        "Optionally: send admin an email alert (to admin email) for each new incoming message using the existing email service"
+      ]
+    },
+    {
+      "id": 4,
+      "feature": "Admin Reply System",
+      "description": "Allow the admin to reply to user messages or emails directly from the dashboard, with replies delivered to the user's inbox.",
+      "requirements": [
+        "In the Messages section, add a 'Reply' button/panel for each message",
+        "Admin can compose a reply with a subject and body in a rich text or plain textarea",
+        "On submit, the reply must be sent as a real email to the user's registered email address using the existing email/SMTP service (e.g. Nodemailer, SendGrid, Mailgun)",
+        "Store the reply in the database linked to the original message: fields: id, originalMessageId, adminReply, repliedAt",
+        "Update the original message record with repliedAt timestamp and a 'replied' status badge in the UI",
+        "Show reply thread history under each message (original message + admin reply)",
+        "Prevent duplicate replies by disabling the reply button after a reply is sent (allow re-reply with a 'Send another reply' option)"
+      ],
+      "email_requirements": {
+        "from": "Admin email address (configured in environment variables)",
+        "to": "User's registered email address",
+        "subject": "Re: [original subject] or custom subject",
+        "body": "Admin's reply text",
+        "footer": "Include platform branding and a 'Do not reply to this automated message' disclaimer if reply-to is not set"
+      }
+    }
+  ],
+  "ui_ux_requirements": [
+    "All new sections must follow the existing admin dashboard design system (colors, fonts, component styles)",
+    "Messages inbox must have a split-pane layout: list on the left, message detail + reply on the right",
+    "Unread messages should be visually distinct (bold text, colored dot indicator)",
+    "Analytics table must support pagination (25 rows per page default)",
+    "Export button should show a loading spinner while generating the Excel file",
+    "Notifications dropdown must be accessible from any admin page without full page reload",
+    "All new components must be mobile-responsive"
+  ],
+  "api_endpoints_to_create": [
+    { "method": "GET", "path": "/api/admin/messages", "description": "Fetch all user messages with pagination and filters" },
+    { "method": "GET", "path": "/api/admin/messages/:id", "description": "Fetch a single message by ID and mark it as read" },
+    { "method": "POST", "path": "/api/admin/messages/:id/reply", "description": "Send a reply email to the user and store it in DB" },
+    { "method": "GET", "path": "/api/admin/analytics/users", "description": "Fetch per-user analytics data with sort/filter support" },
+    { "method": "GET", "path": "/api/admin/analytics/export", "description": "Export analytics data as .xlsx file download" },
+    { "method": "GET", "path": "/api/admin/notifications", "description": "Fetch unread notifications for admin" },
+    { "method": "PATCH", "path": "/api/admin/notifications/:id/read", "description": "Mark a notification as read" },
+    { "method": "PATCH", "path": "/api/admin/notifications/read-all", "description": "Mark all notifications as read" }
+  ],
+  "environment_variables_needed": [
+    "ADMIN_EMAIL — the admin's email address for sending reply emails",
+    "SMTP_HOST / SMTP_PORT / SMTP_USER / SMTP_PASS — or existing email service credentials",
+    "SOCKET_IO_ENABLED — boolean to toggle WebSocket notifications vs polling"
+  ],
+  "implementation_order": [
+    "1. Database schema updates (messages, notifications tables/collections)",
+    "2. Backend API endpoints for messages CRUD and reply with email send",
+    "3. Backend API endpoints for per-user analytics and Excel export",
+    "4. WebSocket or polling setup for real-time admin notifications",
+    "5. Frontend: Admin Messages Inbox UI with reply panel",
+    "6. Frontend: Admin Analytics table with sort, filter, pagination, and export button",
+    "7. Frontend: Notification bell with dropdown in admin header",
+    "8. End-to-end testing: send message as user → appears in admin inbox → admin replies → email arrives in user inbox"
+  ],
+  "testing_checklist": [
+    "User submits contact form → message appears in admin Messages tab",
+    "Admin opens message → status changes to 'read'",
+    "Admin receives bell notification when new message arrives",
+    "Admin clicks notification → navigates to the correct message",
+    "Admin replies → user receives email in their inbox with correct content",
+    "Analytics table shows correct data per user",
+    "Export to Excel downloads a valid .xlsx file with all user rows",
+    "All UI is responsive on mobile screen sizes"
+  ]
+}

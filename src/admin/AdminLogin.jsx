@@ -1,26 +1,40 @@
 import { useState } from 'react';
 
-const ADMIN_USER = 'admin';
-const ADMIN_PASS = 'kickstream2026';
-
-export default function AdminLogin({ onLogin }) {
+function AdminLogin({ onLogin }) {
   const [user, setUser] = useState('');
   const [pass, setPass] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setTimeout(() => {
-      if (user === ADMIN_USER && pass === ADMIN_PASS) {
-        localStorage.setItem('admin_logged_in', 'true');
-        onLogin();
-      } else {
-        setError('ACCESS DENIED — invalid credentials');
+    setError('');
+    try {
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: user, password: pass }),
+        credentials: 'include',
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setError(data.msg || 'ACCESS DENIED — invalid credentials');
         setLoading(false);
+        return;
       }
-    }, 600);
+      if (!data.user.isAdmin) {
+        setError('ACCESS DENIED — not an admin');
+        setLoading(false);
+        return;
+      }
+      // Assume backend sets cookie; just call onLogin
+      onLogin();
+    } catch (err) {
+      setError('Server error. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -42,7 +56,6 @@ export default function AdminLogin({ onLogin }) {
           <div style={styles.dot('#FF5B5B')} />
           <span style={styles.termTitle}>admin@kickstream ~ /login</span>
         </div>
-
         <div style={styles.cardBody}>
           <div style={styles.lockIcon}>
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#AAFF45" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -265,3 +278,5 @@ const styles = {
     fontFamily: "'Courier Prime', monospace",
   },
 };
+
+export default AdminLogin;

@@ -1,0 +1,72 @@
+{
+  "projectName": "KickStream Platform",
+  "description": "KickStream is a full-stack web application for real-time sports streaming, analytics, and user engagement. It features a modern React frontend, a Node.js/Express backend, MongoDB for data storage, and real-time communication via socket.io and Ably. The platform includes user authentication, persistent chat, admin dashboards, analytics, notifications, and email integration.",
+  "architecture": {
+    "frontend": {
+      "framework": "React (Vite)",
+      "structure": "src/ contains modular components, hooks, pages, and admin UI. Main entry is App.jsx. Admin and user dashboards are separated.",
+      "features": [
+        "User authentication with session persistence (JWT in HTTP-only cookies)",
+        "WhatsApp-like chat widget with real-time updates",
+        "Notification system for both users and admins (real-time, badge, dropdown)",
+        "Admin dashboard with user management, analytics, and email queue",
+        "Analytics tracking via useAnalytics hook (page views, visits)",
+        "Modern UI/UX with Tailwind and custom styles"
+      ]
+    },
+    "backend": {
+      "framework": "Node.js (Express)",
+      "structure": "backend/ contains server.js, routes (auth, admin, session), models (User, Message, UserAnalytics, Conversation, Notification), middleware, and scripts.",
+      "features": [
+        "RESTful API for authentication, chat, analytics, and admin actions",
+        "Socket.io for real-time notifications and chat",
+        "Ably integration for scalable real-time messaging",
+        "MongoDB for persistent storage (users, messages, analytics, notifications)",
+        "Email notifications via nodemailer",
+        "Secure session management with JWT in cookies"
+      ]
+    }
+  },
+  "dataModels": {
+    "User": "Stores user credentials, profile, and admin flag.",
+    "Message": "Stores chat and contact messages, sender info, timestamps, and read status.",
+    "UserAnalytics": "Tracks per-user analytics: visits, page views, matches watched, plan type, country, IP, and visit history.",
+    "Conversation": "Groups chat messages by user and admin for persistent threaded chat.",
+    "Notification": "Stores notifications for admin and user, with read/unread status."
+  },
+  "realTime": {
+    "socket.io": "Handles user/admin identification, targeted notifications, and chat events.",
+    "Ably": "Used for scalable pub/sub messaging in chat.",
+    "Frontend Hooks": "useUserNotifications and useAdminNotifications manage real-time updates and UI pop-outs."
+  },
+  "analytics": {
+    "tracking": "useAnalytics hook sends page view and visit events to /api/admin/analytics/track endpoint.",
+    "adminDashboard": "Displays total users, emails queued, click events, and per-user analytics. Data is fetched from /api/admin/stats and /api/admin/analytics/users."
+  },
+  "authentication": {
+    "method": "JWT in HTTP-only cookies for secure session management.",
+    "sessionCheck": "Frontend checks /api/session on mount to persist login.",
+    "admin": "Separate admin login and dashboard, with isAdmin flag enforcement."
+  },
+  "notifications": {
+    "realTime": "Socket.io emits targeted notifications to users and admins.",
+    "UI": "Notification badges and dropdowns pop out in real time on new events."
+  },
+  "email": {
+    "sending": "Nodemailer utility sends emails to admin and users for important events.",
+    "queue": "Admin dashboard shows queued/unread emails/messages."
+  },
+  "security": {
+    "auth": "All protected API routes require valid JWT in cookies.",
+    "CORS": "Configured for credentials and secure cross-origin requests.",
+    "inputValidation": "Backend validates all incoming data."
+  },
+  "setup": {
+    "env": "Requires .env file with MongoDB URI, JWT secret, Ably API key, and email credentials.",
+    "start": "Run backend with npm start or npm run dev. Frontend with npm run dev from root.",
+    "scripts": "backend/scripts/createAdmin.js creates an initial admin user."
+  },
+  "agentNotes": {
+    "LLM": "This project is a robust, real-time, full-stack web platform with modular, scalable architecture. All real-time and analytics features are implemented with best practices for session persistence, notification targeting, and data integrity. For further extension, add more analytics events, roles, or notification types as needed."
+  }
+}

@@ -7,18 +7,28 @@ export default function ContactAdmin() {
   const [sent, setSent] = useState(false);
   const [error, setError] = useState("");
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!email.trim() || !message.trim()) {
       setError("Please fill in both fields before sending.");
       return;
     }
     setError("");
     try {
-      const emails = JSON.parse(localStorage.getItem("client_emails") || "[]");
-      emails.push({ email, message, timestamp: Date.now() });
-      localStorage.setItem("client_emails", JSON.stringify(emails));
-    } catch (e) {}
-    setSent(true);
+      const res = await fetch("/api/admin/messages", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ senderEmail: email, body: message }),
+        credentials: "include",
+      });
+      if (!res.ok) {
+        const data = await res.json();
+        setError(data.msg || "Failed to send message");
+        return;
+      }
+      setSent(true);
+    } catch (e) {
+      setError("Failed to send message");
+    }
   };
 
   const handleReset = () => {
