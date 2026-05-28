@@ -1,0 +1,253 @@
+{
+  "task": "CI/CD Pipeline Setup and Deployment Configuration",
+  "project": "KickStream Platform",
+  "priority": "high",
+  "context": {
+    "stack": {
+      "frontend": "React + Vite, located in root /src, built with 'npm run build' outputting to /dist",
+      "backend": "Node.js + Express + Socket.io + Ably, located in /backend, entry point is backend/server.js",
+      "database": "MongoDB (Atlas recommended for production)",
+      "realtime": "Socket.io and Ably — requires persistent process, NOT serverless",
+      "auth": "JWT in HTTP-only cookies — requires SameSite=None + Secure=true in production cross-domain setup"
+    },
+    "deployment_targets": {
+      "frontend": "Vercel — Git integration, automatic preview deployments per PR, Vite-optimized",
+      "backend": "Railway — persistent Node.js process, WebSocket support, environment variable management"
+    },
+    "repository": "GitHub — single monorepo with frontend in root and backend in /backend folder"
+  },
+  "phase_1_project_preparation": {
+    "description": "Prepare the codebase for CI/CD and cross-domain production deployment before writing any pipeline config",
+    "tasks": [
+      {
+        "id": "1.1",
+        "name": "Environment Variable Audit",
+        "steps": [
+          "Create a .env.example file in root listing all required frontend env vars: VITE_API_URL, VITE_ABLY_KEY, VITE_SOCKET_URL",
+          "Create a .env.example file in /backend listing all required backend env vars: MONGODB_URI, JWT_SECRET, ABLY_API_KEY, EMAIL_HOST, EMAIL_PORT, EMAIL_USER, EMAIL_PASS, ADMIN_EMAIL, CLIENT_URL, NODE_ENV, PORT",
+          "Ensure .env and .env.local are in .gitignore — never commit secrets",
+          "Replace all hardcoded localhost URLs in frontend with import.meta.env.VITE_API_URL",
+          "Replace all hardcoded localhost URLs in backend with process.env.CLIENT_URL for CORS"
+        ]
+      },
+      {
+        "id": "1.2",
+        "name": "Cross-Domain Cookie Fix",
+        "steps": [
+          "In backend/server.js, update the cookie settings for JWT to: { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax' }",
+          "Update CORS configuration to use process.env.CLIENT_URL as the allowed origin, with credentials: true",
+          "In frontend, ensure all fetch/axios calls include credentials: 'include' or withCredentials: true"
+        ]
+      },
+      {
+        "id": "1.3",
+        "name": "Socket.io Production Config",
+        "steps": [
+          "In frontend socket initialization, set transports: ['websocket'] to avoid polling fallback issues in production",
+          "In backend socket.io setup, confirm cors origin uses process.env.CLIENT_URL",
+          "Set the socket server URL in frontend using import.meta.env.VITE_SOCKET_URL"
+        ]
+      },
+      {
+        "id": "1.4",
+        "name": "Add Test Infrastructure",
+        "steps": [
+          "Install Vitest and @testing-library/react in root for frontend tests: npm install -D vitest @testing-library/react @testing-library/jest-dom jsdom",
+          "Install Jest and supertest in /backend for API tests: npm install -D jest supertest mongodb-memory-server",
+          "Add test scripts to both package.json files: 'test': 'vitest run' (frontend) and 'test': 'jest' (backend)",
+          "Create at minimum 3 backend test files: backend/tests/auth.test.js (register/login routes), backend/tests/admin.test.js (protected route auth check), backend/tests/messages.test.js (message creation and fetch)",
+          "Create at minimum 2 frontend test files: src/tests/App.test.jsx (renders without crash), src/tests/auth.test.jsx (login form renders and submits)",
+          "Use mongodb-memory-server in backend tests to avoid needing a real MongoDB connection in CI"
+        ]
+      },
+      {
+        "id": "1.5",
+        "name": "Add Linting Config",
+        "steps": [
+          "Ensure ESLint is configured in root with an .eslintrc or eslint.config.js for the React frontend",
+          "Add ESLint to /backend with Node.js rules",
+          "Add lint scripts: 'lint': 'eslint src --ext .js,.jsx' in frontend and 'lint': 'eslint . --ext .js' in backend",
+          "Fix any existing lint errors before proceeding"
+        ]
+      },
+      {
+        "id": "1.6",
+        "name": "Vercel Configuration File",
+        "steps": [
+          "Create vercel.json in the project root with the following config:",
+          "{ 'buildCommand': 'npm run build', 'outputDirectory': 'dist', 'framework': 'vite', 'rewrites': [{ 'source': '/(.*)', 'destination': '/index.html' }] }",
+          "This ensures React Router client-side routing works correctly on Vercel"
+        ]
+      },
+      {
+        "id": "1.7",
+        "name": "Railway Configuration File",
+        "steps": [
+          "Create a Procfile or railway.toml in /backend",
+          "railway.toml content: [build] builder = 'NIXPACKS' [deploy] startCommand = 'node server.js' healthcheckPath = '/api/health' restartPolicyType = 'ON_FAILURE'",
+          "Add a health check endpoint in backend/server.js: app.get('/api/health', (req, res) => res.json({ status: 'ok', timestamp: new Date() }))",
+          "Ensure backend/package.json has 'start': 'node server.js' and 'engines': { 'node': '>=18.0.0' }"
+        ]
+      }
+    ]
+  },
+  "phase_2_github_actions_ci_pipeline": {
+    "description": "Create the CI workflow that runs on every push and pull request to validate code integrity",
+    "file_path": ".github/workflows/ci.yml",
+    "workflow_spec": {
+      "name": "CI — Lint, Test, and Build",
+      "triggers": ["push to any branch", "pull_request targeting main or dev"],
+      "jobs": [
+        {
+          "job_id": "lint-and-test-backend",
+          "runs_on": "ubuntu-latest",
+          "steps": [
+            "Checkout code",
+            "Setup Node.js 20",
+            "Cache node_modules for /backend",
+            "Run: cd backend && npm install",
+            "Run: cd backend && npm run lint",
+            "Run: cd backend && npm test (uses mongodb-memory-server, no external DB needed)"
+          ]
+        },
+        {
+          "job_id": "lint-and-test-frontend",
+          "runs_on": "ubuntu-latest",
+          "steps": [
+            "Checkout code",
+            "Setup Node.js 20",
+            "Cache node_modules for root",
+            "Run: npm install",
+            "Run: npm run lint",
+            "Run: npm test",
+            "Run: npm run build (ensures Vite build succeeds — catches import errors, missing env types, etc.)"
+          ],
+          "env_vars_needed": [
+            "VITE_API_URL=http://localhost:5000",
+            "VITE_SOCKET_URL=http://localhost:5000",
+            "VITE_ABLY_KEY=test_key_placeholder"
+          ]
+        },
+        {
+          "job_id": "security-audit",
+          "runs_on": "ubuntu-latest",
+          "steps": [
+            "Checkout code",
+            "Setup Node.js 20",
+            "Run: npm audit --audit-level=high in root",
+            "Run: cd backend && npm audit --audit-level=high",
+            "Use 'continue-on-error: false' to fail the pipeline on high/critical vulnerabilities"
+          ]
+        }
+      ]
+    }
+  },
+  "phase_3_github_actions_cd_pipeline": {
+    "description": "Create the CD workflow that deploys to Vercel and Railway only when CI passes on the main branch",
+    "file_path": ".github/workflows/deploy.yml",
+    "workflow_spec": {
+      "name": "CD — Deploy to Vercel and Railway",
+      "triggers": ["push to main branch only", "condition: CI workflow must pass first (use needs or workflow_run)"],
+      "jobs": [
+        {
+          "job_id": "deploy-frontend-vercel",
+          "runs_on": "ubuntu-latest",
+          "steps": [
+            "Checkout code",
+            "Setup Node.js 20",
+            "Run: npm install",
+            "Install Vercel CLI: npm install -g vercel",
+            "Run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}",
+            "Run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}",
+            "Run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}"
+          ],
+          "github_secrets_required": [
+            "VERCEL_TOKEN — from Vercel dashboard under Account Settings > Tokens",
+            "VERCEL_ORG_ID — from .vercel/project.json after first vercel link",
+            "VERCEL_PROJECT_ID — from .vercel/project.json after first vercel link"
+          ]
+        },
+        {
+          "job_id": "deploy-backend-railway",
+          "runs_on": "ubuntu-latest",
+          "steps": [
+            "Checkout code",
+            "Install Railway CLI: npm install -g @railway/cli",
+            "Run: railway up --service kickstream-backend --detach (deploys /backend directory)",
+            "Railway auto-detects Node.js and uses the start command from package.json or railway.toml"
+          ],
+          "github_secrets_required": [
+            "RAILWAY_TOKEN — from Railway dashboard under Account Settings > Tokens",
+            "RAILWAY_SERVICE_ID — the service ID from Railway project dashboard"
+          ],
+          "alternative": "Instead of CLI, use Railway's built-in GitHub integration (connect repo in Railway dashboard and set root directory to /backend) — this is simpler and removes the need for RAILWAY_TOKEN in GitHub secrets. Railway will auto-deploy on push to main. Recommend this approach for simplicity."
+        }
+      ]
+    }
+  },
+  "phase_4_environment_variable_setup": {
+    "description": "Configure all environment variables in each deployment platform",
+    "vercel_env_vars": [
+      "VITE_API_URL=https://your-railway-backend-url.railway.app",
+      "VITE_SOCKET_URL=https://your-railway-backend-url.railway.app",
+      "VITE_ABLY_KEY=your_ably_public_key"
+    ],
+    "railway_env_vars": [
+      "MONGODB_URI=mongodb+srv://...(Atlas connection string)",
+      "JWT_SECRET=your_production_jwt_secret_min_32_chars",
+      "ABLY_API_KEY=your_ably_api_key",
+      "EMAIL_HOST=smtp.gmail.com or your SMTP host",
+      "EMAIL_PORT=587",
+      "EMAIL_USER=your_email@domain.com",
+      "EMAIL_PASS=your_email_app_password",
+      "ADMIN_EMAIL=admin@yourdomain.com",
+      "CLIENT_URL=https://your-vercel-app.vercel.app",
+      "NODE_ENV=production",
+      "PORT=5000"
+    ],
+    "github_secrets": [
+      "VERCEL_TOKEN",
+      "VERCEL_ORG_ID",
+      "VERCEL_PROJECT_ID",
+      "RAILWAY_TOKEN (only if using CLI approach)"
+    ]
+  },
+  "phase_5_recommended_extras": {
+    "description": "Optional but strongly recommended additions",
+    "items": [
+      {
+        "name": "Preview Deployments for PRs",
+        "description": "Vercel automatically creates preview URLs for every PR. Add a GitHub Actions comment bot that posts the preview URL as a PR comment for easy review."
+      },
+      {
+        "name": "Dependabot",
+        "description": "Create .github/dependabot.yml to auto-create PRs for outdated npm dependencies weekly. Config: { version: 2, updates: [{ package-ecosystem: 'npm', directory: '/', schedule: { interval: 'weekly' } }, { package-ecosystem: 'npm', directory: '/backend', schedule: { interval: 'weekly' } }] }"
+      },
+      {
+        "name": "Branch Protection Rules",
+        "description": "In GitHub repo Settings > Branches, protect the main branch: require CI to pass before merge, require at least 1 PR review, disallow direct pushes to main."
+      },
+      {
+        "name": "Railway Staging Environment",
+        "description": "Create a second Railway service connected to a 'dev' branch for staging deployments before promoting to production."
+      }
+    ]
+  },
+  "implementation_order": [
+    "1. Phase 1: Prepare codebase (env vars, cookie fix, CORS, Socket.io config, tests, vercel.json, railway.toml)",
+    "2. Phase 4: Set up all environment variables in Vercel and Railway dashboards first",
+    "3. Phase 2: Create and commit .github/workflows/ci.yml — test it triggers correctly on a test branch push",
+    "4. Phase 3: Create and commit .github/workflows/deploy.yml — verify first deploy succeeds",
+    "5. Phase 5: Add branch protection, Dependabot, and preview URL comment bot"
+  ],
+  "success_criteria": [
+    "Pushing to any branch triggers CI: lint, test, and build all pass",
+    "A failing test or lint error blocks the pipeline and prevents merge",
+    "Merging to main automatically deploys frontend to Vercel and backend to Railway",
+    "The live app at the Vercel URL connects correctly to the Railway backend via HTTPS",
+    "Socket.io real-time features (chat, notifications) work in production",
+    "JWT cookie auth works cross-domain in production",
+    "Health check endpoint /api/health returns 200 on Railway",
+    "npm audit reports no high or critical vulnerabilities"
+  ]
+}

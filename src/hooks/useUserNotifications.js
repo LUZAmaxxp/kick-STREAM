@@ -11,7 +11,7 @@ export default function useUserNotifications(user, onNotification) {
       return;
     }
     import('socket.io-client').then(({ io }) => {
-      const s = io('http://localhost:5000');
+      const s = io(`${import.meta.env.VITE_API_URL}`);
       s.emit('identify', user.id);
       setSocket(s);
       s.on('user-notification', (notification) => {
