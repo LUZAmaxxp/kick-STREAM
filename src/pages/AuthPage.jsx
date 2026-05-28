@@ -31,7 +31,7 @@ export default function AuthPage({ onAuth }) {
     setSubmitted(true);
     try {
         const endpoint = isLogin ? '/api/auth/login' : '/api/auth/register';
-        const res = await fetch(endpoint, {
+        const res = await fetch(`${import.meta.env.VITE_API_URL}${endpoint}`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(isLogin ? { email, password } : { email, password, username: email.split('@')[0] }),

@@ -8,7 +8,7 @@ const AdminApp = () => {
 
   useEffect(() => {
     // Check admin session from backend
-    fetch('/api/session', { credentials: 'include' })
+    fetch(`${import.meta.env.VITE_API_URL}/api/session`, { credentials: 'include' })
       .then(res => res.ok ? res.json() : Promise.reject())
       .then(data => {
         if (data.user && data.user.isAdmin) setAdminUser(data.user);
@@ -19,7 +19,7 @@ const AdminApp = () => {
 
   const handleLogin = () => {
     // After login, re-fetch user
-    fetch('/api/session', { credentials: 'include' })
+    fetch(`${import.meta.env.VITE_API_URL}/api/session`, { credentials: 'include' })
       .then(res => res.ok ? res.json() : Promise.reject())
       .then(data => {
         if (data.user && data.user.isAdmin) setAdminUser(data.user);

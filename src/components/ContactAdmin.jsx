@@ -14,7 +14,7 @@ export default function ContactAdmin() {
     }
     setError("");
     try {
-      const res = await fetch("/api/admin/messages", {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/messages`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ senderEmail: email, body: message }),

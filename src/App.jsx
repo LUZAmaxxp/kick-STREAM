@@ -31,12 +31,12 @@ export default function App() {
   const logout = () => {
     setUser(null);
     // Optionally, call backend to clear cookie
-    fetch('/api/auth/logout', { method: 'POST', credentials: 'include' });
+    fetch(`${import.meta.env.VITE_API_URL}/api/auth/logout`, { method: 'POST', credentials: 'include' });
   };
 
   // Check for session cookie on mount to persist login
   useEffect(() => {
-    fetch('/api/session', { credentials: 'include' })
+    fetch(`${import.meta.env.VITE_API_URL}/api/session`, { credentials: 'include' })
       .then(res => res.ok ? res.json() : Promise.reject())
       .then(data => {
         if (data.user) setUser(data.user);

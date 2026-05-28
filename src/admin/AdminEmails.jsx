@@ -11,7 +11,7 @@ export default function AdminEmails() {
 
   useEffect(() => {
     setLoading(true);
-    fetch("/api/admin/conversations", {
+    fetch(`${import.meta.env.VITE_API_URL}/api/admin/conversations`, {
       credentials: 'include',
     })
       .then(res => res.json())
@@ -37,7 +37,7 @@ export default function AdminEmails() {
     if (!convo || !convo.participants || convo.participants.length === 0) return;
     const userId = convo.participants[0]._id || convo.participants[0].id;
     try {
-      const res = await fetch(`/api/admin/conversation/${userId}/reply`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/conversation/${userId}/reply`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

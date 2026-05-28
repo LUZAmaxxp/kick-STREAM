@@ -10,7 +10,7 @@ export default function AdminDashboard({ user }) {
   const notifications = useAdminNotifications(user, () => setShowDropdown(true));
   const [stats, setStats] = useState({ totalUsers: '—', emailsQueued: '—', clickEvents: '—' });
   useEffect(() => {
-    fetch('/api/admin/stats', { credentials: 'include' })
+    fetch(`${import.meta.env.VITE_API_URL}/api/admin/stats`, { credentials: 'include' })
       .then(res => res.json())
       .then(data => {
         setStats({
@@ -24,7 +24,7 @@ export default function AdminDashboard({ user }) {
 
   const handleLogout = () => {
     // Optionally, call backend to clear cookie
-    fetch('/api/auth/logout', { method: 'POST', credentials: 'include' }).then(() => {
+    fetch(`${import.meta.env.VITE_API_URL}/api/auth/logout`, { method: 'POST', credentials: 'include' }).then(() => {
       window.location.reload();
     });
   };

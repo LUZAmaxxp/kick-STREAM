@@ -10,7 +10,7 @@ export default function AdminUsers() {
       setLoading(true);
       setError('');
       try {
-        const res = await fetch('/api/admin/users', {
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/users`, {
           credentials: 'include',
         });
         if (!res.ok) throw new Error('Failed to fetch users');

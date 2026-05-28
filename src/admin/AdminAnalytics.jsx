@@ -7,7 +7,7 @@ export default function AdminAnalytics() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    fetch('/api/admin/analytics/users', {
+    fetch(`${import.meta.env.VITE_API_URL}/api/admin/analytics/users`, {
       credentials: 'include',
     })
       .then(res => res.json())
@@ -22,7 +22,7 @@ export default function AdminAnalytics() {
   }, []);
 
   const handleExport = () => {
-    fetch('/api/admin/analytics/export', {
+    fetch(`${import.meta.env.VITE_API_URL}/api/admin/analytics/export`, {
       credentials: 'include',
     })
       .then(res => res.blob())

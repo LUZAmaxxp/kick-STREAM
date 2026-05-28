@@ -13,7 +13,7 @@ const Chat = ({ user }) => {
   useEffect(() => {
     if (!user) return;
     setLoading(true);
-    fetch('/api/admin/conversation', {
+    fetch(`${import.meta.env.VITE_API_URL}/api/admin/conversation`, {
       credentials: 'include',
     })
       .then(res => res.json())
@@ -37,7 +37,7 @@ const Chat = ({ user }) => {
     const ablyClient = new Ably.Realtime({
       authCallback: async (tokenParams, callback) => {
         try {
-          const response = await fetch('/api/ably-token', {
+          const response = await fetch(`${import.meta.env.VITE_API_URL}/api/ably-token`, {
             method: 'GET',
             credentials: 'include',
             headers: {
@@ -103,7 +103,7 @@ const Chat = ({ user }) => {
 
     try {
       // Persist to backend (creates/updates conversation)
-      const res = await fetch('/api/admin/conversation/message', {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/conversation/message`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
