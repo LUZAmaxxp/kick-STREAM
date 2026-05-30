@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import * as Ably from 'ably';
 
-const Chat = ({ user }) => {
+const Chat = ({ user, open }) => {
   const [ably, setAbly] = useState(null);
   const [channel, setChannel] = useState(null);
   const [messageText, setMessageText] = useState('');
@@ -29,8 +29,8 @@ const Chat = ({ user }) => {
   }, [user]);
 
   useEffect(() => {
-    if (!user) {
-      console.log('User not available for Ably');
+    if (!user || !open) {
+      setAbly(null);
       return;
     }
 
@@ -52,12 +52,8 @@ const Chat = ({ user }) => {
           }
 
           const tokenRequest = await response.json();
-          console.log('🔑 Full token request:', JSON.stringify(tokenRequest, null, 2));
-          console.log('👤 user.id being used for channel:', user.id);
-          console.log('🔤 clientId type:', typeof user.id, '| value:', user.id);
           callback(null, tokenRequest);
         } catch (err) {
-          console.error('Ably auth error:', err);
           callback(err, null);
         }
       },
@@ -65,18 +61,18 @@ const Chat = ({ user }) => {
     });
 
     ablyClient.connection.once('connected', () => {
-      console.log('Ably connected!');
       setAbly(ablyClient);
     });
 
     ablyClient.connection.on('failed', (err) => {
-      console.error('Ably connection failed:', err);
+      // Optionally handle connection errors
     });
 
     return () => {
       ablyClient.close();
+      setAbly(null);
     };
-  }, [user]);
+  }, [user, open]);
 
   useEffect(() => {
     if (!ably || !user) return;

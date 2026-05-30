@@ -61,7 +61,7 @@ export default function ChatWidget({ user }) {
             <button onClick={() => setOpen(false)} aria-label="Close chat" className="text-[#1A1A1A] hover:text-[#00A651] text-2xl font-bold">×</button>
           </div>
           <div className="flex-1 overflow-y-auto">
-            <Chat user={user} />
+            <Chat user={user} open={open} />
           </div>
         </div>
       )}
