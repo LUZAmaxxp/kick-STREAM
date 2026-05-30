@@ -144,7 +144,29 @@ router.get('/conversation', authMiddleware, async (req, res) => {
 router.get('/conversations', authMiddleware, async (req, res) => {
   try {
     if (!req.user.isAdmin) return res.status(403).json({ msg: 'Forbidden' });
-    const convos = await Conversation.find({}).populate('participants', 'username email').sort({ lastUpdated: -1 });
+    const limit = parseInt(req.query.limit, 10) || 20; // messages per conversation
+    // Aggregate to limit messages per conversation
+    const convosAgg = await Conversation.aggregate([
+      { $sort: { lastUpdated: -1 } },
+      { $project: {
+          participants: 1,
+          lastUpdated: 1,
+          messages: { $slice: ['$messages', -limit] }
+        }
+      }
+    ]);
+
+    // Populate participants for all conversations
+    const allParticipantIds = Array.from(new Set(convosAgg.flatMap(c => c.participants.map(id => id.toString()))));
+    const participants = await User.find({ _id: { $in: allParticipantIds } }, 'username email');
+    const participantsMap = Object.fromEntries(participants.map(p => [p._id.toString(), p]));
+
+    // Attach participant details to each conversation
+    const convos = convosAgg.map(convo => ({
+      ...convo,
+      participants: convo.participants.map(id => participantsMap[id.toString()] || { _id: id, username: 'Unknown', email: '' })
+    }));
+
     res.json({ conversations: convos });
   } catch (err) {
     res.status(500).json({ msg: 'Server error', error: err.message });
