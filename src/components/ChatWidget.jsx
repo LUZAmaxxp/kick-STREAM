@@ -7,7 +7,9 @@ import useUserNotifications from '../hooks/useUserNotifications';
 export default function ChatWidget({ user }) {
   const [open, setOpen] = useState(false);
   // Pop open chat on notification
-  const notifications = useUserNotifications(user, () => setOpen(true));
+  const notifications = useUserNotifications(user, () => {
+    setOpen((prev) => prev ? true : true); // Only open if not already open
+  });
 
   // Helper: get user initials for avatar
   const getInitials = (name) => {

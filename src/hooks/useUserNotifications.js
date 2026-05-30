@@ -1,29 +1,40 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 
 export default function useUserNotifications(user, onNotification) {
   const [notifications, setNotifications] = useState([]);
-  const [socket, setSocket] = useState(null);
+  const socketRef = useRef(null);
 
   useEffect(() => {
     if (!user || !user.id) {
-      if (!user) console.warn('useUserNotifications: user is missing');
-      else if (!user.id) console.warn('useUserNotifications: user.id is missing');
+      if (socketRef.current) {
+        socketRef.current.disconnect();
+        socketRef.current = null;
+      }
       return;
     }
+    let mounted = true;
     import('socket.io-client').then(({ io }) => {
+      if (socketRef.current) {
+        socketRef.current.disconnect();
+      }
       const s = io(`${import.meta.env.VITE_API_URL}`);
+      socketRef.current = s;
       s.emit('identify', user.id);
-      setSocket(s);
       s.on('user-notification', (notification) => {
+        if (!mounted) return;
         setNotifications((prev) => [notification, ...prev]);
         if (typeof onNotification === 'function') onNotification(notification);
       });
     });
     return () => {
-      if (socket) socket.disconnect();
+      mounted = false;
+      if (socketRef.current) {
+        socketRef.current.disconnect();
+        socketRef.current = null;
+      }
     };
     // eslint-disable-next-line
-  }, [user, onNotification]);
+  }, [user]);
 
   return notifications;
 }
