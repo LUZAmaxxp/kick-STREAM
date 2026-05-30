@@ -13,7 +13,7 @@ const Chat = ({ user, open }) => {
   useEffect(() => {
     if (!user) return;
     setLoading(true);
-    fetch(`${import.meta.env.VITE_API_URL}/api/admin/conversation`, {
+    fetch(`${import.meta.env.VITE_API_URL}/api/admin/conversation?limit=20`, {
       credentials: 'include',
     })
       .then(res => res.json())

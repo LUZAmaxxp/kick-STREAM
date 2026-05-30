@@ -113,9 +113,15 @@ router.post('/conversation/message', authMiddleware, async (req, res) => {
 router.get('/conversation', authMiddleware, async (req, res) => {
   try {
     const userId = req.user.id;
-    const convo = await Conversation.findOne({ participants: userId }).populate('participants', 'username email');
+    const limit = parseInt(req.query.limit, 10) || 20;
+    let convo = await Conversation.findOne({ participants: userId }).populate('participants', 'username email');
     if (!convo) return res.json({ conversation: null });
-    res.json({ conversation: convo });
+    // Only return the latest N messages
+    const convoObj = convo.toObject();
+    if (Array.isArray(convoObj.messages)) {
+      convoObj.messages = convoObj.messages.slice(-limit);
+    }
+    res.json({ conversation: convoObj });
   } catch (err) {
     res.status(500).json({ msg: 'Server error', error: err.message });
   }
