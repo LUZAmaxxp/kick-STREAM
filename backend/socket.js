@@ -5,7 +5,10 @@ function setupSocket(server) {
     cors: {
       origin: process.env.CLIENT_URL || '*',
       methods: ['GET', 'POST']
-    }
+    },
+    pingTimeout: 20000, // 20 seconds
+    pingInterval: 25000, // 25 seconds
+    maxHttpBufferSize: 1e6 // 1MB (optional, for large messages)
   });
 
   // Map userId to socket.id
