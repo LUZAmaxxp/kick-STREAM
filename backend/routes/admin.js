@@ -114,14 +114,27 @@ router.get('/conversation', authMiddleware, async (req, res) => {
   try {
     const userId = req.user.id;
     const limit = parseInt(req.query.limit, 10) || 20;
-    let convo = await Conversation.findOne({ participants: userId }).populate('participants', 'username email');
-    if (!convo) return res.json({ conversation: null });
-    // Only return the latest N messages
-    const convoObj = convo.toObject();
-    if (Array.isArray(convoObj.messages)) {
-      convoObj.messages = convoObj.messages.slice(-limit);
-    }
-    res.json({ conversation: convoObj });
+
+    // Use aggregation to only fetch the last N messages
+    const convoAgg = await Conversation.aggregate([
+      { $match: { participants: userId } },
+      { $project: {
+          participants: 1,
+          messages: { $slice: ['$messages', -limit] }
+        }
+      }
+    ]);
+
+    if (!convoAgg || convoAgg.length === 0) return res.json({ conversation: null });
+
+    // Optionally, populate participants (if needed)
+    // We'll fetch participant details for the frontend
+    const convo = convoAgg[0];
+    const participantIds = convo.participants || [];
+    const participants = await User.find({ _id: { $in: participantIds } }, 'username email');
+    convo.participants = participants;
+
+    res.json({ conversation: convo });
   } catch (err) {
     res.status(500).json({ msg: 'Server error', error: err.message });
   }
