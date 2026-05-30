@@ -108,7 +108,10 @@ const Chat = ({ user, open }) => {
 
   const handleSendMessage = async () => {
     if (messageText.trim() === '') return;
-
+    if (!channel) {
+      alert('Chat is still connecting. Please wait...');
+      return;
+    }
     try {
       // Persist to backend (creates/updates conversation)
       const res = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/conversation/message`, {
@@ -124,15 +127,13 @@ const Chat = ({ user, open }) => {
       }
       setMessageText('');
       // Optionally, publish to Ably for real-time update
-      if (channel) {
-        await channel.publish('message', {
-          text: messageText,
-          sender: user.username,
-          senderId: user.id,
-          timestamp: Date.now(),
-          isAdmin: user.isAdmin,
-        });
-      }
+      await channel.publish('message', {
+        text: messageText,
+        sender: user.username,
+        senderId: user.id,
+        timestamp: Date.now(),
+        isAdmin: user.isAdmin,
+      });
     } catch (err) {
       console.error('Error sending message:', err);
     }
@@ -185,9 +186,10 @@ const Chat = ({ user, open }) => {
           value={messageText}
           onChange={(e) => setMessageText(e.target.value)}
           onKeyPress={(e) => {
-            if (e.key === 'Enter') handleSendMessage();
+            if (e.key === 'Enter' && channel) handleSendMessage();
           }}
-          placeholder="Type your message..."
+          placeholder={channel ? "Type your message..." : "Connecting..."}
+          disabled={!channel}
           style={{
             flex: 1,
             border: 'none',
@@ -196,24 +198,26 @@ const Chat = ({ user, open }) => {
             fontSize: 15,
             padding: '8px 0',
             color: '#1A1A1A',
+            opacity: channel ? 1 : 0.5,
           }}
         />
         <button
           onClick={handleSendMessage}
+          disabled={!channel || messageText.trim() === ''}
           style={{
             marginLeft: 8,
-            background: '#00A651',
+            background: channel ? '#00A651' : '#ccc',
             color: '#fff',
             border: 'none',
             borderRadius: 8,
             padding: '8px 18px',
             fontWeight: 600,
             fontSize: 15,
-            cursor: 'pointer',
+            cursor: channel ? 'pointer' : 'not-allowed',
             transition: 'background 0.2s',
           }}
         >
-          Send
+          {channel ? 'Send' : 'Connecting...'}
         </button>
       </div>
     </div>
