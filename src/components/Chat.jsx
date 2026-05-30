@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import * as Ably from 'ably';
 
 const Chat = ({ user, open }) => {
+  const ablyRef = useRef(null);
   const [ably, setAbly] = useState(null);
   const [channel, setChannel] = useState(null);
   const [messageText, setMessageText] = useState('');
@@ -30,47 +31,58 @@ const Chat = ({ user, open }) => {
 
   useEffect(() => {
     if (!user || !open) {
-      setAbly(null);
+      if (ablyRef.current) {
+        ablyRef.current.close();
+        ablyRef.current = null;
+        setAbly(null);
+      }
       return;
     }
 
-    const ablyClient = new Ably.Realtime({
-      authCallback: async (tokenParams, callback) => {
-        try {
-          const response = await fetch(`${import.meta.env.VITE_API_URL}/api/ably-token`, {
-            method: 'GET',
-            credentials: 'include',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          });
+    if (!ablyRef.current) {
+      const ablyClient = new Ably.Realtime({
+        authCallback: async (tokenParams, callback) => {
+          try {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/ably-token`, {
+              method: 'GET',
+              credentials: 'include',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+            });
 
-          if (!response.ok) {
-            const err = await response.text();
+            if (!response.ok) {
+              const err = await response.text();
+              callback(err, null);
+              return;
+            }
+
+            const tokenRequest = await response.json();
+            callback(null, tokenRequest);
+          } catch (err) {
             callback(err, null);
-            return;
           }
+        },
+        echoMessages: false,
+      });
 
-          const tokenRequest = await response.json();
-          callback(null, tokenRequest);
-        } catch (err) {
-          callback(err, null);
-        }
-      },
-      echoMessages: false,
-    });
+      ablyClient.connection.once('connected', () => {
+        setAbly(ablyClient);
+      });
 
-    ablyClient.connection.once('connected', () => {
-      setAbly(ablyClient);
-    });
+      ablyClient.connection.on('failed', (err) => {
+        // Optionally handle connection errors
+      });
 
-    ablyClient.connection.on('failed', (err) => {
-      // Optionally handle connection errors
-    });
+      ablyRef.current = ablyClient;
+    }
 
     return () => {
-      ablyClient.close();
-      setAbly(null);
+      if (ablyRef.current) {
+        ablyRef.current.close();
+        ablyRef.current = null;
+        setAbly(null);
+      }
     };
   }, [user, open]);
 
