@@ -36,7 +36,9 @@ const authMiddleware = require('./middleware/authMiddleware'); // We'll create t
 const ably = new Ably.Rest({ key: process.env.ABLY_API_KEY.trim() });
 app.get('/api/ably-token', authMiddleware, async (req, res) => {
   try {
-    console.log('✅ req.user:', req.user);
+    console.log('Ably token request headers:', req.headers);
+    console.log('Ably token request cookies:', req.headers.cookie);
+    console.log('Ably token request user:', req.user);
     const tokenRequest = await ably.auth.createTokenRequest({
       clientId: String(req.user.id),
       capability: {
