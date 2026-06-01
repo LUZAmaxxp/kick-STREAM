@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { setAuthToken } from '../lib/auth';
 
 export default function AuthModal({ open, onClose, onAuth }) {
   const [isLogin, setIsLogin] = useState(true);
@@ -30,7 +31,8 @@ export default function AuthModal({ open, onClose, onAuth }) {
       });
       const data = await res.json();
       if (!res.ok) { setError(data.msg || 'Authentication failed'); return; }
-      onAuth(data.user);
+      if (data.token) setAuthToken(data.token);
+      onAuth({ ...data.user, authToken: data.token });
       onClose();
     } catch (err) {
       setError('Server error. Please try again.');

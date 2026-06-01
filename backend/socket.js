@@ -34,7 +34,11 @@ function setupSocket(server) {
   io.use((socket, next) => {
     try {
       const cookies = parseCookieHeader(socket.handshake.headers.cookie);
-      const token = cookies.token || socket.handshake.auth?.token;
+      const authHeader = socket.handshake.headers?.authorization;
+      const bearer = authHeader && authHeader.startsWith('Bearer ')
+        ? authHeader.slice(7).trim()
+        : null;
+      const token = cookies.token || socket.handshake.auth?.token || bearer || socket.handshake.headers?.['x-auth-token'];
       if (!token) return next(new Error('unauthorized'));
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
       socket.data.userId = String(decoded.user.id);

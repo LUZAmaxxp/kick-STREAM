@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { setAuthToken } from '../lib/auth';
 
 function AdminLogin({ onLogin }) {
   const [user, setUser] = useState('');
@@ -28,7 +29,7 @@ function AdminLogin({ onLogin }) {
         setLoading(false);
         return;
       }
-      // Assume backend sets cookie; just call onLogin
+      if (data.token) setAuthToken(data.token);
       onLogin();
     } catch (err) {
       setError('Server error. Please try again.');

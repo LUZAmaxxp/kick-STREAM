@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import videoBg from '../assets/13406407_1080_1920_30fps.mp4';
 import { useNavigate } from 'react-router-dom';
+import { setAuthToken, getAuthHeaders, clearAuthToken } from '../lib/auth';
 
 const TICKER_ITEMS = [
   'Welcome back', 'Sign in to continue', 'New here? Join us',
@@ -53,11 +54,20 @@ export default function AuthPage({ onAuth }) {
         setError('This account is not an administrator.');
         setSubmitted(false);
         // Best-effort logout on server so the cookie isn't left around
-        try { await fetch(`${import.meta.env.VITE_API_URL}/api/auth/logout`, { method: 'POST', credentials: 'include' }); } catch { /* noop */ }
+        try {
+          await fetch(`${import.meta.env.VITE_API_URL}/api/auth/logout`, {
+            method: 'POST',
+            credentials: 'include',
+            headers: getAuthHeaders(),
+          });
+        } catch {
+          /* noop */
+        }
+        clearAuthToken();
         return;
       }
-        // Assume backend sets cookie; just update user state
-        onAuth(data.user);
+      if (data.token) setAuthToken(data.token);
+      onAuth({ ...data.user, authToken: data.token });
       navigate(data.user?.isAdmin ? '/admin' : '/');
     } catch (err) {
       setError('Server error. Please try again.');

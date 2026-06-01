@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import * as Ably from 'ably';
+import { getAuthHeaders } from '../lib/auth';
 
 const Chat = ({ user, open }) => {
   const ablyRef = useRef(null);
@@ -8,6 +9,7 @@ const Chat = ({ user, open }) => {
   const [messageText, setMessageText] = useState('');
   const [messages, setMessages] = useState([]);
   const messagesEndRef = useRef(null);
+  const [connectionError, setConnectionError] = useState('');
   // Track loading state for history
   const [loading, setLoading] = useState(true);
   // Fetch conversation history on mount
@@ -16,6 +18,7 @@ const Chat = ({ user, open }) => {
     setLoading(true);
     fetch(`${import.meta.env.VITE_API_URL}/api/admin/conversation?limit=20`, {
       credentials: 'include',
+      headers: getAuthHeaders(),
     })
       .then(res => res.json())
       .then(data => {
@@ -46,14 +49,12 @@ const Chat = ({ user, open }) => {
             const response = await fetch(`${import.meta.env.VITE_API_URL}/api/ably-token`, {
               method: 'GET',
               credentials: 'include',
-              headers: {
-                'Content-Type': 'application/json',
-              },
+              headers: getAuthHeaders(),
             });
 
             if (!response.ok) {
-              const err = await response.text();
-              callback(err, null);
+              const errText = await response.text();
+              callback(new Error(errText || 'Unable to authenticate realtime connection'), null);
               return;
             }
 
@@ -67,11 +68,13 @@ const Chat = ({ user, open }) => {
       });
 
       ablyClient.connection.once('connected', () => {
+        setConnectionError('');
         setAbly(ablyClient);
       });
 
       ablyClient.connection.on('failed', (err) => {
-        // Optionally handle connection errors
+        setConnectionError('Unable to connect chat on this network. Please refresh and sign in again.');
+        if (import.meta.env.DEV) console.error('Ably connection failed:', err);
       });
 
       ablyRef.current = ablyClient;
@@ -120,7 +123,7 @@ const Chat = ({ user, open }) => {
     try {
       const res = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/conversation/message`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
         credentials: 'include',
         body: JSON.stringify({ text: trimmed })
       });
@@ -185,6 +188,11 @@ const Chat = ({ user, open }) => {
         <div ref={messagesEndRef} />
       </div>
       <div style={{ display: 'flex', alignItems: 'center', borderTop: '1.5px solid #F5F3EE', padding: '10px 12px', background: '#FAFAF8', borderRadius: '0 0 12px 12px' }}>
+        {!!connectionError && (
+          <div style={{ color: '#b42318', fontSize: 12, marginRight: 8 }}>
+            {connectionError}
+          </div>
+        )}
         <input
           type="text"
           value={messageText}

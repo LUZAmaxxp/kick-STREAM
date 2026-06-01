@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import AdminDashboard from './AdminDashboard';
 import AdminLogin from './AdminLogin';
+import { getAuthHeaders } from '../lib/auth';
 
 
 const AdminApp = () => {
@@ -8,7 +9,10 @@ const AdminApp = () => {
 
   useEffect(() => {
     // Check admin session from backend
-    fetch(`${import.meta.env.VITE_API_URL}/api/session`, { credentials: 'include' })
+    fetch(`${import.meta.env.VITE_API_URL}/api/session`, {
+      credentials: 'include',
+      headers: getAuthHeaders(),
+    })
       .then(res => res.ok ? res.json() : Promise.reject())
       .then(data => {
         if (data.user && data.user.isAdmin) setAdminUser(data.user);
@@ -19,7 +23,10 @@ const AdminApp = () => {
 
   const handleLogin = () => {
     // After login, re-fetch user
-    fetch(`${import.meta.env.VITE_API_URL}/api/session`, { credentials: 'include' })
+    fetch(`${import.meta.env.VITE_API_URL}/api/session`, {
+      credentials: 'include',
+      headers: getAuthHeaders(),
+    })
       .then(res => res.ok ? res.json() : Promise.reject())
       .then(data => {
         if (data.user && data.user.isAdmin) setAdminUser(data.user);

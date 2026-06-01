@@ -78,7 +78,10 @@ router.post('/register', authLimiter, async (req, res) => {
 
     const token = await signToken(user);
     setTokenCookie(res, token);
-    res.json({ user: { id: user.id, username: user.username, email: user.email, isAdmin: user.isAdmin } });
+    res.json({
+      user: { id: user.id, username: user.username, email: user.email, isAdmin: user.isAdmin },
+      token,
+    });
   } catch (err) {
     console.error('register error:', err.message);
     res.status(500).json({ msg: 'Server error' });
@@ -109,7 +112,10 @@ router.post('/login', authLimiter, async (req, res) => {
 
     const token = await signToken(user);
     setTokenCookie(res, token);
-    res.json({ user: { id: user.id, username: user.username, email: user.email, isAdmin: user.isAdmin } });
+    res.json({
+      user: { id: user.id, username: user.username, email: user.email, isAdmin: user.isAdmin },
+      token,
+    });
   } catch (err) {
     console.error('login error:', err.message);
     res.status(500).json({ msg: 'Server error' });

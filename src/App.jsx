@@ -1,6 +1,7 @@
 import { useEffect, useState, lazy, Suspense } from 'react';
 import useAnalytics from './hooks/useAnalytics';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { clearAuthToken, getAuthHeaders, setAuthToken } from './lib/auth';
 import Nav from './components/Nav';
 import Hero from './components/Hero';
 import ChatWidget from './components/ChatWidget';
@@ -23,20 +24,28 @@ export default function App() {
 
   // Auth handler: expects userData to include authToken
   const handleAuth = (userData) => {
+    if (userData?.authToken) setAuthToken(userData.authToken);
     setUser(userData);
-    // No localStorage, rely on cookies
   };
 
   // Logout handler
   const logout = () => {
     setUser(null);
+    clearAuthToken();
     // Optionally, call backend to clear cookie
-    fetch(`${import.meta.env.VITE_API_URL}/api/auth/logout`, { method: 'POST', credentials: 'include' });
+    fetch(`${import.meta.env.VITE_API_URL}/api/auth/logout`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: getAuthHeaders(),
+    });
   };
 
   // Check for session cookie on mount to persist login
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_API_URL}/api/session`, { credentials: 'include' })
+    fetch(`${import.meta.env.VITE_API_URL}/api/session`, {
+      credentials: 'include',
+      headers: getAuthHeaders(),
+    })
       .then(res => res.ok ? res.json() : Promise.reject())
       .then(data => {
         if (data.user) setUser(data.user);
