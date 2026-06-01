@@ -15,7 +15,7 @@ export default function AdminUsers() {
         });
         if (!res.ok) throw new Error('Failed to fetch users');
         const data = await res.json();
-        setUsers(data);
+        setUsers(Array.isArray(data) ? data : (data.users || []));
       } catch (err) {
         setError('Could not load users');
       } finally {
