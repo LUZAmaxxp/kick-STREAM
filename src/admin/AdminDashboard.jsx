@@ -3,6 +3,7 @@ import AdminAnalytics from './AdminAnalytics';
 import AdminEmails from './AdminEmails';
 import useAdminNotifications from './useAdminNotifications';
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 export default function AdminDashboard({ user }) {
   const [activeTab, setActiveTab] = useState('overview');
   const [showDropdown, setShowDropdown] = useState(false);
@@ -42,7 +43,22 @@ export default function AdminDashboard({ user }) {
 
       <header style={styles.topbar}>
         <div style={styles.topLeft}>
-          {/* Add any top bar content here, e.g. logo, nav, etc. */}
+          <span style={styles.statusDot} />
+          <span style={styles.siteLabel}>KICKSTREAM</span>
+          <span style={styles.slash}>/</span>
+          <span style={styles.pageLabel}>admin</span>
+        </div>
+        <div style={styles.topRight}>
+          <Link to="/" style={styles.siteLink}>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: 6 }}>
+              <path d="M19 12H5" />
+              <polyline points="12 19 5 12 12 5" />
+            </svg>
+            BACK TO SITE
+          </Link>
+          <button onClick={handleLogout} style={styles.logoutBtn}>
+            LOGOUT
+          </button>
         </div>
       </header>
 
@@ -138,6 +154,19 @@ const styles = {
     color: '#E8714F', fontSize: 11,
     letterSpacing: '0.12em', fontWeight: 600,
     cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
+    transition: 'all 0.2s',
+  },
+  siteLink: {
+    display: 'inline-flex', alignItems: 'center',
+    textDecoration: 'none',
+    border: '2px solid #1A1A1A',
+    background: '#F5F3EE',
+    color: '#1A1A1A',
+    fontSize: 11,
+    letterSpacing: '0.12em',
+    fontWeight: 600,
+    padding: '6px 12px',
+    fontFamily: "'DM Sans', sans-serif",
     transition: 'all 0.2s',
   },
   pageHead: {

@@ -60,6 +60,14 @@ export default function Nav({ user, logout }) {
                 </Link>
               ) : (
                 <>
+                  {user.isAdmin && (
+                    <Link
+                      to="/admin"
+                      className="text-xs font-ui font-semibold uppercase tracking-[0.15em] text-[#E8714F] hover:text-black transition-colors"
+                    >
+                      Dashboard
+                    </Link>
+                  )}
                   <span className="text-xs font-ui font-semibold uppercase tracking-[0.15em] text-black/80">{user.email || user.username || 'Account'}</span>
                   <button
                     onClick={logout}
@@ -125,6 +133,15 @@ export default function Nav({ user, logout }) {
                     </Link>
                   ) : (
                     <>
+                      {user.isAdmin && (
+                        <Link
+                          to="/admin"
+                          onClick={() => setMenuOpen(false)}
+                          className="text-sm font-ui font-semibold uppercase tracking-widest text-[#E8714F] hover:text-black"
+                        >
+                          Dashboard
+                        </Link>
+                      )}
                       <span className="text-sm font-ui font-semibold uppercase tracking-widest text-black/80">{user.email || user.username || 'Account'}</span>
                       <button
                         onClick={() => { setMenuOpen(false); logout(); }}

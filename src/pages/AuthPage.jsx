@@ -13,6 +13,7 @@ const TICKER_ITEMS = [
 
 export default function AuthPage({ onAuth }) {
   const [isLogin, setIsLogin] = useState(true);
+  const [role, setRole] = useState('user'); // 'user' | 'admin'
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -33,11 +34,13 @@ export default function AuthPage({ onAuth }) {
     setError('');
     setSubmitted(true);
     try {
-        const endpoint = isLogin ? '/api/auth/login' : '/api/auth/register';
+        // Admin role only supports sign-in; registration is user-only
+        const useLogin = role === 'admin' ? true : isLogin;
+        const endpoint = useLogin ? '/api/auth/login' : '/api/auth/register';
         const res = await fetch(`${import.meta.env.VITE_API_URL}${endpoint}`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(isLogin ? { email, password } : { email, password, username: email.split('@')[0] }),
+          body: JSON.stringify(useLogin ? { email, password } : { email, password, username: email.split('@')[0] }),
           credentials: 'include',
         });
       const data = await res.json();
@@ -46,9 +49,16 @@ export default function AuthPage({ onAuth }) {
         setSubmitted(false);
         return;
       }
+      if (role === 'admin' && !data.user?.isAdmin) {
+        setError('This account is not an administrator.');
+        setSubmitted(false);
+        // Best-effort logout on server so the cookie isn't left around
+        try { await fetch(`${import.meta.env.VITE_API_URL}/api/auth/logout`, { method: 'POST', credentials: 'include' }); } catch { /* noop */ }
+        return;
+      }
         // Assume backend sets cookie; just update user state
         onAuth(data.user);
-      navigate('/');
+      navigate(data.user?.isAdmin ? '/admin' : '/');
     } catch (err) {
       setError('Server error. Please try again.');
       setSubmitted(false);
@@ -56,9 +66,17 @@ export default function AuthPage({ onAuth }) {
   };
 
   const switchMode = () => {
+    if (role === 'admin') return; // no register in admin mode
     setIsLogin((v) => !v);
     setError('');
     setSubmitted(false);
+  };
+
+  const switchRole = (next) => {
+    setRole(next);
+    setError('');
+    setSubmitted(false);
+    if (next === 'admin') setIsLogin(true); // force login for admin
   };
 
   return (
@@ -127,19 +145,39 @@ export default function AuthPage({ onAuth }) {
           ))}
         </div>
 
+        {/* Role toggle: User / Admin */}
+        <div style={{ ...s.modeToggle, marginBottom: 12 }}>
+          <button
+            type="button"
+            style={role === 'user' ? { ...s.modeBtn, ...s.modeBtnActive } : s.modeBtn}
+            onClick={() => switchRole('user')}
+          >
+            User
+          </button>
+          <button
+            type="button"
+            style={role === 'admin' ? { ...s.modeBtn, ...s.modeBtnActive, background: '#E8714F', color: '#1A1A1A' } : s.modeBtn}
+            onClick={() => switchRole('admin')}
+          >
+            Admin
+          </button>
+        </div>
+
         {/* Toggle */}
         <div style={s.modeToggle}>
           <button
             type="button"
             style={isLogin ? { ...s.modeBtn, ...s.modeBtnActive } : s.modeBtn}
-            onClick={() => { setIsLogin(true); setError(''); }}
+            onClick={() => { if (role === 'admin') return; setIsLogin(true); setError(''); }}
+            disabled={role === 'admin'}
           >
             Sign In
           </button>
           <button
             type="button"
-            style={!isLogin ? { ...s.modeBtn, ...s.modeBtnActive } : s.modeBtn}
-            onClick={() => { setIsLogin(false); setError(''); }}
+            style={!isLogin ? { ...s.modeBtn, ...s.modeBtnActive } : { ...s.modeBtn, opacity: role === 'admin' ? 0.4 : 1, cursor: role === 'admin' ? 'not-allowed' : 'pointer' }}
+            onClick={() => { if (role === 'admin') return; setIsLogin(false); setError(''); }}
+            disabled={role === 'admin'}
           >
             Sign Up
           </button>
@@ -147,9 +185,13 @@ export default function AuthPage({ onAuth }) {
 
         {/* Heading */}
         <div style={s.formHeader}>
-          <h2 style={s.formTitle}>{isLogin ? 'Welcome back' : 'Join us today'}</h2>
+          <h2 style={s.formTitle}>
+            {role === 'admin' ? 'Admin access' : (isLogin ? 'Welcome back' : 'Join us today')}
+          </h2>
           <p style={s.formSub}>
-            {isLogin ? 'Enter your credentials to continue' : 'Create your account in seconds'}
+            {role === 'admin'
+              ? 'Sign in with your administrator credentials'
+              : (isLogin ? 'Enter your credentials to continue' : 'Create your account in seconds')}
           </p>
         </div>
 
@@ -218,7 +260,7 @@ export default function AuthPage({ onAuth }) {
             }}
           >
             <span style={s.submitInner}>
-              {submitted ? '✓ Done!' : isLogin ? 'Sign In →' : 'Create Account →'}
+              {submitted ? '✓ Done!' : (role === 'admin' ? 'Sign In as Admin →' : (isLogin ? 'Sign In →' : 'Create Account →'))}
             </span>
           </button>
         </form>
@@ -231,12 +273,14 @@ export default function AuthPage({ onAuth }) {
         </div>
 
         {/* Switch */}
-        <p style={s.switchRow}>
-          {isLogin ? "Don't have an account? " : 'Already have an account? '}
-          <button type="button" style={s.switchLink} onClick={switchMode}>
-            {isLogin ? 'Sign Up' : 'Sign In'}
-          </button>
-        </p>
+        {role !== 'admin' && (
+          <p style={s.switchRow}>
+            {isLogin ? "Don't have an account? " : 'Already have an account? '}
+            <button type="button" style={s.switchLink} onClick={switchMode}>
+              {isLogin ? 'Sign Up' : 'Sign In'}
+            </button>
+          </p>
+        )}
       </div>
     </div>
   );
