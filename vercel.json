@@ -1,5 +1,13 @@
 {
   "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "https://kick-stream-production.up.railway.app/api/$1"
+    },
+    {
+      "source": "/socket.io/(.*)",
+      "destination": "https://kick-stream-production.up.railway.app/socket.io/$1"
+    },
     { "source": "/(.*)", "destination": "/" }
   ]
 }
