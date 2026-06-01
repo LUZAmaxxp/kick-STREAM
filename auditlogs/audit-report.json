@@ -1,0 +1,488 @@
+{
+  "project": "kick-stream",
+  "auditDate": "2026-06-01",
+  "scope": ["backend/", "src/", "root configs"],
+  "summary": {
+    "totalIssues": 95,
+    "bySeverity": {
+      "critical": 24,
+      "high": 27,
+      "medium": 36,
+      "low": 8
+    },
+    "topRisks": [
+      "Hardcoded admin credentials in backend/scripts/createAdmin.js",
+      "Unauthenticated endpoints (POST /api/admin/messages, POST /api/analytics/track)",
+      "Socket.IO identification accepts client-supplied userId without verification (impersonation)",
+      "Logout route is unreachable (defined inside login catch block)",
+      "Sensitive headers/cookies logged to console (/api/ably-token)",
+      "No rate limiting, no helmet, no CSRF protection anywhere",
+      "Stored XSS risk: message/email bodies never sanitized",
+      "NoSQL injection risk in analytics sortBy param",
+      "Pagination accepts unbounded limit (DoS / OOM)",
+      "Memory leaks possible in Chat / notification hooks",
+      "Notification bell UI feature incomplete",
+      "No end-to-end tests"
+    ]
+  },
+  "backend": {
+    "security": [
+      {
+        "file": "backend/scripts/createAdmin.js",
+        "lines": "7-10",
+        "severity": "critical",
+        "category": "broken-authentication",
+        "title": "Hardcoded admin email and password in source",
+        "description": "Admin email 'admin@kickstream.com' and password 'admin123' are hardcoded and committed to version control. Trivially brute-forceable and exposed in repo.",
+        "recommendation": "Read ADMIN_EMAIL and ADMIN_PASSWORD from env; require strong password; or prompt interactively. Refuse to run if admin already exists unless --force is passed."
+      },
+      {
+        "file": "backend/server.js",
+        "lines": "37-52",
+        "severity": "critical",
+        "category": "sensitive-data-exposure",
+        "title": "Logs full request headers and cookies in /api/ably-token",
+        "description": "console.log of req.headers and req.headers.cookie leaks JWT tokens and other secrets to logs (Railway, file system, log aggregators).",
+        "recommendation": "Remove header/cookie logging. Use a structured logger (winston/pino) with redaction of Authorization/Cookie/Set-Cookie."
+      },
+      {
+        "file": "backend/routes/admin.js",
+        "lines": "POST /messages route",
+        "severity": "critical",
+        "category": "broken-access-control",
+        "title": "POST /api/admin/messages is unauthenticated",
+        "description": "No authMiddleware on the inbound message endpoint. Any anonymous client can post messages, trigger admin notifications, send emails, and pollute analytics.",
+        "recommendation": "Either require authMiddleware, or move to a dedicated /api/contact endpoint protected by rate limiting + CAPTCHA + email-format validation + body length cap."
+      },
+      {
+        "file": "backend/routes/admin.js",
+        "lines": "POST /analytics/track route",
+        "severity": "critical",
+        "category": "broken-access-control",
+        "title": "POST /api/analytics/track is fully open",
+        "description": "No auth, no rate limit, accepts arbitrary email/userId/ip/country from the client. Allows data poisoning, user enumeration, and bogus analytics injection.",
+        "recommendation": "Require authentication for identified analytics; derive IP server-side from req.ip; rate-limit per IP; whitelist event names; cap payload size."
+      },
+      {
+        "file": "backend/socket.js",
+        "lines": "18-27",
+        "severity": "critical",
+        "category": "broken-authentication",
+        "title": "Socket.IO 'identify' trusts client-supplied userId",
+        "description": "Any connected client can emit identify with any userId and start receiving that user's notifications. Full impersonation primitive.",
+        "recommendation": "Use Socket.IO auth middleware: read JWT from handshake (cookie or auth payload), verify it, and set socket.data.userId server-side. Ignore client-sent identify payloads."
+      },
+      {
+        "file": "backend/routes/auth.js",
+        "lines": "logout block inside login try/catch",
+        "severity": "critical",
+        "category": "logic-bug",
+        "title": "Logout route is defined inside login handler (dead code)",
+        "description": "router.post('/logout', ...) is declared inside the try block of the login handler, so it is only registered after a successful login call, on every login, leading to duplicate handlers or never being registered.",
+        "recommendation": "Move router.post('/logout', ...) to module scope, after the login route closes."
+      },
+      {
+        "file": "backend/routes/admin.js",
+        "lines": "/messages POST handler",
+        "severity": "high",
+        "category": "xss-injection",
+        "title": "Message body and senderEmail are stored and rendered unsanitized",
+        "description": "Raw HTML/JS can be stored and later rendered in admin UI, enabling stored XSS against the admin account.",
+        "recommendation": "Validate senderEmail with validator.isEmail; cap body length (e.g. 5000); sanitize HTML with the 'xss' library or strip HTML; escape on render in React."
+      },
+      {
+        "file": "backend/routes/auth.js",
+        "lines": "register handler",
+        "severity": "high",
+        "category": "input-validation",
+        "title": "No validation of email/password/username strength",
+        "description": "Accepts any email, any password (including empty after trim), no username constraints, no rate limiting. Enables credential stuffing, weak accounts, enumeration via timing.",
+        "recommendation": "Add validator.isEmail, enforce min 8-12 chars + complexity, length-limit username, add express-rate-limit on /login and /register, return constant-time generic error for bad credentials."
+      },
+      {
+        "file": "backend/models/Conversation.js",
+        "lines": "messages schema",
+        "severity": "high",
+        "category": "denial-of-service",
+        "title": "Unbounded embedded messages array",
+        "description": "messages is an embedded array with no cap. Documents can approach the 16MB MongoDB limit and cause the OOM crashes already observed.",
+        "recommendation": "Move messages into a separate collection with an index on { conversationId, createdAt }, OR enforce a hard cap (e.g. 200) and archive older messages."
+      },
+      {
+        "file": "backend/routes/admin.js",
+        "lines": "analytics list endpoint (sortBy)",
+        "severity": "high",
+        "category": "nosql-injection",
+        "title": "Unvalidated sort field used directly in Mongo query",
+        "description": "req.query.sortBy is plugged into a sort object without a whitelist, allowing operator injection in some Mongo configurations.",
+        "recommendation": "Whitelist allowed sort fields (e.g. ['lastVisit','totalVisits','pagesViewed']) and reject anything else."
+      },
+      {
+        "file": "backend/routes/admin.js",
+        "lines": "all paginated endpoints",
+        "severity": "high",
+        "category": "denial-of-service",
+        "title": "limit query param has no upper bound",
+        "description": "parseInt(req.query.limit) || 25 with no Math.min cap lets a caller request ?limit=10000000 and force the server to OOM.",
+        "recommendation": "const limit = Math.min(parseInt(req.query.limit) || 25, 100); apply uniformly."
+      },
+      {
+        "file": "backend/server.js",
+        "lines": "middleware",
+        "severity": "high",
+        "category": "security-misconfiguration",
+        "title": "No helmet, no rate limiting, no CSRF strategy",
+        "description": "Server is missing baseline hardening middleware. Exposed to clickjacking, MIME sniffing, and brute force.",
+        "recommendation": "app.use(helmet()); add express-rate-limit globally and tighter limits on /api/auth/*; rely on SameSite=None+Strict origin allowlist for CSRF or add csurf for state-changing endpoints."
+      },
+      {
+        "file": "backend/utils/sendEmail.js",
+        "lines": "sendEmail signature",
+        "severity": "high",
+        "category": "input-validation",
+        "title": "No validation of 'to' recipient and no try/catch",
+        "description": "An invalid or attacker-controlled 'to' value can be passed through; failures bubble up as unhandled rejections.",
+        "recommendation": "Validate with validator.isEmail; wrap sendMail in try/catch; sanitize subject (strip CR/LF to prevent header injection)."
+      },
+      {
+        "file": "backend/socket.js",
+        "lines": "cors origin fallback",
+        "severity": "medium",
+        "category": "security-misconfiguration",
+        "title": "Socket.IO CORS falls back to '*'",
+        "description": "origin: process.env.CLIENT_URL || '*' — if CLIENT_URL is unset, any origin can connect.",
+        "recommendation": "Fail fast at boot if CLIENT_URL is missing; never fall back to '*'."
+      },
+      {
+        "file": "backend/routes/admin.js",
+        "lines": "PUT/GET by :userId routes",
+        "severity": "medium",
+        "category": "input-validation",
+        "title": "ObjectId params not validated",
+        "description": "Invalid IDs throw 500 instead of 400; potential for query-shape abuse.",
+        "recommendation": "if (!mongoose.Types.ObjectId.isValid(req.params.userId)) return res.status(400)."
+      },
+      {
+        "file": "backend/models/UserAnalytics.js",
+        "lines": "schema",
+        "severity": "medium",
+        "category": "privacy-gdpr",
+        "title": "No retention policy or delete endpoint",
+        "description": "Stores IP/country/email indefinitely without consent flow or DELETE endpoint. Violates GDPR Art. 17 if EU users are involved.",
+        "recommendation": "Add TTL index on createdAt; provide DELETE /api/user/analytics; add cookie/consent banner; minimize PII."
+      },
+      {
+        "file": "backend/routes/admin.js",
+        "lines": "analytics XLSX export",
+        "severity": "medium",
+        "category": "privacy-gdpr",
+        "title": "Exports full PII without masking or audit log",
+        "description": "Anyone with admin can download full email/IP/country dataset, no audit trail.",
+        "recommendation": "Mask emails, log every export with admin id+timestamp+row count, require re-auth or 2FA for export."
+      },
+      {
+        "file": "backend/middleware/authMiddleware.js",
+        "lines": "fallback x-auth-token header",
+        "severity": "medium",
+        "category": "broken-authentication",
+        "title": "Accepts JWT from arbitrary header in addition to cookie",
+        "description": "Allows bypassing SameSite cookie protections via custom header from a malicious origin if CORS is misconfigured.",
+        "recommendation": "Drop the x-auth-token fallback unless explicitly needed; rely on HttpOnly cookie."
+      },
+      {
+        "file": "backend/models/User.js",
+        "lines": "schema",
+        "severity": "low",
+        "category": "sensitive-data-exposure",
+        "title": "Password field not excluded by default",
+        "description": "Forgetting .select('-password') in a future query will leak hashes.",
+        "recommendation": "Set password field to select:false in schema and add toJSON transform to strip it."
+      }
+    ],
+    "qualityAndPerformance": [
+      {
+        "file": "backend/routes/admin.js",
+        "severity": "high",
+        "title": "N+1 query when populating participants in /conversations",
+        "recommendation": "Use a single $lookup stage inside the aggregation instead of per-doc User.find."
+      },
+      {
+        "file": "backend/routes/admin.js",
+        "severity": "high",
+        "title": "Analytics-update logic duplicated between /messages and /analytics/track",
+        "recommendation": "Extract into a shared upsertAnalytics(query, patch) helper."
+      },
+      {
+        "file": "backend/models/*.js",
+        "severity": "medium",
+        "title": "Missing indexes on hot query fields",
+        "recommendation": "Add indexes: Conversation { participants:1, lastUpdated:-1 }, Message { timestamp:-1, senderEmail:1 }, UserAnalytics { email:1 }, { lastVisit:-1 }."
+      },
+      {
+        "file": "backend/scripts/trimLargeConversations.js",
+        "severity": "medium",
+        "title": "Loads entire collection into memory",
+        "recommendation": "Stream with cursor() or paginate in batches of 500."
+      },
+      {
+        "file": "backend/server.js",
+        "severity": "low",
+        "title": "No graceful shutdown",
+        "recommendation": "Handle SIGTERM/SIGINT: close http server, io.close(), mongoose.disconnect()."
+      },
+      {
+        "file": "backend/server.js",
+        "severity": "low",
+        "title": "MongoDB connection failure is non-fatal",
+        "recommendation": "process.exit(1) on initial connection error so the orchestrator restarts."
+      }
+    ],
+    "incompleteFeatures": [
+      {
+        "title": "Admin notification bell backend",
+        "description": "Notification model exists but no REST endpoint to list/mark-read user-facing notifications."
+      },
+      {
+        "title": "Conversation pagination cursor",
+        "description": "Only last-N slice is returned; no 'load older' cursor parameter, so the UI cannot scroll back."
+      },
+      {
+        "title": "Account lifecycle",
+        "description": "No email verification, no password reset, no account deletion endpoints."
+      },
+      {
+        "title": "Tests",
+        "description": "No unit, integration, or contract tests anywhere in backend/."
+      },
+      {
+        "title": "Logging / observability",
+        "description": "No structured logger, no request log middleware (morgan), no error reporter (Sentry)."
+      },
+      {
+        "title": "API documentation",
+        "description": "No Swagger/OpenAPI definition."
+      }
+    ]
+  },
+  "frontend": {
+    "security": [
+      {
+        "file": "src/components/Chat.jsx",
+        "severity": "high",
+        "category": "xss",
+        "title": "Chat messages rendered without explicit sanitization",
+        "description": "Text comes from server and is rendered as-is. React escapes text nodes, but any future use of dangerouslySetInnerHTML or attribute interpolation would be exploitable, and stored XSS in message bodies will surface in the admin UI.",
+        "recommendation": "Sanitize with DOMPurify at the boundary, cap message length, verify senderId before treating a message as 'self'."
+      },
+      {
+        "file": "src/pages/AuthPage.jsx",
+        "severity": "high",
+        "category": "input-validation",
+        "title": "No client-side email/password validation",
+        "recommendation": "Validate format and strength before submit; show inline errors; disable button on invalid input."
+      },
+      {
+        "file": "src/components/ContactAdmin.jsx",
+        "severity": "high",
+        "category": "input-validation",
+        "title": "Unbounded contact form submission",
+        "recommendation": "Validate email, cap body, debounce submit, show server-side rate-limit errors."
+      },
+      {
+        "file": "src/admin/AdminEmails.jsx",
+        "severity": "high",
+        "category": "broken-access-control",
+        "title": "Admin pages render before verifying user.isAdmin",
+        "recommendation": "Add a route guard that redirects non-admins; do not depend solely on backend response."
+      },
+      {
+        "file": "src/hooks/useUserNotifications.js",
+        "severity": "high",
+        "category": "broken-authentication",
+        "title": "Socket.io identifies user by client-supplied user.id",
+        "recommendation": "Pass JWT via socket auth handshake; verify server-side; do not emit 'identify'."
+      },
+      {
+        "file": "src/components/AuthModal.jsx",
+        "severity": "high",
+        "category": "broken-authentication",
+        "title": "Legacy demo auth flow still present",
+        "recommendation": "Remove or hard-disable; always route through backend /api/auth/login."
+      },
+      {
+        "file": "src/hooks/useAnalytics.js",
+        "severity": "medium",
+        "category": "privacy",
+        "title": "Sends raw email/username to analytics endpoint",
+        "recommendation": "Send hashed userId only; provide opt-out; respect Do Not Track."
+      },
+      {
+        "file": "index.html",
+        "severity": "medium",
+        "category": "security-misconfiguration",
+        "title": "No Content-Security-Policy meta tag and no SRI for external assets",
+        "recommendation": "Add CSP via response headers (or meta), add integrity attributes to <link>/<script> from CDNs."
+      },
+      {
+        "file": "src/App.jsx + every fetch call",
+        "severity": "medium",
+        "category": "security-misconfiguration",
+        "title": "Backend base URL exposed as VITE_API_URL",
+        "description": "Not a secret, but allows attackers to enumerate backend directly bypassing any frontend protections.",
+        "recommendation": "Front the API with a same-origin reverse proxy (Vercel rewrites) and drop VITE_API_URL from the bundle."
+      }
+    ],
+    "qualityAndBugs": [
+      {
+        "file": "src/components/Chat.jsx",
+        "severity": "critical",
+        "title": "Message list keyed by array index",
+        "recommendation": "Use a stable id (msg.data._id || timestamp+senderId)."
+      },
+      {
+        "file": "src/components/Chat.jsx",
+        "severity": "high",
+        "title": "Ably channels not explicitly unsubscribed before client close",
+        "recommendation": "Call userChannel.unsubscribe() in cleanup before ablyRef.current.close()."
+      },
+      {
+        "file": "src/hooks/useNextKickoff.js",
+        "severity": "high",
+        "title": "Interval may be created in both try and catch branches",
+        "recommendation": "Create the interval once, outside try/catch; store id in a ref and clear in cleanup."
+      },
+      {
+        "file": "src/admin/AdminDashboard.jsx",
+        "severity": "high",
+        "title": "No AbortController on fetch in useEffect",
+        "recommendation": "Cancel in-flight requests on unmount to avoid setState-after-unmount warnings."
+      },
+      {
+        "file": "src/admin/AdminAnalytics.jsx",
+        "severity": "critical",
+        "title": "No pagination — renders entire analytics dataset",
+        "recommendation": "Paginate, sort and filter server-side; consider react-window for the visible table."
+      },
+      {
+        "file": "src/components/ChatWidget.jsx",
+        "severity": "medium",
+        "title": "Notification callback always opens widget even if already open",
+        "recommendation": "setOpen(prev => prev || true) and only invoke a sound/badge update if already open."
+      },
+      {
+        "file": "Whole app",
+        "severity": "high",
+        "title": "No React ErrorBoundary",
+        "recommendation": "Wrap App with an ErrorBoundary that logs to Sentry and shows a recovery UI."
+      },
+      {
+        "file": "src/admin/*.jsx",
+        "severity": "medium",
+        "title": "Massive inline-style objects instead of Tailwind classes",
+        "recommendation": "Migrate to Tailwind utility classes / CSS modules; extract a small design-tokens module."
+      },
+      {
+        "file": "src/components/Hero.jsx, src/pages/AuthPage.jsx",
+        "severity": "high",
+        "title": "Large unoptimized MP4 backgrounds loaded eagerly",
+        "recommendation": "Provide 720p/1080p WebM+MP4, use preload='metadata', lazy mount on viewport intersection, prefer poster image on mobile."
+      },
+      {
+        "file": "src/hooks/useUserNotifications.js, src/admin/useAdminNotifications.js",
+        "severity": "medium",
+        "title": "socket.io-client imported dynamically per mount",
+        "recommendation": "Create a singleton socket module imported statically; share across hooks."
+      },
+      {
+        "file": "src/hooks/usePLFixtures.js",
+        "severity": "medium",
+        "title": "Polls every 60s indefinitely with no backoff",
+        "recommendation": "Exponential backoff on failures; pause when tab is hidden (document.visibilityState)."
+      },
+      {
+        "file": "src/components/AnalyticsTracker.jsx",
+        "severity": "medium",
+        "title": "Global document click listener can spam the analytics endpoint",
+        "recommendation": "Debounce and only track elements with data-track attribute."
+      },
+      {
+        "file": "src/hooks/*.js, src/admin/*.js",
+        "severity": "low",
+        "title": "console.log / console.warn left in production code",
+        "recommendation": "Strip in build (vite-plugin-remove-console) or guard with import.meta.env.DEV."
+      }
+    ],
+    "incompleteFeatures": [
+      {
+        "title": "Notification bell + dropdown",
+        "status": "in-progress per todo list",
+        "description": "Badge count exists but no list view, no mark-as-read, no per-notification navigation."
+      },
+      {
+        "title": "End-to-end tests",
+        "status": "not started",
+        "description": "No Cypress/Playwright tests. Critical flows (login, send message, admin reply) are untested."
+      },
+      {
+        "title": "Accessibility",
+        "description": "Missing alt text on images, missing label/htmlFor associations, icon-only buttons missing aria-label, no focus trap in modals."
+      },
+      {
+        "title": "Error boundaries / global error UI",
+        "description": "App crashes to blank screen on any render error."
+      },
+      {
+        "title": "Loading & rate-limit UX",
+        "description": "No unified spinner; 429 responses aren't surfaced to the user."
+      },
+      {
+        "title": "Password reset / email verification",
+        "description": "No frontend flow exists."
+      }
+    ]
+  },
+  "deploymentAndConfig": [
+    {
+      "file": ".env / backend/.env",
+      "severity": "high",
+      "title": "Secrets risk if backend/.env was ever committed",
+      "recommendation": "Confirm backend/.env is in .gitignore and was purged from git history with git filter-repo; rotate JWT_SECRET, ABLY_API_KEY, MONGO_URI, SMTP creds."
+    },
+    {
+      "file": "vercel.json / hosting",
+      "severity": "medium",
+      "title": "No security headers at the edge",
+      "recommendation": "Add Strict-Transport-Security, X-Content-Type-Options, X-Frame-Options, Referrer-Policy and CSP via Vercel headers."
+    },
+    {
+      "file": "Railway backend",
+      "severity": "high",
+      "title": "Single replica on low memory tier crashes under load",
+      "recommendation": "Add health check + autorestart, increase memory, or move chat to a managed realtime (Ably-only, no socket.io duplication)."
+    }
+  ],
+  "actionPlan": {
+    "immediate": [
+      "Remove hardcoded admin credentials; rotate.",
+      "Move /api/auth/logout out of the login catch block.",
+      "Add authMiddleware to POST /api/admin/messages and POST /api/analytics/track (or rate-limit + CAPTCHA).",
+      "Stop logging headers/cookies in /api/ably-token.",
+      "Verify JWT in Socket.IO handshake; ignore client-sent identify."
+    ],
+    "shortTerm": [
+      "Add helmet, express-rate-limit, and input validation (validator / zod) across all routes.",
+      "Whitelist sort fields and cap pagination limits.",
+      "Sanitize message/email bodies with the 'xss' library.",
+      "Add ObjectId validation on :userId params.",
+      "Add ErrorBoundary, AbortController on fetches, stable keys in Chat list.",
+      "Paginate AdminAnalytics; debounce AnalyticsTracker."
+    ],
+    "mediumTerm": [
+      "Move Conversation.messages to its own collection with proper indexes and pagination cursor.",
+      "Implement password reset, email verification, account deletion (GDPR).",
+      "Add structured logging (pino) + Sentry on FE and BE.",
+      "Add Cypress E2E tests for auth, chat, admin reply.",
+      "Optimize hero/auth videos (WebM, lazy mount, poster)."
+    ]
+  }
+}

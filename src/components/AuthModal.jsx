@@ -7,16 +7,34 @@ export default function AuthModal({ open, onClose, onAuth }) {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!email.trim() || !password.trim()) {
       setError('Please fill in all fields.');
       return;
     }
+    const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    if (!emailOk) { setError('Please enter a valid email.'); return; }
+    if (password.length < 8) { setError('Password must be at least 8 characters.'); return; }
     setError('');
-    // Demo: just use in-memory user
-    onAuth({ email });
-    onClose();
+    try {
+      const endpoint = isLogin ? '/api/auth/login' : '/api/auth/register';
+      const body = isLogin
+        ? { email, password }
+        : { email, password, username: email.split('@')[0] };
+      const res = await fetch(`${import.meta.env.VITE_API_URL}${endpoint}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify(body),
+      });
+      const data = await res.json();
+      if (!res.ok) { setError(data.msg || 'Authentication failed'); return; }
+      onAuth(data.user);
+      onClose();
+    } catch (err) {
+      setError('Server error. Please try again.');
+    }
   };
 
   if (!open) return null;

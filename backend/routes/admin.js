@@ -1,35 +1,77 @@
-
-
 const express = require('express');
+const mongoose = require('mongoose');
+const rateLimit = require('express-rate-limit');
+const validator = require('validator');
+const xss = require('xss');
+
 const router = express.Router();
+
 const User = require('../models/User');
 const Message = require('../models/Message');
+const Notification = require('../models/Notification');
 const UserAnalytics = require('../models/UserAnalytics');
-const authMiddleware = require('../middleware/authMiddleware');
 const Conversation = require('../models/Conversation');
+const authMiddleware = require('../middleware/authMiddleware');
+const adminOnly = require('../middleware/adminOnly');
+const sendEmail = require('../utils/sendEmail');
 
-// --- USER ANALYTICS TRACKING ENDPOINT ---
-// POST /api/analytics/track
-router.post('/analytics/track', async (req, res) => {
+// ---------------- Helpers ----------------
+const MAX_LIMIT = 100;
+const ALLOWED_SORT_FIELDS = new Set(['lastVisit', 'firstVisit', 'totalVisits', 'pagesViewed', 'matchesWatched', 'planType']);
+
+function parseLimit(raw, def = 25) {
+  const n = parseInt(raw, 10);
+  if (!Number.isFinite(n) || n <= 0) return def;
+  return Math.min(n, MAX_LIMIT);
+}
+
+function isValidObjectId(id) {
+  return mongoose.Types.ObjectId.isValid(String(id));
+}
+
+function sanitizeText(str = '', max = 5000) {
+  return xss(String(str)).slice(0, max);
+}
+
+const contactLimiter = rateLimit({ windowMs: 60 * 1000, max: 5, standardHeaders: true, legacyHeaders: false });
+const analyticsLimiter = rateLimit({ windowMs: 60 * 1000, max: 30, standardHeaders: true, legacyHeaders: false });
+
+// ===========================================================
+// USER ANALYTICS TRACKING — now requires auth
+// POST /api/admin/analytics/track
+// ===========================================================
+router.post('/analytics/track', authMiddleware, analyticsLimiter, async (req, res) => {
   try {
-    const { email, name, userId, event = 'visit', page = '', planType = '', country = '', ip = '' } = req.body;
-    if (!email && !userId) return res.status(400).json({ msg: 'Missing email or userId' });
-    const query = email ? { email } : { userId };
+    const { event = 'visit', page = '', planType = '' } = req.body || {};
+    const userId = req.user.id;
+    const email = req.user.email; // may not be on JWT — fetch if needed
+    const pageStr = sanitizeText(page, 200);
+    const planTypeStr = sanitizeText(planType, 40);
+    const country = sanitizeText(req.headers['x-country'] || '', 60);
+    const ip = (req.ip || '').slice(0, 60);
+
+    const query = { userId };
     let analytics = await UserAnalytics.findOne(query);
+
     if (!analytics) {
+      let nameOrEmail = email;
+      if (!nameOrEmail) {
+        const u = await User.findById(userId).select('email username');
+        nameOrEmail = u?.email;
+      }
       analytics = new UserAnalytics({
-        email,
-        name,
+        email: nameOrEmail,
+        name: nameOrEmail,
         userId,
         firstVisit: new Date(),
         lastVisit: new Date(),
         totalVisits: 1,
         pagesViewed: event === 'visit' || event === 'pageview' ? 1 : 0,
         matchesWatched: 0,
-        planType,
+        planType: planTypeStr,
         country,
         ip,
-        visitHistory: [{ date: new Date(), pagesViewed: 1, matchesWatched: 0, page }]
+        visitHistory: [{ date: new Date(), pagesViewed: 1, matchesWatched: 0, page: pageStr }],
       });
     } else {
       analytics.lastVisit = new Date();
@@ -38,53 +80,67 @@ router.post('/analytics/track', async (req, res) => {
         analytics.pagesViewed = (analytics.pagesViewed || 0) + 1;
       }
       analytics.visitHistory = analytics.visitHistory || [];
-      analytics.visitHistory.push({ date: new Date(), pagesViewed: event === 'visit' || event === 'pageview' ? 1 : 0, matchesWatched: 0, page });
+      // Cap visit history
+      if (analytics.visitHistory.length >= 500) {
+        analytics.visitHistory = analytics.visitHistory.slice(-499);
+      }
+      analytics.visitHistory.push({
+        date: new Date(),
+        pagesViewed: event === 'visit' || event === 'pageview' ? 1 : 0,
+        matchesWatched: 0,
+        page: pageStr,
+      });
     }
     await analytics.save();
     res.json({ msg: 'Analytics updated' });
   } catch (err) {
-    res.status(500).json({ msg: 'Server error', error: err.message });
+    console.error('analytics/track:', err.message);
+    res.status(500).json({ msg: 'Server error' });
   }
 });
 
-
-// GET /api/admin/stats - dashboard stats: total users, emails queued, click events
-router.get('/stats', authMiddleware, async (req, res) => {
+// ===========================================================
+// ADMIN DASHBOARD STATS
+// ===========================================================
+router.get('/stats', authMiddleware, adminOnly, async (req, res) => {
   try {
-    if (!req.user.isAdmin) return res.status(403).json({ msg: 'Forbidden' });
-    // Total users
     const totalUsers = await User.countDocuments();
-    // Emails queued: count of messages not replied
     const emailsQueued = await Message.countDocuments({ isRead: false });
-    // Click events: sum of all UserAnalytics.pagesViewed
     const clickAgg = await UserAnalytics.aggregate([
-      { $group: { _id: null, total: { $sum: "$pagesViewed" } } }
+      { $group: { _id: null, total: { $sum: '$pagesViewed' } } },
     ]);
     const clickEvents = clickAgg[0]?.total || 0;
     res.json({ totalUsers, emailsQueued, clickEvents });
   } catch (err) {
-    res.status(500).json({ msg: 'Server error', error: err.message });
+    console.error('stats:', err.message);
+    res.status(500).json({ msg: 'Server error' });
   }
 });
 
-
-
-
-// USER: Send message (creates or updates conversation)
+// ===========================================================
+// USER: send chat message (creates or updates conversation)
+// ===========================================================
 router.post('/conversation/message', authMiddleware, async (req, res) => {
   try {
-    const { text } = req.body;
-    if (!text || !req.user) return res.status(400).json({ msg: 'Missing message text or user' });
-    const userId = req.user.id;
-    let convo = await Conversation.findOne({ participants: userId });
-    if (!convo) {
-      convo = new Conversation({ participants: [userId], messages: [] });
+    const { text } = req.body || {};
+    if (!text || typeof text !== 'string') {
+      return res.status(400).json({ msg: 'Missing message text' });
     }
+    const cleanText = sanitizeText(text, Conversation.MAX_TEXT_LEN);
+    if (!cleanText) return res.status(400).json({ msg: 'Empty message' });
+
+    const userId = req.user.id;
+    const user = await User.findById(userId).select('username email');
+    if (!user) return res.status(404).json({ msg: 'User not found' });
+
+    let convo = await Conversation.findOne({ participants: userId });
+    if (!convo) convo = new Conversation({ participants: [userId], messages: [] });
+
     const msgObj = {
       senderId: userId,
-      senderName: req.user.username || req.user.email,
-      senderEmail: req.user.email,
-      text,
+      senderName: user.username || user.email,
+      senderEmail: user.email,
+      text: cleanText,
       isAdmin: false,
       timestamp: new Date(),
     };
@@ -92,101 +148,106 @@ router.post('/conversation/message', authMiddleware, async (req, res) => {
     convo.lastUpdated = new Date();
     await convo.save();
 
-    // Emit real-time notification to admin
-    if (req.app.get('notifyAdmin')) {
-      req.app.get('notifyAdmin')({
+    const notifyAdmin = req.app.get('notifyAdmin');
+    if (notifyAdmin) {
+      notifyAdmin({
         type: 'chat',
-        from: req.user.username || req.user.email,
+        from: user.username || user.email,
         userId,
-        text,
-        timestamp: msgObj.timestamp
+        text: cleanText.slice(0, 200),
+        timestamp: msgObj.timestamp,
       });
     }
 
     res.status(201).json({ msg: 'Message sent', conversation: convo });
   } catch (err) {
-    res.status(500).json({ msg: 'Server error', error: err.message });
+    console.error('conversation/message:', err.message);
+    res.status(500).json({ msg: 'Server error' });
   }
 });
 
-// USER: Get their conversation (for chat widget history)
+// ===========================================================
+// USER: get own conversation (last N messages only)
+// ===========================================================
 router.get('/conversation', authMiddleware, async (req, res) => {
   try {
     const userId = req.user.id;
-    const limit = parseInt(req.query.limit, 10) || 20;
+    const limit = parseLimit(req.query.limit, 20);
 
-    // Use aggregation to only fetch the last N messages
     const convoAgg = await Conversation.aggregate([
-      { $match: { participants: userId } },
-      { $project: {
-          participants: 1,
-          messages: { $slice: ['$messages', -limit] }
-        }
-      }
+      { $match: { participants: new mongoose.Types.ObjectId(userId) } },
+      { $project: { participants: 1, messages: { $slice: ['$messages', -limit] } } },
     ]);
 
     if (!convoAgg || convoAgg.length === 0) return res.json({ conversation: null });
 
-    // Optionally, populate participants (if needed)
-    // We'll fetch participant details for the frontend
     const convo = convoAgg[0];
-    const participantIds = convo.participants || [];
-    const participants = await User.find({ _id: { $in: participantIds } }, 'username email');
+    const participants = await User.find({ _id: { $in: convo.participants || [] } }, 'username email');
     convo.participants = participants;
 
     res.json({ conversation: convo });
   } catch (err) {
-    res.status(500).json({ msg: 'Server error', error: err.message });
+    console.error('conversation get:', err.message);
+    res.status(500).json({ msg: 'Server error' });
   }
 });
 
-// ADMIN: List all conversations (for admin dashboard)
-router.get('/conversations', authMiddleware, async (req, res) => {
+// ===========================================================
+// ADMIN: list all conversations
+// ===========================================================
+router.get('/conversations', authMiddleware, adminOnly, async (req, res) => {
   try {
-    if (!req.user.isAdmin) return res.status(403).json({ msg: 'Forbidden' });
-    const limit = parseInt(req.query.limit, 10) || 20; // messages per conversation
-    // Aggregate to limit messages per conversation
+    const limit = parseLimit(req.query.limit, 20);
+
+    // Use $lookup so we don't make N+1 queries
     const convosAgg = await Conversation.aggregate([
       { $sort: { lastUpdated: -1 } },
+      { $limit: 200 }, // hard cap on number of conversations returned
       { $project: {
           participants: 1,
           lastUpdated: 1,
-          messages: { $slice: ['$messages', -limit] }
-        }
-      }
+          messages: { $slice: ['$messages', -limit] },
+        },
+      },
+      { $lookup: {
+          from: 'users',
+          localField: 'participants',
+          foreignField: '_id',
+          as: 'participantDocs',
+          pipeline: [{ $project: { username: 1, email: 1 } }],
+        },
+      },
+      { $addFields: { participants: '$participantDocs' } },
+      { $project: { participantDocs: 0 } },
     ]);
 
-    // Populate participants for all conversations
-    const allParticipantIds = Array.from(new Set(convosAgg.flatMap(c => c.participants.map(id => id.toString()))));
-    const participants = await User.find({ _id: { $in: allParticipantIds } }, 'username email');
-    const participantsMap = Object.fromEntries(participants.map(p => [p._id.toString(), p]));
-
-    // Attach participant details to each conversation
-    const convos = convosAgg.map(convo => ({
-      ...convo,
-      participants: convo.participants.map(id => participantsMap[id.toString()] || { _id: id, username: 'Unknown', email: '' })
-    }));
-
-    res.json({ conversations: convos });
+    res.json({ conversations: convosAgg });
   } catch (err) {
-    res.status(500).json({ msg: 'Server error', error: err.message });
+    console.error('conversations list:', err.message);
+    res.status(500).json({ msg: 'Server error' });
   }
 });
 
-// ADMIN: Reply to a conversation (by userId)
-router.post('/conversation/:userId/reply', authMiddleware, async (req, res) => {
+// ===========================================================
+// ADMIN: reply to a conversation
+// ===========================================================
+router.post('/conversation/:userId/reply', authMiddleware, adminOnly, async (req, res) => {
   try {
-    if (!req.user.isAdmin) return res.status(403).json({ msg: 'Forbidden' });
-    const { text } = req.body;
-    if (!text) return res.status(400).json({ msg: 'Missing reply text' });
-    const userId = req.params.userId;
-    let convo = await Conversation.findOne({ participants: userId });
+    const { userId } = req.params;
+    if (!isValidObjectId(userId)) return res.status(400).json({ msg: 'Invalid userId' });
+    const { text } = req.body || {};
+    if (!text || typeof text !== 'string') return res.status(400).json({ msg: 'Missing reply text' });
+    const cleanText = sanitizeText(text, Conversation.MAX_TEXT_LEN);
+    if (!cleanText) return res.status(400).json({ msg: 'Empty reply' });
+
+    const convo = await Conversation.findOne({ participants: userId });
     if (!convo) return res.status(404).json({ msg: 'Conversation not found' });
+
     const msgObj = {
       senderId: req.user.id,
       senderName: req.user.username || 'Admin',
       senderEmail: req.user.email || '',
-      text,
+      text: cleanText,
       isAdmin: true,
       timestamp: new Date(),
     };
@@ -194,191 +255,243 @@ router.post('/conversation/:userId/reply', authMiddleware, async (req, res) => {
     convo.lastUpdated = new Date();
     await convo.save();
 
-    // Emit real-time notification to user
-    if (req.app.get('notifyUser')) {
-      req.app.get('notifyUser')(userId, {
+    const notifyUser = req.app.get('notifyUser');
+    if (notifyUser) {
+      notifyUser(userId, {
         type: 'chat-reply',
         from: req.user.username || 'Admin',
-        text,
-        timestamp: msgObj.timestamp
+        text: cleanText.slice(0, 200),
+        timestamp: msgObj.timestamp,
       });
     }
 
     res.status(201).json({ msg: 'Reply sent', conversation: convo });
   } catch (err) {
-    res.status(500).json({ msg: 'Server error', error: err.message });
+    console.error('conversation reply:', err.message);
+    res.status(500).json({ msg: 'Server error' });
   }
 });
 
-
-const Notification = require('../models/Notification');
-
-// POST /api/admin/chat-message - save chat message to DB (for chat feature)
+// ===========================================================
+// POST /chat-message — save user chat message (authenticated)
+// ===========================================================
 router.post('/chat-message', authMiddleware, async (req, res) => {
   try {
-    const { text } = req.body;
-    if (!text || !req.user) return res.status(400).json({ msg: 'Missing message text or user' });
-    // Fetch full user info
+    const { text } = req.body || {};
+    if (!text || typeof text !== 'string') return res.status(400).json({ msg: 'Missing message text' });
+    const cleanText = sanitizeText(text, 5000);
+    if (!cleanText) return res.status(400).json({ msg: 'Empty message' });
+
     const user = await User.findById(req.user.id);
     if (!user) return res.status(404).json({ msg: 'User not found' });
+
     const message = new Message({
       senderEmail: user.email,
-      body: text,
+      body: cleanText,
       senderName: user.username || user.email,
       timestamp: new Date(),
       isRead: false,
-      isChat: true,
-      userId: user.id
+      userId: user.id,
     });
     await message.save();
-    // Optionally: emit notification, update analytics, etc.
     res.status(201).json({ msg: 'Chat message saved', message });
   } catch (err) {
-    res.status(500).json({ msg: 'Server error', error: err.message });
+    console.error('chat-message:', err.message);
+    res.status(500).json({ msg: 'Server error' });
   }
 });
 
-// GET /api/admin/messages - fetch all messages for admin
-router.get('/messages', authMiddleware, async (req, res) => {
+// ===========================================================
+// ADMIN: list all messages (paginated)
+// ===========================================================
+router.get('/messages', authMiddleware, adminOnly, async (req, res) => {
   try {
-    if (!req.user.isAdmin) return res.status(403).json({ msg: 'Forbidden' });
-    const messages = await Message.find({}).sort({ timestamp: -1 }).lean();
-    res.json({ messages });
+    const limit = parseLimit(req.query.limit, 50);
+    const page = Math.max(1, parseInt(req.query.page, 10) || 1);
+    const skip = (page - 1) * limit;
+    const messages = await Message.find({}).sort({ timestamp: -1 }).skip(skip).limit(limit).lean();
+    const total = await Message.countDocuments();
+    res.json({ messages, page, limit, total });
   } catch (err) {
-    res.status(500).json({ msg: 'Server error', error: err.message });
+    console.error('messages list:', err.message);
+    res.status(500).json({ msg: 'Server error' });
   }
 });
 
-// GET /api/admin/users - fetch all users for admin
-router.get('/users', authMiddleware, async (req, res) => {
+// ===========================================================
+// ADMIN: list all users (paginated)
+// ===========================================================
+router.get('/users', authMiddleware, adminOnly, async (req, res) => {
   try {
-    if (!req.user.isAdmin) return res.status(403).json({ msg: 'Forbidden' });
-    const users = await User.find({}).select('-password').sort({ createdAt: -1 }).lean();
-    res.json(users);
+    const limit = parseLimit(req.query.limit, 50);
+    const page = Math.max(1, parseInt(req.query.page, 10) || 1);
+    const skip = (page - 1) * limit;
+    const users = await User.find({}).sort({ createdAt: -1 }).skip(skip).limit(limit).lean();
+    const total = await User.countDocuments();
+    res.json({ users, page, limit, total });
   } catch (err) {
-    res.status(500).json({ msg: 'Server error', error: err.message });
+    console.error('users list:', err.message);
+    res.status(500).json({ msg: 'Server error' });
   }
 });
 
-// POST /api/admin/messages - save user message to DB and notify admin
-const sendEmail = require('../utils/sendEmail');
-router.post('/messages', async (req, res) => {
+// ===========================================================
+// PUBLIC CONTACT: POST /messages — heavily rate-limited
+// (was previously fully open — now bounded)
+// ===========================================================
+router.post('/messages', contactLimiter, async (req, res) => {
   try {
-    const { senderEmail, body } = req.body;
+    const { senderEmail, body } = req.body || {};
     if (!senderEmail || !body) return res.status(400).json({ msg: 'Email and message body required' });
+    if (!validator.isEmail(String(senderEmail))) return res.status(400).json({ msg: 'Invalid email' });
+
+    const cleanBody = sanitizeText(body, 5000);
+    if (!cleanBody) return res.status(400).json({ msg: 'Empty message' });
+    const cleanEmail = String(senderEmail).toLowerCase().trim().slice(0, 200);
+
     const message = new Message({
-      senderEmail,
-      body,
-      senderName: senderEmail,
+      senderEmail: cleanEmail,
+      body: cleanBody,
+      senderName: cleanEmail,
       timestamp: new Date(),
-      isRead: false
+      isRead: false,
     });
     await message.save();
 
-    // --- User Analytics Tracking ---
-    let analytics = await UserAnalytics.findOne({ email: senderEmail });
-    if (!analytics) {
-      analytics = new UserAnalytics({
-        email: senderEmail,
-        name: senderEmail.split('@')[0],
-        firstVisit: new Date(),
-        lastVisit: new Date(),
-        totalVisits: 1,
-        pagesViewed: 0,
-        matchesWatched: 0,
-        planType: 'free',
-        country: req.headers['x-country'] || '',
-        ip: req.ip || req.connection?.remoteAddress || '',
-        visitHistory: [{ date: new Date(), pagesViewed: 0, matchesWatched: 0 }]
-      });
-    } else {
-      analytics.lastVisit = new Date();
-      analytics.totalVisits = (analytics.totalVisits || 0) + 1;
-      analytics.visitHistory = analytics.visitHistory || [];
-      analytics.visitHistory.push({ date: new Date(), pagesViewed: 0, matchesWatched: 0 });
-    }
-    await analytics.save();
-    // --- End User Analytics Tracking ---
+    // Lightweight analytics upsert (no PII beyond what user supplied)
+    try {
+      await UserAnalytics.updateOne(
+        { email: cleanEmail },
+        {
+          $setOnInsert: {
+            email: cleanEmail,
+            name: cleanEmail.split('@')[0],
+            firstVisit: new Date(),
+            planType: 'free',
+          },
+          $set: { lastVisit: new Date(), country: sanitizeText(req.headers['x-country'] || '', 60), ip: (req.ip || '').slice(0, 60) },
+          $inc: { totalVisits: 1 },
+        },
+        { upsert: true }
+      );
+    } catch (e) { /* non-fatal */ }
 
-    // Create notification in DB
     const notification = new Notification({
       type: 'message',
       messageId: message._id,
       isRead: false,
       createdAt: new Date(),
-      senderName: senderEmail,
-      preview: body.slice(0, 100)
+      senderName: cleanEmail,
+      preview: cleanBody.slice(0, 100),
     });
     await notification.save();
 
-    // Emit notification via socket if available
-    if (req.app.get('notifyAdmin')) {
-      req.app.get('notifyAdmin')({
+    const notifyAdmin = req.app.get('notifyAdmin');
+    if (notifyAdmin) {
+      notifyAdmin({
         type: 'message',
-        senderName: senderEmail,
-        preview: body.slice(0, 100),
-        timestamp: notification.createdAt
+        senderName: cleanEmail,
+        preview: cleanBody.slice(0, 100),
+        timestamp: notification.createdAt,
       });
     }
 
-    // Send email to admin
     if (process.env.ADMIN_EMAIL) {
-      await sendEmail({
-        to: process.env.ADMIN_EMAIL,
-        subject: 'New message received',
-        text: `You have received a new message from ${senderEmail}:\n${body}`,
-        html: `<p>You have received a new message from <b>${senderEmail}</b>:</p><p>${body}</p>`
-      });
+      try {
+        await sendEmail({
+          to: process.env.ADMIN_EMAIL,
+          subject: 'New message received',
+          text: `You have received a new message from ${cleanEmail}:\n${cleanBody}`,
+          html: `<p>You have received a new message from <b>${xss(cleanEmail)}</b>:</p><p>${xss(cleanBody)}</p>`,
+        });
+      } catch (e) { /* email failure shouldn't break submission */ }
     }
 
-    res.status(201).json({ msg: 'Message sent', message });
+    res.status(201).json({ msg: 'Message sent' });
   } catch (err) {
-    res.status(500).json({ msg: 'Server error', error: err.message });
+    console.error('public messages:', err.message);
+    res.status(500).json({ msg: 'Server error' });
   }
 });
 
-// GET /api/admin/notifications - fetch unread notifications for admin
-router.get('/notifications', authMiddleware, async (req, res) => {
+// ===========================================================
+// ADMIN: notifications
+// ===========================================================
+router.get('/notifications', authMiddleware, adminOnly, async (req, res) => {
   try {
-    if (!req.user.isAdmin) return res.status(403).json({ msg: 'Forbidden' });
-    const notifications = await Notification.find({ isRead: false }).sort({ createdAt: -1 }).lean();
+    const notifications = await Notification.find({ isRead: false }).sort({ createdAt: -1 }).limit(100).lean();
     res.json(notifications);
   } catch (err) {
-    res.status(500).json({ msg: 'Server error', error: err.message });
+    res.status(500).json({ msg: 'Server error' });
   }
 });
 
-// PATCH /api/admin/notifications/:id/read - mark a notification as read
-router.patch('/notifications/:id/read', authMiddleware, async (req, res) => {
+router.patch('/notifications/:id/read', authMiddleware, adminOnly, async (req, res) => {
   try {
-    if (!req.user.isAdmin) return res.status(403).json({ msg: 'Forbidden' });
-    const notification = await Notification.findById(req.params.id);
-    if (!notification) return res.status(404).json({ msg: 'Notification not found' });
-    notification.isRead = true;
-    await notification.save();
+    if (!isValidObjectId(req.params.id)) return res.status(400).json({ msg: 'Invalid id' });
+    const n = await Notification.findById(req.params.id);
+    if (!n) return res.status(404).json({ msg: 'Notification not found' });
+    n.isRead = true;
+    await n.save();
     res.json({ msg: 'Notification marked as read' });
   } catch (err) {
-    res.status(500).json({ msg: 'Server error', error: err.message });
+    res.status(500).json({ msg: 'Server error' });
   }
 });
 
-// PATCH /api/admin/notifications/read-all - mark all notifications as read
-router.patch('/notifications/read-all', authMiddleware, async (req, res) => {
+router.patch('/notifications/read-all', authMiddleware, adminOnly, async (req, res) => {
   try {
-    if (!req.user.isAdmin) return res.status(403).json({ msg: 'Forbidden' });
     await Notification.updateMany({ isRead: false }, { isRead: true });
     res.json({ msg: 'All notifications marked as read' });
   } catch (err) {
-    res.status(500).json({ msg: 'Server error', error: err.message });
+    res.status(500).json({ msg: 'Server error' });
   }
 });
-// GET /api/admin/analytics/export - export analytics data as .xlsx file
-router.get('/analytics/export', authMiddleware, async (req, res) => {
+
+// ===========================================================
+// ADMIN: analytics list (paginated, validated)
+// ===========================================================
+router.get('/analytics/users', authMiddleware, adminOnly, async (req, res) => {
   try {
-    if (!req.user.isAdmin) return res.status(403).json({ msg: 'Forbidden' });
-    const UserAnalytics = require('../models/UserAnalytics');
+    const page = Math.max(1, parseInt(req.query.page, 10) || 1);
+    const limit = parseLimit(req.query.limit, 25);
+    const skip = (page - 1) * limit;
+
+    const filter = {};
+    if (req.query.planType) filter.planType = String(req.query.planType).slice(0, 40);
+    if (req.query.from || req.query.to) {
+      filter.lastVisit = {};
+      if (req.query.from && !Number.isNaN(Date.parse(req.query.from))) filter.lastVisit.$gte = new Date(req.query.from);
+      if (req.query.to && !Number.isNaN(Date.parse(req.query.to))) filter.lastVisit.$lte = new Date(req.query.to);
+    }
+
+    let sortField = String(req.query.sortBy || 'lastVisit');
+    if (!ALLOWED_SORT_FIELDS.has(sortField)) sortField = 'lastVisit';
+    const sortOrder = req.query.sortOrder === 'asc' ? 1 : -1;
+
+    const total = await UserAnalytics.countDocuments(filter);
+    const analytics = await UserAnalytics.find(filter)
+      .sort({ [sortField]: sortOrder })
+      .skip(skip)
+      .limit(limit)
+      .lean();
+
+    res.json({ page, limit, total, analytics });
+  } catch (err) {
+    console.error('analytics/users:', err.message);
+    res.status(500).json({ msg: 'Server error' });
+  }
+});
+
+// ===========================================================
+// ADMIN: export analytics — audit-logged
+// ===========================================================
+router.get('/analytics/export', authMiddleware, adminOnly, async (req, res) => {
+  try {
     const ExcelJS = require('exceljs');
-    const analytics = await UserAnalytics.find({}).lean();
+    const analytics = await UserAnalytics.find({}).limit(10000).lean();
+
+    console.log(`[AUDIT] analytics export by adminId=${req.user.id} rows=${analytics.length} at=${new Date().toISOString()}`);
 
     const workbook = new ExcelJS.Workbook();
     const sheet = workbook.addWorksheet('User Analytics');
@@ -392,7 +505,6 @@ router.get('/analytics/export', authMiddleware, async (req, res) => {
       { header: 'Pages Viewed', key: 'pagesViewed', width: 14 },
       { header: 'Matches Watched', key: 'matchesWatched', width: 16 },
       { header: 'Country', key: 'country', width: 14 },
-      { header: 'IP', key: 'ip', width: 18 },
     ];
     analytics.forEach(row => {
       sheet.addRow({
@@ -407,85 +519,53 @@ router.get('/analytics/export', authMiddleware, async (req, res) => {
     await workbook.xlsx.write(res);
     res.end();
   } catch (err) {
-    res.status(500).json({ msg: 'Server error', error: err.message });
+    console.error('analytics/export:', err.message);
+    res.status(500).json({ msg: 'Server error' });
   }
 });
 
-// GET /api/admin/analytics/users - fetch per-user analytics data
-router.get('/analytics/users', authMiddleware, async (req, res) => {
+// ===========================================================
+// ADMIN: reply to a contact message
+// ===========================================================
+router.post('/messages/:id/reply', authMiddleware, adminOnly, async (req, res) => {
   try {
-    if (!req.user.isAdmin) return res.status(403).json({ msg: 'Forbidden' });
+    if (!isValidObjectId(req.params.id)) return res.status(400).json({ msg: 'Invalid id' });
+    const { subject, body } = req.body || {};
+    if (!body || typeof body !== 'string') return res.status(400).json({ msg: 'Reply body required' });
+    const cleanBody = sanitizeText(body, 5000);
+    if (!cleanBody) return res.status(400).json({ msg: 'Empty reply' });
 
-    // Pagination
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 25;
-    const skip = (page - 1) * limit;
-
-    // Filters
-    const filter = {};
-    if (req.query.planType) filter.planType = req.query.planType;
-    if (req.query.from || req.query.to) {
-      filter.lastVisit = {};
-      if (req.query.from) filter.lastVisit.$gte = new Date(req.query.from);
-      if (req.query.to) filter.lastVisit.$lte = new Date(req.query.to);
-    }
-
-    // Sorting
-    const sortField = req.query.sortBy || 'lastVisit';
-    const sortOrder = req.query.sortOrder === 'asc' ? 1 : -1;
-    const sort = {};
-    sort[sortField] = sortOrder;
-
-    const total = await UserAnalytics.countDocuments(filter);
-    const analytics = await UserAnalytics.find(filter)
-      .sort(sort)
-      .skip(skip)
-      .limit(limit)
-      .lean();
-
-    res.json({
-      page,
-      limit,
-      total,
-      analytics
-    });
-  } catch (err) {
-    res.status(500).json({ msg: 'Server error', error: err.message });
-  }
-});
-// POST /api/admin/messages/:id/reply - send reply email and store in DB
-router.post('/messages/:id/reply', authMiddleware, async (req, res) => {
-  try {
-    if (!req.user.isAdmin) return res.status(403).json({ msg: 'Forbidden' });
-    const { subject, body } = req.body;
-    if (!body) return res.status(400).json({ msg: 'Reply body required' });
     const message = await Message.findById(req.params.id);
     if (!message) return res.status(404).json({ msg: 'Message not found' });
 
-    // Send email to user
-    if (message.senderEmail) {
-      await sendEmail({
-        to: message.senderEmail,
-        subject: subject || 'Reply from Admin',
-        text: `Admin replied to your message:\n${body}`,
-        html: `<p>Admin replied to your message:</p><p>${body}</p>`
-      });
+    if (message.senderEmail && validator.isEmail(message.senderEmail)) {
+      try {
+        await sendEmail({
+          to: message.senderEmail,
+          subject: subject || 'Reply from Admin',
+          text: `Admin replied to your message:\n${cleanBody}`,
+          html: `<p>Admin replied to your message:</p><p>${xss(cleanBody)}</p>`,
+        });
+      } catch (e) { /* continue saving even if email fails */ }
     }
 
-    // Store reply in DB
     message.repliedAt = new Date();
-    message.replies.push({ adminReply: body, repliedAt: new Date() });
+    message.replies.push({ adminReply: cleanBody, repliedAt: new Date() });
     await message.save();
 
     res.json({ msg: 'Reply sent and saved', message });
   } catch (err) {
-    res.status(500).json({ msg: 'Server error', error: err.message });
+    console.error('message reply:', err.message);
+    res.status(500).json({ msg: 'Server error' });
   }
 });
-// GET /api/admin/messages/:id - fetch a single message and mark as read
-router.get('/messages/:id', authMiddleware, async (req, res) => {
+
+// ===========================================================
+// ADMIN: get single message
+// ===========================================================
+router.get('/messages/:id', authMiddleware, adminOnly, async (req, res) => {
   try {
-    if (!req.user.isAdmin) return res.status(403).json({ msg: 'Forbidden' });
+    if (!isValidObjectId(req.params.id)) return res.status(400).json({ msg: 'Invalid id' });
     const message = await Message.findById(req.params.id);
     if (!message) return res.status(404).json({ msg: 'Message not found' });
     if (!message.isRead) {
@@ -494,7 +574,7 @@ router.get('/messages/:id', authMiddleware, async (req, res) => {
     }
     res.json(message);
   } catch (err) {
-    res.status(500).json({ msg: 'Server error', error: err.message });
+    res.status(500).json({ msg: 'Server error' });
   }
 });
 

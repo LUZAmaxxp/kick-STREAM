@@ -98,7 +98,7 @@ const Chat = ({ user, open }) => {
     setChannel(userChannel);
 
     return () => {
-      userChannel.unsubscribe();
+      try { userChannel.unsubscribe(); } catch { /* noop */ }
     };
   }, [ably, user]);
 
@@ -107,18 +107,22 @@ const Chat = ({ user, open }) => {
   }, [messages]);
 
   const handleSendMessage = async () => {
-    if (messageText.trim() === '') return;
+    const trimmed = messageText.trim();
+    if (trimmed === '') return;
+    if (trimmed.length > 5000) {
+      alert('Message too long (max 5000 chars).');
+      return;
+    }
     if (!channel) {
       alert('Chat is still connecting. Please wait...');
       return;
     }
     try {
-      // Persist to backend (creates/updates conversation)
       const res = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/conversation/message`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
-        body: JSON.stringify({ text: messageText })
+        body: JSON.stringify({ text: trimmed })
       });
       if (!res.ok) throw new Error('Failed to send');
       const data = await res.json();
@@ -126,16 +130,15 @@ const Chat = ({ user, open }) => {
         setMessages(data.conversation.messages.map(m => ({ data: m })));
       }
       setMessageText('');
-      // Optionally, publish to Ably for real-time update
       await channel.publish('message', {
-        text: messageText,
+        text: trimmed,
         sender: user.username,
         senderId: user.id,
         timestamp: Date.now(),
         isAdmin: user.isAdmin,
       });
     } catch (err) {
-      console.error('Error sending message:', err);
+      if (import.meta.env.DEV) console.error('Error sending message:', err);
     }
   };
 
@@ -150,9 +153,10 @@ const Chat = ({ user, open }) => {
           messages.map((msg, index) => {
             const isAdmin = msg.data.isAdmin;
             const isSelf = msg.data.senderId === user.id;
+            const stableKey = msg.data._id || `${msg.data.timestamp || ''}-${msg.data.senderId || ''}-${index}`;
             return (
               <div
-                key={index}
+                key={stableKey}
                 style={{
                   alignSelf: isAdmin ? 'flex-end' : (isSelf ? 'flex-end' : 'flex-start'),
                   maxWidth: '75%',

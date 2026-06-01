@@ -1,39 +1,30 @@
 import { useEffect, useState, useRef } from 'react';
+import { getSocket, disconnectSocket } from '../lib/socket';
 
 export default function useUserNotifications(user, onNotification) {
   const [notifications, setNotifications] = useState([]);
-  const socketRef = useRef(null);
+  const cbRef = useRef(onNotification);
+  cbRef.current = onNotification;
 
   useEffect(() => {
     if (!user || !user.id) {
-      if (socketRef.current) {
-        socketRef.current.disconnect();
-        socketRef.current = null;
-      }
+      disconnectSocket();
       return;
     }
     let mounted = true;
-    import('socket.io-client').then(({ io }) => {
-      if (socketRef.current) {
-        socketRef.current.disconnect();
-      }
-      const s = io(`${import.meta.env.VITE_API_URL}`);
-      socketRef.current = s;
-      s.emit('identify', user.id);
-      s.on('user-notification', (notification) => {
-        if (!mounted) return;
-        setNotifications((prev) => [notification, ...prev]);
-        if (typeof onNotification === 'function') onNotification(notification);
-      });
-    });
+    const s = getSocket();
+
+    const handler = (notification) => {
+      if (!mounted) return;
+      setNotifications((prev) => [notification, ...prev]);
+      if (typeof cbRef.current === 'function') cbRef.current(notification);
+    };
+    s.on('user-notification', handler);
+
     return () => {
       mounted = false;
-      if (socketRef.current) {
-        socketRef.current.disconnect();
-        socketRef.current = null;
-      }
+      s.off('user-notification', handler);
     };
-    // eslint-disable-next-line
   }, [user]);
 
   return notifications;

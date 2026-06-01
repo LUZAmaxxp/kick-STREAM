@@ -1,25 +1,37 @@
 
 import { useEffect, useState } from 'react';
 
+const PAGE_SIZE = 25;
+
 export default function AdminAnalytics() {
   const [analytics, setAnalytics] = useState([]);
+  const [total, setTotal] = useState(0);
+  const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_API_URL}/api/admin/analytics/users`, {
+    const controller = new AbortController();
+    setLoading(true);
+    fetch(`${import.meta.env.VITE_API_URL}/api/admin/analytics/users?page=${page}&limit=${PAGE_SIZE}`, {
       credentials: 'include',
+      signal: controller.signal,
     })
       .then(res => res.json())
       .then(data => {
         setAnalytics(data.analytics || []);
+        setTotal(data.total || 0);
         setLoading(false);
       })
-      .catch(() => {
+      .catch((err) => {
+        if (err.name === 'AbortError') return;
         setError('Failed to load analytics');
         setLoading(false);
       });
-  }, []);
+    return () => controller.abort();
+  }, [page]);
+
+  const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
 
   const handleExport = () => {
     fetch(`${import.meta.env.VITE_API_URL}/api/admin/analytics/export`, {
@@ -51,7 +63,7 @@ export default function AdminAnalytics() {
             <line x1="6" y1="20" x2="6" y2="14" />
           </svg>
           <span style={styles.panelTitle}>USER ANALYTICS</span>
-          <span style={styles.badge}>{analytics.length} users</span>
+          <span style={styles.badge}>{total} users</span>
         </div>
         <span style={styles.liveTag}>
           <span style={styles.liveDot} />
@@ -99,6 +111,13 @@ export default function AdminAnalytics() {
               ))}
             </tbody>
           </table>
+        )}
+        {!loading && !error && total > PAGE_SIZE && (
+          <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: 12, padding: '12px 0' }}>
+            <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page <= 1} style={{ padding: '4px 12px' }}>Prev</button>
+            <span style={{ fontSize: 12 }}>Page {page} of {totalPages}</span>
+            <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page >= totalPages} style={{ padding: '4px 12px' }}>Next</button>
+          </div>
         )}
       </div>
     </div>

@@ -12,6 +12,14 @@ export default function ContactAdmin() {
       setError("Please fill in both fields before sending.");
       return;
     }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setError("Please enter a valid email address.");
+      return;
+    }
+    if (message.length > 5000) {
+      setError("Message too long (max 5000 characters).");
+      return;
+    }
     setError("");
     try {
       const res = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/messages`, {
@@ -21,7 +29,9 @@ export default function ContactAdmin() {
         credentials: "include",
       });
       if (!res.ok) {
-        const data = await res.json();
+        if (res.status === 429) { setError("Too many requests, please slow down."); return; }
+        let data = {};
+        try { data = await res.json(); } catch { /* noop */ }
         setError(data.msg || "Failed to send message");
         return;
       }

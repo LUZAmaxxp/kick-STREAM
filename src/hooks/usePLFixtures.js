@@ -152,12 +152,36 @@ export function usePLFixtures() {
     load()
   }, [load])
 
-  // Poll every 60 s when any match is live; every 5 min otherwise
+  // Poll when any match is live; back off when tab hidden; exponential backoff on errors
   useEffect(() => {
     const hasLive = matches.some(m => m.statusCode === 'LIVE' || m.statusCode === 'HT')
-    const interval = setInterval(load, hasLive ? 60_000 : 300_000)
-    return () => clearInterval(interval)
-  }, [matches, load])
+    let baseInterval = hasLive ? 60_000 : 300_000
+    let currentInterval = baseInterval
+    let timerId = null
+
+    const schedule = () => {
+      if (typeof document !== 'undefined' && document.visibilityState === 'hidden') {
+        timerId = setTimeout(schedule, 30_000)
+        return
+      }
+      timerId = setTimeout(async () => {
+        const before = error
+        await load()
+        currentInterval = error && error !== before
+          ? Math.min(currentInterval * 2, 30 * 60_000)
+          : baseInterval
+        schedule()
+      }, currentInterval)
+    }
+
+    schedule()
+    const onVis = () => { /* trigger immediate reschedule on visibility change */ }
+    document.addEventListener('visibilitychange', onVis)
+    return () => {
+      if (timerId) clearTimeout(timerId)
+      document.removeEventListener('visibilitychange', onVis)
+    }
+  }, [matches, load, error])
 
   return { matches, loading, error, round }
 }

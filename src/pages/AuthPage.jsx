@@ -27,6 +27,9 @@ export default function AuthPage({ onAuth }) {
       setError('Please fill in all fields.');
       return;
     }
+    const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    if (!emailOk) { setError('Please enter a valid email.'); return; }
+    if (password.length < 8) { setError('Password must be at least 8 characters.'); return; }
     setError('');
     setSubmitted(true);
     try {
