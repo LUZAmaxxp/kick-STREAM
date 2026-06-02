@@ -27,6 +27,11 @@ body {
 /* ─── Typography ──────────────────────────────────────────── */
 h1, h2, h3, h4, h5, h6 { font-family: 'Anton', sans-serif; }
 
+.hero-slogan__accent {
+  color: #E8714F;
+  font-weight: 900;
+}
+
 /* ─── Editorial boxes ──────────────────────────────────────── */
 @layer utilities {
   .editorial-box {

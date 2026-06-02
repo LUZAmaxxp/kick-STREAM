@@ -1,0 +1,286 @@
+{
+  "document": {
+    "title": "Kick Stream Frontend UI/UX and Design Specification",
+    "version": "1.0.0",
+    "updatedAt": "2026-06-02",
+    "scope": "Public marketing site, authentication experience, guest contact affordances, chat widget UX, and admin entry surface.",
+    "sourceOfTruth": [
+      "src/App.jsx",
+      "src/components/Hero.jsx",
+      "src/components/Nav.jsx",
+      "src/components/ChatWidget.jsx",
+      "src/components/Chat.jsx",
+      "src/pages/AuthPage.jsx",
+      "src/components/WhatsAppContactButton.jsx",
+      "src/index.css"
+    ]
+  },
+  "experienceGoals": {
+    "brandIntent": "Convey premium, high-energy football streaming with editorial boldness and modern confidence.",
+    "userGoals": [
+      "Understand value proposition quickly",
+      "Navigate trust and pricing content with low friction",
+      "Authenticate with clear role boundaries",
+      "Contact support or sales instantly as a guest",
+      "Chat in real time after login"
+    ],
+    "uxPrinciples": [
+      "High visual contrast with restrained palette",
+      "Strong typography hierarchy for instant scanning",
+      "Progressive disclosure (guest vs authenticated actions)",
+      "Fast feedback for async actions",
+      "Mobile-first touch ergonomics for key flows"
+    ]
+  },
+  "visualLanguage": {
+    "colorSystem": {
+      "primaryBackground": "#F5F3EE",
+      "surfaceLight": "#FAFAF8",
+      "primaryText": "#1A1A1A",
+      "accentOrange": "#E8714F",
+      "accentGreen": "#00A651",
+      "semantic": {
+        "success": "#00A651",
+        "error": "#b42318",
+        "warning": "#E8714F"
+      },
+      "usageRules": [
+        "Use cream/off-white backgrounds for content-heavy sections",
+        "Use near-black for primary readability and framing",
+        "Reserve orange for kinetic highlights, emphasis, and progress",
+        "Reserve green for positive action states (send, WhatsApp, connected states)"
+      ]
+    },
+    "typography": {
+      "display": {
+        "family": "Anton",
+        "role": "Hero headlines, section headers, compact loud labels",
+        "traits": "Tall, high-impact uppercase feel"
+      },
+      "body": {
+        "family": "DM Sans",
+        "role": "Body copy, forms, utility content",
+        "traits": "Clean legibility across devices"
+      },
+      "dataMono": {
+        "family": "Data/monospace utility style",
+        "role": "Ticker, timing, metadata, technical cues"
+      },
+      "hierarchyPattern": [
+        "Display headline with compressed leading",
+        "Uppercase micro-labels with letter spacing for section framing",
+        "Readable body copy with medium contrast",
+        "Micro-metadata at reduced opacity"
+      ]
+    },
+    "shapeAndDepth": {
+      "borders": "Frequent 2px hard borders to maintain editorial mechanical framing",
+      "radius": "Mostly square/low radius except chat/action pills",
+      "shadows": "Offset editorial shadows and soft functional shadows",
+      "texture": "Subtle texture overlay + gradient vignettes for atmosphere"
+    },
+    "motionLanguage": {
+      "entry": "Staggered word reveal and delayed content fade",
+      "ambient": "Slow background movement/parallax where available",
+      "feedback": "Button hover shifts, subtle pulse on key floating actions",
+      "timing": "Short and decisive for controls, slower for hero drama"
+    }
+  },
+  "informationArchitecture": {
+    "publicRoutes": [
+      {
+        "path": "/",
+        "purpose": "Marketing funnel + product clarity + conversion",
+        "sectionFlow": [
+          "Hero",
+          "TrustBar",
+          "ProductReveal",
+          "HowItWorks",
+          "Stats",
+          "Pricing",
+          "Testimonials",
+          "LiveMatchTicker",
+          "FAQ",
+          "FinalCTA",
+          "Footer"
+        ]
+      },
+      {
+        "path": "/auth",
+        "purpose": "Role-aware authentication gateway"
+      }
+    ],
+    "adminRoute": {
+      "path": "/admin",
+      "purpose": "Admin operations and analytics",
+      "entryCondition": "Authenticated admin account"
+    },
+    "stateBasedAffordances": {
+      "guest": [
+        "WhatsApp floating contact button",
+        "Sign-in prompts in navigation"
+      ],
+      "authenticatedUser": [
+        "Chat widget",
+        "Session-based continuity",
+        "Role-specific redirects"
+      ]
+    }
+  },
+  "componentDesignAndUX": {
+    "nav": {
+      "behavior": [
+        "Appears after user scroll threshold",
+        "Desktop horizontal links with primary CTA",
+        "Mobile collapsible menu"
+      ],
+      "uxIntent": "Keep focus on hero at top, then reveal navigation when user is ready to explore deeper.",
+      "mobileNotes": "Menu uses large touch targets and clear typographic hierarchy."
+    },
+    "hero": {
+      "content": "Statement headline, kickoff timing line, primary CTA.",
+      "mediaStrategy": {
+        "desktop": "Autoplay looping background video with poster fallback",
+        "mobile": "Autoplay looping mobile-optimized video with muted inline playback protections"
+      },
+      "uxIntent": "Deliver emotional impact in first viewport while preserving text legibility via layered gradient overlays.",
+      "riskAndMitigation": [
+        "Large media payload risk mitigated through poster fallback and optimization pipeline",
+        "Autoplay restrictions mitigated by muted+inline+retry strategy"
+      ]
+    },
+    "pricing": {
+      "design": "Card-based plan comparison with highlighted popular option.",
+      "interaction": "Primary CTA drives purchase intent and contact action.",
+      "uxIntent": "Reduce cognitive load in plan comparison using consistent card rhythm and visual emphasis."
+    },
+    "authPage": {
+      "design": "Split-brand experience on large screens, focused single-column form on mobile.",
+      "roleModel": [
+        "Explicit user/admin role toggle",
+        "Admin registration disabled",
+        "Role-aware error messaging"
+      ],
+      "uxIntent": "Prevent accidental privilege confusion and communicate role boundaries before submission."
+    },
+    "chatWidget": {
+      "placement": "Bottom-right floating launcher with unread badge.",
+      "panel": "Responsive fixed overlay with capped viewport height and safe-area spacing.",
+      "interactionModel": [
+        "Message history display",
+        "Inline send feedback",
+        "Error visibility for connection/send",
+        "Enter-to-send behavior"
+      ],
+      "uxIntent": "Preserve persistent support access without hijacking primary browsing tasks."
+    },
+    "whatsappContactButton": {
+      "audience": "Guest/non-authenticated users",
+      "placement": "Persistent bottom-right floating action",
+      "behavior": "Opens WhatsApp deep-link with prefilled message",
+      "uxIntent": "Offer zero-friction direct contact when account creation is a barrier."
+    }
+  },
+  "interactionDesign": {
+    "feedbackPatterns": {
+      "optimisticOrImmediate": [
+        "Button state changes during submit/send",
+        "Connection state labels"
+      ],
+      "errorPatterns": [
+        "Inline text errors near controls",
+        "Role mismatch and credential errors are explicit",
+        "Chat send failures surfaced directly in panel"
+      ],
+      "statusPatterns": [
+        "Loading placeholders for async content",
+        "Notification badges for unread items"
+      ]
+    },
+    "microInteractions": [
+      "Hover shadow intensification for CTAs",
+      "Floating action pulse for discoverability",
+      "Animated headline reveal sequence"
+    ]
+  },
+  "responsiveDesign": {
+    "breakpointIntent": {
+      "mobile": "Single-column, thumb-friendly controls, safe-area-aware floating UI",
+      "tablet": "Transitional spacing and preserved hierarchy",
+      "desktop": "Expanded editorial composition with richer media"
+    },
+    "mobileHardeningImplemented": [
+      "Auth page collapses to focused right-panel flow",
+      "Chat overlay dimensions constrained to viewport and safe area",
+      "Floating controls avoid device insets",
+      "Hero mobile video explicitly handled"
+    ],
+    "knownConstraints": [
+      "Heavy desktop hero source remains bandwidth-intensive until fully transcoded in CI/dev environment with ffmpeg"
+    ]
+  },
+  "accessibilityAndUsability": {
+    "strengths": [
+      "Semantic buttons/links for primary interactions",
+      "Visible labels on auth inputs",
+      "High color contrast in core text surfaces",
+      "Role-specific messaging reduces user confusion"
+    ],
+    "gapsToAddress": [
+      "Add reduced-motion handling for heavy animated regions",
+      "Audit keyboard focus styles across all interactive cards/links",
+      "Run full screen-reader pass on dynamic chat/notification regions"
+    ],
+    "recommendedA11yEnhancements": [
+      "Prefer aria-live regions for chat status/errors",
+      "Ensure all icon-only controls have descriptive labels",
+      "Use prefers-reduced-motion media query to simplify large hero transitions"
+    ]
+  },
+  "performanceProfile": {
+    "currentCharacteristics": [
+      "Code splitting is used for many marketing sections",
+      "Hero media is the dominant payload contributor",
+      "Realtime features add connection overhead post-auth"
+    ],
+    "existingMitigations": [
+      "Poster fallback for hero",
+      "Scripted optimization pipeline scaffold for hero videos",
+      "Conditional rendering of chat/guest actions based on auth state"
+    ],
+    "nextOptimizations": [
+      "Generate and commit optimized hero files via ffmpeg in CI/local pipeline",
+      "Adopt AV1/WebM secondary source where supported",
+      "Introduce route-level skeletons for perceived loading smoothness"
+    ]
+  },
+  "designSystemTokens": {
+    "core": {
+      "background": "#F5F3EE",
+      "textPrimary": "#1A1A1A",
+      "accentPrimary": "#E8714F",
+      "accentPositive": "#00A651",
+      "surface": "#FAFAF8"
+    },
+    "uiMetrics": {
+      "borderWeightPrimary": "2px",
+      "radiusSoft": "8-14px",
+      "shadowEditorial": "Offset hard shadow for brand personality",
+      "shadowFunctional": "Soft depth for overlays and floating controls"
+    }
+  },
+  "governance": {
+    "consistencyRules": [
+      "Keep CTA verbs action-first and concise",
+      "Preserve role clarity in all auth-adjacent text",
+      "Use green for positive/send/contact actions, orange for highlight/progress",
+      "Prefer one visual focal point per section"
+    ],
+    "changeReviewChecklist": [
+      "Does this change keep guest vs authenticated action separation clear?",
+      "Is mobile tap target size at least 40-44px?",
+      "Do motion and media choices preserve readability and performance?",
+      "Are error states visible without console dependency?"
+    ]
+  }
+}

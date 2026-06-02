@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { useNextKickoff } from '../hooks/useNextKickoff'
+import HeroSlogans from './HeroSlogans'
 import heroVideo from '../assets/13433792_3840_2160_30fps.mp4'
 import heroVideoMobile from '../assets/13406407_1080_1920_30fps.mp4'
 import heroPoster from '../assets/hero-poster.svg'
@@ -9,18 +10,6 @@ import heroPoster from '../assets/hero-poster.svg'
 const HERO_VIDEO = heroVideo
 const HERO_VIDEO_MOBILE = heroVideoMobile
 const HERO_VIDEO_MOBILE_OPTIMIZED = '/media/hero-mobile-optimized.mp4'
-
-const HEADLINE = ['EVERY', 'MATCH.', 'YOUR', 'SERVER.', 'NO', 'COMPROMISE.']
-
-const containerVariants = {
-  hidden: {},
-  show: { transition: { staggerChildren: 0.06 } },
-}
-
-const wordVariants = {
-  hidden: { opacity: 0, y: 40, filter: 'blur(4px)' },
-  show:   { opacity: 1, y: 0,  filter: 'blur(0px)', transition: { duration: 0.35, ease: [0.22, 1, 0.36, 1] } },
-}
 
 const typeVariants = {
   hidden: { width: '0%' },
@@ -140,24 +129,7 @@ export default function Hero() {
           British Football Streaming
         </p>
 
-        {/* Headline */}
-        <motion.h1
-          className="font-display text-[clamp(56px,11vw,144px)] leading-[0.92] text-black max-w-3xl"
-          style={{ letterSpacing: '-0.02em' }}
-          variants={containerVariants}
-          initial="hidden"
-          animate="show"
-        >
-          {HEADLINE.map((word, i) => (
-            <motion.span
-              key={i}
-              variants={wordVariants}
-              className={`inline-block mr-[0.1em] ${word === 'NO' || word === 'COMPROMISE.' ? 'text-accent' : ''}`}
-            >
-              {word}
-            </motion.span>
-          ))}
-        </motion.h1>
+        <HeroSlogans />
 
         {/* Monospace typing line */}
         <div className="mt-8 mb-10 overflow-hidden">
@@ -170,7 +142,7 @@ export default function Hero() {
             <p className="font-data text-black text-sm md:text-base tracking-wider">
               Server connected. Firmware loaded.{' '}
               <span className="text-black/60">
-                {matchName} starting in{' '}
+                Next Event starting in{' '}
               </span>
               <span className="text-accent font-semibold">
                 {hh}:{mm}:{ss}
@@ -185,15 +157,6 @@ export default function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.2, duration: 0.4 }}
-          className="
-            inline-flex items-center gap-2
-            px-8 py-4
-            bg-black text-cream
-            font-ui font-semibold text-sm uppercase tracking-[0.14em]
-            transition-all
-            hover:shadow-editorial
-            focus:outline-none focus-visible:ring-2 focus-visible:ring-black
-          "
           style={{ boxShadow: '4px 4px 0px rgba(26, 26, 26, 0.3)' }}
           onMouseEnter={e => {
             e.currentTarget.style.boxShadow = '8px 8px 0px rgba(26, 26, 26, 0.5)'
@@ -201,6 +164,15 @@ export default function Hero() {
           onMouseLeave={e => {
             e.currentTarget.style.boxShadow = '4px 4px 0px rgba(26, 26, 26, 0.3)'
           }}
+          className={`
+            inline-flex items-center gap-2
+            px-8 py-4
+            bg-black text-cream
+            font-ui font-semibold text-sm uppercase tracking-[0.14em]
+            transition-all
+            hover:shadow-editorial
+            focus:outline-none focus-visible:ring-2 focus-visible:ring-black
+          `}
         >
           Get Your Kit
           <span className="text-base leading-none">→</span>

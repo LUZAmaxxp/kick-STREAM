@@ -1,0 +1,325 @@
+{
+  "task": "Implement Animated Sequential Hero Slogans with Entrance/Exit Animations",
+  "component": "HeroSlogans.jsx",
+  "version": "1.0.0",
+  "relatedFiles": [
+    "src/components/Hero.jsx",
+    "src/index.css"
+  ],
+  "objective": "Replace static hero slogan with three dynamic phrases that appear sequentially with unique entrance animations. Each phrase should have a distinct animation personality while maintaining brand visual language (Anton display font, orange/green accents, mechanical 2px borders).",
+  "sloganContent": [
+    {
+      "order": 1,
+      "phrase": "All the Action. None of the Lag.",
+      "accentWords": ["Action", "Lag"],
+      "role": "energy statement"
+    },
+    {
+      "order": 2,
+      "phrase": "Every Match. Everywhere.",
+      "accentWords": ["Match", "Everywhere"],
+      "role": "availability statement"
+    },
+    {
+      "order": 3,
+      "phrase": "Unlimited Access. Unmatched Quality.",
+      "accentWords": ["Access", "Quality"],
+      "role": "promise statement"
+    }
+  ],
+  "animationSpecification": {
+    "global": {
+      "stageDuration": "2.5 seconds total for all three phrases to complete",
+      "staggers": [
+        {
+          "slogan": 1,
+          "enterDelay": "0.0s",
+          "enterDuration": "0.8s",
+          "holdDuration": "1.0s",
+          "exitDelay": "on unmount or replay",
+          "exitDuration": "0.5s"
+        },
+        {
+          "slogan": 2,
+          "enterDelay": "0.5s",
+          "enterDuration": "0.9s",
+          "holdDuration": "1.1s",
+          "exitDelay": "on unmount or replay",
+          "exitDuration": "0.5s"
+        },
+        {
+          "slogan": 3,
+          "enterDelay": "1.0s",
+          "enterDuration": "1.0s",
+          "holdDuration": "none (final)",
+          "exitDelay": "on unmount or replay",
+          "exitDuration": "0.5s"
+        }
+      ]
+    },
+    "sloganAnimations": {
+      "slogan_1_entry": {
+        "name": "Bounce + Scale (High Energy Entrance)",
+        "technique": "CSS keyframes + Framer Motion (or React Spring)",
+        "keyframes": {
+          "0%": {
+            "opacity": 0,
+            "transform": "scale(0.3) translateY(-40px)",
+            "description": "Start small, compressed from above"
+          },
+          "50%": {
+            "opacity": 1,
+            "description": "Fade in midway through scale"
+          },
+          "100%": {
+            "opacity": 1,
+            "transform": "scale(1) translateY(0)",
+            "description": "Land at full size"
+          }
+        },
+        "easing": "cubic-bezier(0.34, 1.56, 0.64, 1)",
+        "notes": "Bouncy easing for kinetic energy feel — aligns with 'Action' theme"
+      },
+      "slogan_1_exit": {
+        "name": "Fade + Shrink Out",
+        "keyframes": {
+          "0%": {
+            "opacity": 1,
+            "transform": "scale(1)"
+          },
+          "100%": {
+            "opacity": 0,
+            "transform": "scale(0.8) translateY(20px)"
+          }
+        },
+        "easing": "ease-in",
+        "duration": "0.5s"
+      },
+      "slogan_2_entry": {
+        "name": "Slide In + Tilt (Confident Entrance)",
+        "technique": "CSS keyframes + transform-origin left",
+        "keyframes": {
+          "0%": {
+            "opacity": 0,
+            "transform": "translateX(-60px) rotateZ(-5deg)",
+            "description": "Slide from left, tilted"
+          },
+          "100%": {
+            "opacity": 1,
+            "transform": "translateX(0) rotateZ(0deg)",
+            "description": "Straightens as it lands"
+          }
+        },
+        "easing": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "notes": "Smooth, elastic easing for confident arrival — aligns with 'Everywhere' ubiquity"
+      },
+      "slogan_2_exit": {
+        "name": "Slide Out Right + Fade",
+        "keyframes": {
+          "0%": {
+            "opacity": 1,
+            "transform": "translateX(0)"
+          },
+          "100%": {
+            "opacity": 0,
+            "transform": "translateX(60px) rotateZ(5deg)"
+          }
+        },
+        "easing": "ease-in",
+        "duration": "0.5s"
+      },
+      "slogan_3_entry": {
+        "name": "Expand + Letter-Spacing (Premium Unveil)",
+        "technique": "CSS keyframes + simultaneous scale + letter-spacing",
+        "keyframes": {
+          "0%": {
+            "opacity": 0,
+            "transform": "scaleX(0) scaleY(0.8)",
+            "letterSpacing": "-4px",
+            "description": "Compressed horizontally, letters bunched"
+          },
+          "60%": {
+            "opacity": 1,
+            "letterSpacing": "0px",
+            "description": "Fade and spacing settle"
+          },
+          "100%": {
+            "opacity": 1,
+            "transform": "scaleX(1) scaleY(1)",
+            "letterSpacing": "0px",
+            "description": "Fully expanded, perfectly spaced"
+          }
+        },
+        "easing": "cubic-bezier(0.25, 0.46, 0.45, 0.94)",
+        "notes": "Elegant entrance revealing quality and polish — aligns with 'Quality' promise"
+      },
+      "slogan_3_exit": {
+        "name": "Contract + Fade",
+        "keyframes": {
+          "0%": {
+            "opacity": 1,
+            "transform": "scaleX(1) scaleY(1)"
+          },
+          "100%": {
+            "opacity": 0,
+            "transform": "scaleX(0.8) scaleY(0.8)"
+          }
+        },
+        "easing": "ease-in",
+        "duration": "0.5s"
+      }
+    }
+  },
+  "accentStyling": {
+    "rule": "Each accent word (Action, Lag, Match, etc.) receives a distinct color per slogan",
+    "mappings": {
+      "slogan_1_accents": {
+        "words": ["Action", "Lag"],
+        "color": "#E8714F",
+        "fontWeight": 900,
+        "description": "Orange — high energy"
+      },
+      "slogan_2_accents": {
+        "words": ["Match", "Everywhere"],
+        "color": "#E8714F",
+        "fontWeight": 900,
+        "description": "Orange — universal positivity/go"
+      },
+      "slogan_3_accents": {
+        "words": ["Access", "Quality"],
+        "color": "#E8714F",
+        "fontWeight": 900,
+        "description": "Orange — premium emphasis"
+      }
+    },
+    "implementation": "Use <span> wrapper with inline style or CSS class for each accent word"
+  },
+  "typographyRequirements": {
+    "fontFamily": "Anton (display) for all slogans",
+    "fontSize": "clamp(24px, 6vw, 48px) for desktop responsiveness",
+    "fontWeight": 700,
+    "color": "#1A1A1A",
+    "textAlign": "center",
+    "lineHeight": 1.3,
+    "letterSpacing": "-1px",
+    "textTransform": "uppercase"
+  },
+  "containerStyling": {
+    "background": "linear-gradient(135deg, #F5F3EE 0%, #FAFAF8 100%)",
+    "padding": "clamp(30px, 5vh, 60px) 20px",
+    "display": "flex",
+    "flexDirection": "column",
+    "alignItems": "center",
+    "justifyContent": "center",
+    "gap": "20px",
+    "minHeight": "300px",
+    "position": "relative",
+    "overflow": "hidden"
+  },
+  "interactionPatterns": {
+    "onMount": "Automatically play animation sequence once on component mount",
+    "onReplay": "Provide optional replay button or manual trigger to restart sequence",
+    "onUnmount": "Cancel all active animations gracefully",
+    "responsiveness": {
+      "mobile": "Font sizes compress via clamp() — animations remain identical",
+      "tablet": "Standard animation timing",
+      "desktop": "Standard animation timing — full visual impact"
+    }
+  },
+  "implementationApproach": {
+    "framework": "React 18+ with Framer Motion (recommended) OR React Spring OR pure CSS",
+    "optionA": {
+      "name": "Framer Motion (Recommended)",
+      "rationale": "Built-in stagger/sequence control, smooth on low-end devices, easy exit animations",
+      "usage": [
+        "AnimatePresence for exit animations",
+        "stagger prop for sequential timing",
+        "variants for reusable animation definitions"
+      ]
+    },
+    "optionB": {
+      "name": "Pure CSS + React State",
+      "rationale": "Zero dependencies, lightweight, full control",
+      "usage": [
+        "Use CSS keyframe classes",
+        "Toggle class names based on React state",
+        "Use useEffect to manage animation timing"
+      ]
+    },
+    "optionC": {
+      "name": "React Spring",
+      "rationale": "Physics-based, smooth springs, natural feel",
+      "usage": [
+        "useTrail hook for staggered animations",
+        "Custom spring config per slogan"
+      ]
+    }
+  },
+  "codingGuidelines": {
+    "componentStructure": {
+      "steps": [
+        "Create HeroSlogans.jsx with three separate slogan components (or one with mapped state)",
+        "Import animation library (Framer Motion or equivalent)",
+        "Define keyframe variants for each slogan entry/exit",
+        "Manage animation state via useState/useEffect",
+        "Apply classes or style props to slogans based on current state",
+        "Wrap accent words in <span> elements with aria labels if needed"
+      ]
+    },
+    "cssClasses": "Use BEM naming if using pure CSS: .hero-slogan__wrapper, .hero-slogan__phrase, .hero-slogan__accent",
+    "a11yConsiderations": [
+      "Add aria-label to slogan wrapper: 'Animated slogan reveal sequence'",
+      "Ensure reduced-motion media query respects prefers-reduced-motion and skips animations if enabled",
+      "Do not use role='region' unless slogans announce dynamically — static content doesn't need it"
+    ],
+    "performanceNotes": [
+      "Use transform and opacity for GPU acceleration — avoid animating layout properties (width, height)",
+      "Consider will-change: transform on animated elements",
+      "Test on mid-range devices (iPhone SE, Android budget phones) for jank",
+      "Use CSS containment (contain: layout) if browser support allows"
+    ]
+  },
+  "integrationWithHero": {
+    "replacesCurrentSlogan": "The existing static slogan text in src/components/Hero.jsx should be replaced by the HeroSlogans component",
+    "maintainedElements": [
+      "Existing Hero component structure (background video, overlay, etc.) remains unchanged",
+      "CTA buttons in Hero can be repositioned below slogans or remain as-is",
+      "Navigation bar behavior unaffected"
+    ],
+    "importStatement": "import HeroSlogans from './HeroSlogans';",
+    "usageInHero": "Replace <h1> slogan section with <HeroSlogans />"
+  },
+  "testingStrategy": {
+    "visualRegressionTests": [
+      "Capture before/after screenshots of hero section on desktop and mobile",
+      "Verify animations play at correct timing intervals",
+      "Verify animations exit cleanly when component unmounts"
+    ],
+    "interactionTests": [
+      "Verify replay button triggers animation sequence again",
+      "Verify animations complete before CTA button is interactive",
+      "Verify no layout shift or jank during animations"
+    ],
+    "a11yTests": [
+      "Run with prefers-reduced-motion enabled — animations should disable",
+      "Screen reader passes through key content without duplicate/conflicting announcements"
+    ]
+  },
+  "deliverables": [
+    "HeroSlogans.jsx — complete component with animations",
+    "index.css (or HeroSlogans.module.css) — all keyframe definitions and class rules",
+    "Updated src/components/Hero.jsx — integration point",
+    "Optional: Replay/control button for testing animations",
+    "Optional: Storybook story showing all animation states"
+  ],
+  "successCriteria": [
+    "All three slogans appear sequentially with zero visual jank",
+    "Each slogan has unique, recognizable entrance animation",
+    "Total animation sequence completes in ~2.5 seconds",
+    "Accent words are visually emphasized via color and weight",
+    "Animations respect prefers-reduced-motion on supported browsers",
+    "Component remains responsive on mobile (font scales, touch-friendly)",
+    "Animation can be replayed without page reload",
+    "CTA button appears after slogans complete"
+  ]
+}
