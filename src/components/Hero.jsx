@@ -30,6 +30,7 @@ const typeVariants = {
 
 export default function Hero() {
   const ref = useRef(null)
+  const mobileVideoRef = useRef(null)
   const { scrollY } = useScroll()
   const videoY = useTransform(scrollY, [0, 800], [0, 320])
   const [loadDesktopVideo, setLoadDesktopVideo] = useState(false)
@@ -53,6 +54,49 @@ export default function Hero() {
     timer = window.setTimeout(() => setLoadDesktopVideo(true), 600)
     return () => {
       if (timer) window.clearTimeout(timer)
+    }
+  }, [])
+
+  useEffect(() => {
+    const v = mobileVideoRef.current
+    if (!v) return
+
+    const forcePlay = () => {
+      v.muted = true
+      v.defaultMuted = true
+      v.loop = true
+      v.playsInline = true
+      const p = v.play()
+      if (p && typeof p.catch === 'function') {
+        p.catch(() => {
+          // Mobile browsers may require a later retry after first interaction.
+        })
+      }
+    }
+
+    forcePlay()
+
+    const onFirstInteraction = () => {
+      forcePlay()
+      window.removeEventListener('touchstart', onFirstInteraction)
+      window.removeEventListener('pointerdown', onFirstInteraction)
+      window.removeEventListener('click', onFirstInteraction)
+    }
+
+    const onVisible = () => {
+      if (!document.hidden) forcePlay()
+    }
+
+    window.addEventListener('touchstart', onFirstInteraction, { passive: true })
+    window.addEventListener('pointerdown', onFirstInteraction, { passive: true })
+    window.addEventListener('click', onFirstInteraction, { passive: true })
+    document.addEventListener('visibilitychange', onVisible)
+
+    return () => {
+      window.removeEventListener('touchstart', onFirstInteraction)
+      window.removeEventListener('pointerdown', onFirstInteraction)
+      window.removeEventListener('click', onFirstInteraction)
+      document.removeEventListener('visibilitychange', onVisible)
     }
   }, [])
 
@@ -88,10 +132,15 @@ export default function Hero() {
       {/* ── Mobile video ── */}
       <div className="absolute inset-0 md:hidden">
         <video
+          ref={mobileVideoRef}
           autoPlay
           muted
+          defaultMuted
           loop
           playsInline
+          controls={false}
+          disablePictureInPicture
+          controlsList="nodownload nofullscreen noremoteplayback"
           poster={heroPoster}
           preload="metadata"
           className="w-full h-full object-cover"
