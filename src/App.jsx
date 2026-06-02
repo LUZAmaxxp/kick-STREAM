@@ -5,6 +5,7 @@ import { clearAuthToken, getAuthHeaders, setAuthToken } from './lib/auth';
 import Nav from './components/Nav';
 import Hero from './components/Hero';
 import ChatWidget from './components/ChatWidget';
+import WhatsAppContactButton from './components/WhatsAppContactButton';
 import AuthPage from './pages/AuthPage';
 const TrustBar        = lazy(() => import('./components/TrustBar'));
 const ProductReveal   = lazy(() => import('./components/ProductReveal'));
@@ -94,6 +95,7 @@ export default function App() {
               <Nav user={user} logout={logout} />
               <Hero />
               {user && <ChatWidget user={user} />}
+              {!user && <WhatsAppContactButton />}
               <Suspense fallback={null}>
                 <TrustBar />
                 <ProductReveal />
