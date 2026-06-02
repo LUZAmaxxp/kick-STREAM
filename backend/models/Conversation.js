@@ -20,11 +20,10 @@ const conversationSchema = new mongoose.Schema({
 
 conversationSchema.index({ participants: 1, lastUpdated: -1 });
 
-conversationSchema.pre('save', function (next) {
+conversationSchema.pre('save', function () {
   if (this.messages && this.messages.length > MAX_MESSAGES_PER_CONVO) {
     this.messages = this.messages.slice(-MAX_MESSAGES_PER_CONVO);
   }
-  next();
 });
 
 conversationSchema.statics.MAX_TEXT_LEN = MAX_TEXT_LEN;
