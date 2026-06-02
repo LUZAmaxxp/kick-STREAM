@@ -5,7 +5,10 @@ function sanitizePhone(raw = '') {
 }
 
 export default function WhatsAppContactButton() {
-  const rawNumber = import.meta.env.VITE_WHATSAPP_NUMBER || '';
+  const rawNumber =
+    import.meta.env.VITE_WHATSAPP_NUMBER ||
+    import.meta.env.VITE_PUBLIC_WHATSAPP_NUMBER ||
+    '212631604905';
   const phone = sanitizePhone(rawNumber);
   const defaultMessage = import.meta.env.VITE_WHATSAPP_MESSAGE || 'Hi, I need help with KickStream.';
 
@@ -20,8 +23,13 @@ export default function WhatsAppContactButton() {
       rel="noopener noreferrer"
       aria-label="Contact us on WhatsApp"
       title="Chat with us on WhatsApp"
-      className="fixed bottom-6 right-6 z-[80]"
-      style={{ textDecoration: 'none' }}
+      style={{
+        position: 'fixed',
+        right: 24,
+        bottom: 24,
+        zIndex: 9999,
+        textDecoration: 'none',
+      }}
     >
       <span
         style={{
