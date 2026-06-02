@@ -10,6 +10,8 @@ const Chat = ({ user, open }) => {
   const [messages, setMessages] = useState([]);
   const messagesEndRef = useRef(null);
   const [connectionError, setConnectionError] = useState('');
+  const [sendError, setSendError] = useState('');
+  const [sending, setSending] = useState(false);
   // Track loading state for history
   const [loading, setLoading] = useState(true);
   // Fetch conversation history on mount
@@ -110,16 +112,15 @@ const Chat = ({ user, open }) => {
   }, [messages]);
 
   const handleSendMessage = async () => {
+    if (sending) return;
     const trimmed = messageText.trim();
     if (trimmed === '') return;
     if (trimmed.length > 5000) {
       alert('Message too long (max 5000 chars).');
       return;
     }
-    if (!channel) {
-      alert('Chat is still connecting. Please wait...');
-      return;
-    }
+    setSendError('');
+    setSending(true);
     try {
       const res = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/conversation/message`, {
         method: 'POST',
@@ -127,21 +128,39 @@ const Chat = ({ user, open }) => {
         credentials: 'include',
         body: JSON.stringify({ text: trimmed })
       });
-      if (!res.ok) throw new Error('Failed to send');
+      if (!res.ok) {
+        let msg = 'Failed to send message.';
+        try {
+          const errData = await res.json();
+          if (errData?.msg) msg = errData.msg;
+        } catch {
+          // noop
+        }
+        throw new Error(msg);
+      }
       const data = await res.json();
       if (data.conversation && Array.isArray(data.conversation.messages)) {
         setMessages(data.conversation.messages.map(m => ({ data: m })));
       }
       setMessageText('');
-      await channel.publish('message', {
-        text: trimmed,
-        sender: user.username,
-        senderId: user.id,
-        timestamp: Date.now(),
-        isAdmin: user.isAdmin,
-      });
+      if (channel) {
+        try {
+          await channel.publish('message', {
+            text: trimmed,
+            sender: user.username,
+            senderId: user.id,
+            timestamp: Date.now(),
+            isAdmin: user.isAdmin,
+          });
+        } catch (publishErr) {
+          if (import.meta.env.DEV) console.warn('Publish failed after save:', publishErr);
+        }
+      }
     } catch (err) {
+      setSendError(err?.message || 'Failed to send message. Please try again.');
       if (import.meta.env.DEV) console.error('Error sending message:', err);
+    } finally {
+      setSending(false);
     }
   };
 
@@ -193,15 +212,20 @@ const Chat = ({ user, open }) => {
             {connectionError}
           </div>
         )}
+        {!!sendError && (
+          <div style={{ color: '#b42318', fontSize: 12, marginRight: 8 }}>
+            {sendError}
+          </div>
+        )}
         <input
           type="text"
           value={messageText}
           onChange={(e) => setMessageText(e.target.value)}
-          onKeyPress={(e) => {
-            if (e.key === 'Enter' && channel) handleSendMessage();
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') handleSendMessage();
           }}
-          placeholder={channel ? "Type your message..." : "Connecting..."}
-          disabled={!channel}
+          placeholder={channel ? 'Type your message...' : 'Type your message...'}
+          disabled={sending}
           style={{
             flex: 1,
             border: 'none',
@@ -210,26 +234,26 @@ const Chat = ({ user, open }) => {
             fontSize: 15,
             padding: '8px 0',
             color: '#1A1A1A',
-            opacity: channel ? 1 : 0.5,
+            opacity: sending ? 0.6 : 1,
           }}
         />
         <button
           onClick={handleSendMessage}
-          disabled={!channel || messageText.trim() === ''}
+          disabled={sending || messageText.trim() === ''}
           style={{
             marginLeft: 8,
-            background: channel ? '#00A651' : '#ccc',
+            background: sending || messageText.trim() === '' ? '#ccc' : '#00A651',
             color: '#fff',
             border: 'none',
             borderRadius: 8,
             padding: '8px 18px',
             fontWeight: 600,
             fontSize: 15,
-            cursor: channel ? 'pointer' : 'not-allowed',
+            cursor: sending || messageText.trim() === '' ? 'not-allowed' : 'pointer',
             transition: 'background 0.2s',
           }}
         >
-          {channel ? 'Send' : 'Connecting...'}
+          {sending ? 'Sending...' : 'Send'}
         </button>
       </div>
     </div>
