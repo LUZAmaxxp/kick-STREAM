@@ -72,7 +72,12 @@ export default function App() {
       <Routes>
         <Route
           path="/auth"
-          element={<AuthPage onAuth={handleAuth} />}
+          element={
+            <>
+              <AuthPage onAuth={handleAuth} />
+              {!user && <WhatsAppContactButton />}
+            </>
+          }
         />
         <Route
           path="/admin"

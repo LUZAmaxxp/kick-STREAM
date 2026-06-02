@@ -20,7 +20,7 @@ export default function WhatsAppContactButton() {
       rel="noopener noreferrer"
       aria-label="Contact us on WhatsApp"
       title="Chat with us on WhatsApp"
-      className="fixed bottom-6 right-6 z-50"
+      className="fixed bottom-6 right-6 z-[80]"
       style={{ textDecoration: 'none' }}
     >
       <span
