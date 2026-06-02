@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { useNextKickoff } from '../hooks/useNextKickoff'
 import heroVideo from '../assets/13433792_3840_2160_30fps.mp4'
@@ -8,7 +8,6 @@ import heroPoster from '../assets/hero-poster.svg'
 // Pexels free stadium floodlights video (CC0)
 const HERO_VIDEO = heroVideo
 const HERO_VIDEO_MOBILE = heroVideoMobile
-const HERO_VIDEO_OPTIMIZED = '/media/hero-desktop-optimized.mp4'
 const HERO_VIDEO_MOBILE_OPTIMIZED = '/media/hero-mobile-optimized.mp4'
 
 const HEADLINE = ['EVERY', 'MATCH.', 'YOUR', 'SERVER.', 'NO', 'COMPROMISE.']
@@ -33,29 +32,6 @@ export default function Hero() {
   const mobileVideoRef = useRef(null)
   const { scrollY } = useScroll()
   const videoY = useTransform(scrollY, [0, 800], [0, 320])
-  const [loadDesktopVideo, setLoadDesktopVideo] = useState(false)
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return
-
-    const conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection
-    const saveData = Boolean(conn && conn.saveData)
-    const slowNetwork = /2g/.test((conn && conn.effectiveType) || '')
-    const isDesktop = window.matchMedia('(min-width: 768px)').matches
-
-    if (!isDesktop || saveData || slowNetwork) return
-
-    let timer = null
-    if (typeof window.requestIdleCallback === 'function') {
-      const idleId = window.requestIdleCallback(() => setLoadDesktopVideo(true), { timeout: 1200 })
-      return () => window.cancelIdleCallback(idleId)
-    }
-
-    timer = window.setTimeout(() => setLoadDesktopVideo(true), 600)
-    return () => {
-      if (timer) window.clearTimeout(timer)
-    }
-  }, [])
 
   useEffect(() => {
     const v = mobileVideoRef.current
@@ -117,15 +93,15 @@ export default function Hero() {
         <video
           autoPlay
           muted
+          defaultMuted
           loop
           playsInline
-          preload="none"
+          preload="metadata"
           poster={heroPoster}
           className="w-full h-full object-cover"
           style={{ filter: 'grayscale(0.3) brightness(1.1) contrast(0.9)' }}
         >
-          {loadDesktopVideo && <source src={HERO_VIDEO_OPTIMIZED} type="video/mp4" />}
-          {loadDesktopVideo && <source src={HERO_VIDEO} type="video/mp4" />}
+          <source src={HERO_VIDEO} type="video/mp4" />
         </video>
       </motion.div>
 
