@@ -2,11 +2,11 @@ import { motion } from 'framer-motion'
 
 const PLANS = [
   {
-    id: 'terrace',
-    name: 'TERRACE',
-    price: '£9',
-    period: '/mo',
-    description: 'For the casual supporter who wants a reliable stream without the commitment.',
+    id: 'one-month',
+    name: '1 MONTH',
+    price: '$14.99',
+    period: '/month',
+    description: 'Perfect if you want flexibility and full access without a long-term commitment.',
     features: [
       'Single device',
       'HD 1080p quality',
@@ -14,45 +14,60 @@ const PLANS = [
       'Standard latency (< 8s)',
       'Email support',
     ],
-    cta: 'Get Terrace',
+    cta: 'Start 1 Month',
     ctaStyle: 'border',
     popular: false,
   },
   {
-    id: 'season',
-    name: 'SEASON TICKET',
-    price: '£69',
-    period: '/yr',
-    description: 'The fan choice. Best value, best performance, best experience.',
+    id: 'three-month',
+    name: '3 MONTHS',
+    price: '$29.99',
+    period: '/3 months',
+    description: 'A stronger value pick for fans who stream regularly every match week.',
     features: [
       'Two devices',
-      '4K Ultra HD',
-      'All fixtures inc. FA Cup & EFL',
-      'Sub 3-second latency',
-      'Priority 24/7 support',
-      'Firmware auto-updates',
+      'Full HD 1080p quality',
+      'All Premier League fixtures',
+      'Low latency stream',
+      'Priority support',
     ],
-    cta: 'Get Season Ticket',
-    ctaStyle: 'solid-green',
-    popular: true,
-  },
-  {
-    id: 'boardroom',
-    name: 'BOARDROOM',
-    price: '£149',
-    period: '/yr',
-    description: 'For the household that argues over the remote. Four devices, zero compromises.',
-    features: [
-      'Four devices simultaneously',
-      '4K Ultra HD',
-      'All competitions + International',
-      'Sub 3-second latency',
-      'Dedicated account manager',
-      'Priority shipping',
-    ],
-    cta: 'Get Boardroom',
+    cta: 'Start 3 Months',
     ctaStyle: 'solid-white',
     popular: false,
+  },
+  {
+    id: 'six-month',
+    name: '6 MONTHS',
+    price: '$49.99',
+    period: '/6 months',
+    description: 'Built for committed supporters who want better value over the season.',
+    features: [
+      'Two devices simultaneously',
+      'Full HD 1080p quality',
+      'All Premier League fixtures',
+      'Low latency stream',
+      'Priority support',
+    ],
+    cta: 'Start 6 Months',
+    ctaStyle: 'border',
+    popular: false,
+  },
+  {
+    id: 'twelve-month',
+    name: '12 MONTHS',
+    price: '$69.99',
+    period: '/12 months',
+    description: 'Best overall value. Lock in a full year and stream every match for less.',
+    features: [
+      'Three devices simultaneously',
+      'Full HD 1080p quality',
+      'All Premier League fixtures',
+      'Lowest latency priority routing',
+      'VIP support',
+    ],
+    cta: 'Start 12 Months',
+    ctaStyle: 'solid-green',
+    popular: true,
   },
 ]
 
@@ -84,10 +99,10 @@ export default function Pricing() {
           transition={{ delay: 0.15 }}
           className="font-ui text-sm text-black/60 mb-16 max-w-md"
         >
-          No blackouts. No upsells. No broadcaster telling you which games you're allowed to watch.
+          Every plan includes a 1-day free trial. No blackouts. No upsells.
         </motion.p>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 items-start">
           {PLANS.map((plan, i) => (
             <motion.div
               key={plan.id}
