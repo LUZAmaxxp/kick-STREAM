@@ -106,11 +106,11 @@ export default function AuthPage({ onAuth }) {
   };
 
   return (
-    <div style={s.root}>
+    <div className="auth-root" style={s.root}>
       <style>{css}</style>
 
       {/* ── LEFT PANEL ── */}
-      <div style={s.left}>
+      <div className="auth-left" style={s.left}>
         <video
           autoPlay
           loop
@@ -159,20 +159,20 @@ export default function AuthPage({ onAuth }) {
       </div>
 
       {/* ── RIGHT PANEL ── */}
-      <div style={s.right}>
+      <div className="auth-right" style={s.right}>
         {/* Corner accents */}
-        <div style={s.cornerTR} />
-        <div style={s.cornerBL} />
+        <div className="auth-corner" style={s.cornerTR} />
+        <div className="auth-corner" style={s.cornerBL} />
 
         {/* Dot grid */}
-        <div style={s.dotGrid}>
+        <div className="auth-dot-grid" style={s.dotGrid}>
           {Array.from({ length: 16 }).map((_, i) => (
             <div key={i} style={s.dot} />
           ))}
         </div>
 
         {/* Role toggle: User / Admin */}
-        <div style={{ ...s.modeToggle, marginBottom: 12 }}>
+        <div className="auth-mode-toggle" style={{ ...s.modeToggle, marginBottom: 12 }}>
           <button
             type="button"
             style={role === 'user' ? { ...s.modeBtn, ...s.modeBtnActive } : s.modeBtn}
@@ -190,7 +190,7 @@ export default function AuthPage({ onAuth }) {
         </div>
 
         {/* Toggle */}
-        <div style={s.modeToggle}>
+        <div className="auth-mode-toggle" style={s.modeToggle}>
           <button
             type="button"
             style={isLogin ? { ...s.modeBtn, ...s.modeBtnActive } : s.modeBtn}
@@ -210,7 +210,7 @@ export default function AuthPage({ onAuth }) {
         </div>
 
         {/* Heading */}
-        <div style={s.formHeader}>
+        <div className="auth-form-header" style={s.formHeader}>
           <h2 style={s.formTitle}>
             {role === 'admin' ? 'Admin access' : (isLogin ? 'Welcome back' : 'Join us today')}
           </h2>
@@ -278,7 +278,7 @@ export default function AuthPage({ onAuth }) {
           <button
             ref={btnRef}
             type="submit"
-            className="submit-btn"
+            className="submit-btn auth-submit-btn"
             style={{
               ...s.submitBtn,
               background: submitted ? '#FF6B00' : '#1A1A1A',
@@ -590,4 +590,53 @@ const css = `
   }
   .submit-btn:hover::after { width: 100%; }
   .submit-btn:hover { color: #1A1A1A !important; background: #1A1A1A !important; }
+
+  @media (max-width: 960px) {
+    .auth-root {
+      min-height: 100dvh;
+      overflow-y: auto;
+    }
+    .auth-left {
+      display: none !important;
+    }
+    .auth-right {
+      flex: 1 1 auto !important;
+      width: 100% !important;
+      min-height: 100dvh;
+      padding: 28px 18px !important;
+      justify-content: center !important;
+    }
+    .auth-corner,
+    .auth-dot-grid {
+      display: none !important;
+    }
+    .auth-form-header h2 {
+      font-size: 28px !important;
+      line-height: 1.08 !important;
+    }
+    .auth-mode-toggle {
+      width: 100% !important;
+      display: grid !important;
+      grid-template-columns: 1fr 1fr;
+      margin-bottom: 14px !important;
+    }
+    .auth-mode-toggle button {
+      width: 100% !important;
+      min-height: 42px;
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+    }
+    .auth-submit-btn {
+      min-height: 48px;
+    }
+  }
+
+  @media (max-width: 420px) {
+    .auth-right {
+      padding: 22px 14px !important;
+    }
+    .auth-form-header h2 {
+      font-size: 24px !important;
+    }
+  }
 `;

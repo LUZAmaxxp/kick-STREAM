@@ -165,7 +165,7 @@ const Chat = ({ user, open }) => {
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: 400, background: '#fff', borderRadius: 12, boxShadow: '0 2px 16px 0 rgba(26,26,26,0.06)' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', background: '#fff', borderRadius: 12, boxShadow: '0 2px 16px 0 rgba(26,26,26,0.06)' }}>
       <div style={{ flex: 1, overflowY: 'auto', padding: '18px 12px 8px 12px', display: 'flex', flexDirection: 'column', gap: 8 }}>
         {loading ? (
           <div style={{ textAlign: 'center', color: '#888', margin: 16 }}>Loading chat...</div>
@@ -206,55 +206,58 @@ const Chat = ({ user, open }) => {
         )}
         <div ref={messagesEndRef} />
       </div>
-      <div style={{ display: 'flex', alignItems: 'center', borderTop: '1.5px solid #F5F3EE', padding: '10px 12px', background: '#FAFAF8', borderRadius: '0 0 12px 12px' }}>
+      <div style={{ borderTop: '1.5px solid #F5F3EE', padding: '10px 12px', background: '#FAFAF8', borderRadius: '0 0 12px 12px' }}>
         {!!connectionError && (
-          <div style={{ color: '#b42318', fontSize: 12, marginRight: 8 }}>
+          <div style={{ color: '#b42318', fontSize: 12, marginBottom: 6 }}>
             {connectionError}
           </div>
         )}
         {!!sendError && (
-          <div style={{ color: '#b42318', fontSize: 12, marginRight: 8 }}>
+          <div style={{ color: '#b42318', fontSize: 12, marginBottom: 6 }}>
             {sendError}
           </div>
         )}
-        <input
-          type="text"
-          value={messageText}
-          onChange={(e) => setMessageText(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') handleSendMessage();
-          }}
-          placeholder={channel ? 'Type your message...' : 'Type your message...'}
-          disabled={sending}
-          style={{
-            flex: 1,
-            border: 'none',
-            outline: 'none',
-            background: 'transparent',
-            fontSize: 15,
-            padding: '8px 0',
-            color: '#1A1A1A',
-            opacity: sending ? 0.6 : 1,
-          }}
-        />
-        <button
-          onClick={handleSendMessage}
-          disabled={sending || messageText.trim() === ''}
-          style={{
-            marginLeft: 8,
-            background: sending || messageText.trim() === '' ? '#ccc' : '#00A651',
-            color: '#fff',
-            border: 'none',
-            borderRadius: 8,
-            padding: '8px 18px',
-            fontWeight: 600,
-            fontSize: 15,
-            cursor: sending || messageText.trim() === '' ? 'not-allowed' : 'pointer',
-            transition: 'background 0.2s',
-          }}
-        >
-          {sending ? 'Sending...' : 'Send'}
-        </button>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <input
+            type="text"
+            value={messageText}
+            onChange={(e) => setMessageText(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') handleSendMessage();
+            }}
+            placeholder={channel ? 'Type your message...' : 'Type your message...'}
+            disabled={sending}
+            style={{
+              flex: 1,
+              minWidth: 0,
+              border: 'none',
+              outline: 'none',
+              background: 'transparent',
+              fontSize: 15,
+              padding: '8px 0',
+              color: '#1A1A1A',
+              opacity: sending ? 0.6 : 1,
+            }}
+          />
+          <button
+            onClick={handleSendMessage}
+            disabled={sending || messageText.trim() === ''}
+            style={{
+              background: sending || messageText.trim() === '' ? '#ccc' : '#00A651',
+              color: '#fff',
+              border: 'none',
+              borderRadius: 8,
+              padding: '8px 14px',
+              fontWeight: 600,
+              fontSize: 14,
+              cursor: sending || messageText.trim() === '' ? 'not-allowed' : 'pointer',
+              transition: 'background 0.2s',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            {sending ? 'Sending...' : 'Send'}
+          </button>
+        </div>
       </div>
     </div>
   );
