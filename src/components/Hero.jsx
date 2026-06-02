@@ -2,12 +2,14 @@ import { useEffect, useRef, useState } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { useNextKickoff } from '../hooks/useNextKickoff'
 import heroVideo from '../assets/13433792_3840_2160_30fps.mp4'
-import heroVideoMobile from '../assets/13433792_3840_2160_30fps.mp4'
+import heroVideoMobile from '../assets/13406407_1080_1920_30fps.mp4'
 import heroPoster from '../assets/hero-poster.svg'
 
 // Pexels free stadium floodlights video (CC0)
 const HERO_VIDEO = heroVideo
 const HERO_VIDEO_MOBILE = heroVideoMobile
+const HERO_VIDEO_OPTIMIZED = '/media/hero-desktop-optimized.mp4'
+const HERO_VIDEO_MOBILE_OPTIMIZED = '/media/hero-mobile-optimized.mp4'
 
 const HEADLINE = ['EVERY', 'MATCH.', 'YOUR', 'SERVER.', 'NO', 'COMPROMISE.']
 
@@ -78,6 +80,7 @@ export default function Hero() {
           className="w-full h-full object-cover"
           style={{ filter: 'grayscale(0.3) brightness(1.1) contrast(0.9)' }}
         >
+          {loadDesktopVideo && <source src={HERO_VIDEO_OPTIMIZED} type="video/mp4" />}
           {loadDesktopVideo && <source src={HERO_VIDEO} type="video/mp4" />}
         </video>
       </motion.div>
@@ -94,6 +97,7 @@ export default function Hero() {
           className="w-full h-full object-cover"
           style={{ filter: 'grayscale(0.25) brightness(1.06) contrast(0.9)' }}
         >
+          <source src={HERO_VIDEO_MOBILE_OPTIMIZED} type="video/mp4" />
           <source src={HERO_VIDEO_MOBILE} type="video/mp4" />
         </video>
       </div>
