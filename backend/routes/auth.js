@@ -91,7 +91,7 @@ router.post('/register', authLimiter, async (req, res) => {
 // ---------------- Login ----------------
 router.post('/login', authLimiter, async (req, res) => {
   try {
-    const { email, password } = req.body || {};
+    const { email, password, loginAs } = req.body || {};
     if (!email || !password) {
       return res.status(400).json({ msg: 'Invalid Credentials' });
     }
@@ -108,6 +108,13 @@ router.post('/login', authLimiter, async (req, res) => {
     const isMatch = await user.matchPassword(password);
     if (!isMatch) {
       return res.status(400).json({ msg: 'Invalid Credentials' });
+    }
+
+    if (loginAs === 'admin' && !user.isAdmin) {
+      return res.status(403).json({ msg: 'Admin login required for administrator access' });
+    }
+    if (loginAs === 'user' && user.isAdmin) {
+      return res.status(403).json({ msg: 'Please use the Admin login to access this account' });
     }
 
     const token = await signToken(user);

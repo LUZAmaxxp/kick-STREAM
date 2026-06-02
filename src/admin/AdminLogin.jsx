@@ -15,7 +15,7 @@ function AdminLogin({ onLogin }) {
       const res = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: user, password: pass }),
+          body: JSON.stringify({ email: user, password: pass, loginAs: 'admin' }),
         credentials: 'include',
       });
       const data = await res.json();

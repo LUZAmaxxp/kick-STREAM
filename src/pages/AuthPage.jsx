@@ -38,10 +38,11 @@ export default function AuthPage({ onAuth }) {
         // Admin role only supports sign-in; registration is user-only
         const useLogin = role === 'admin' ? true : isLogin;
         const endpoint = useLogin ? '/api/auth/login' : '/api/auth/register';
+        const loginPayload = { email, password, loginAs: role };
         const res = await fetch(`${import.meta.env.VITE_API_URL}${endpoint}`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(useLogin ? { email, password } : { email, password, username: email.split('@')[0] }),
+          body: JSON.stringify(useLogin ? loginPayload : { email, password, username: email.split('@')[0] }),
           credentials: 'include',
         });
       const data = await res.json();
@@ -54,6 +55,21 @@ export default function AuthPage({ onAuth }) {
         setError('This account is not an administrator.');
         setSubmitted(false);
         // Best-effort logout on server so the cookie isn't left around
+        try {
+          await fetch(`${import.meta.env.VITE_API_URL}/api/auth/logout`, {
+            method: 'POST',
+            credentials: 'include',
+            headers: getAuthHeaders(),
+          });
+        } catch {
+          /* noop */
+        }
+        clearAuthToken();
+        return;
+      }
+      if (role === 'user' && data.user?.isAdmin) {
+        setError('This is an admin account. Please switch to Admin login.');
+        setSubmitted(false);
         try {
           await fetch(`${import.meta.env.VITE_API_URL}/api/auth/logout`, {
             method: 'POST',

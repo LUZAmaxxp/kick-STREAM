@@ -21,7 +21,7 @@ export default function AuthModal({ open, onClose, onAuth }) {
     try {
       const endpoint = isLogin ? '/api/auth/login' : '/api/auth/register';
       const body = isLogin
-        ? { email, password }
+        ? { email, password, loginAs: 'user' }
         : { email, password, username: email.split('@')[0] };
       const res = await fetch(`${import.meta.env.VITE_API_URL}${endpoint}`, {
         method: 'POST',
