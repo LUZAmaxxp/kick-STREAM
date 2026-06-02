@@ -1,9 +1,12 @@
 import { useRef } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { useNextKickoff } from '../hooks/useNextKickoff'
+import heroVideo from '../assets/13433792_3840_2160_30fps.mp4'
+import heroVideoMobile from '../assets/13406407_1080_1920_30fps.mp4'
 
 // Pexels free stadium floodlights video (CC0)
-const HERO_VIDEO = 'src/assets/13433792_3840_2160_30fps.mp4'
+const HERO_VIDEO = heroVideo
+const HERO_VIDEO_MOBILE = heroVideoMobile
 
 const HEADLINE = ['EVERY', 'MATCH.', 'YOUR', 'SERVER.', 'NO', 'COMPROMISE.']
 
@@ -53,11 +56,20 @@ export default function Hero() {
         </video>
       </motion.div>
 
-      {/* ── Mobile fallback gradient ── */}
-      <div
-        className="absolute inset-0 md:hidden"
-        style={{ background: 'linear-gradient(160deg, #F5F3EE 0%, #FAFAF8 60%, #F5F3EE 100%)' }}
-      />
+      {/* ── Mobile video ── */}
+      <div className="absolute inset-0 md:hidden">
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          className="w-full h-full object-cover"
+          style={{ filter: 'grayscale(0.25) brightness(1.06) contrast(0.9)' }}
+        >
+          <source src={HERO_VIDEO_MOBILE} type="video/mp4" />
+        </video>
+      </div>
 
       {/* ── Light editorial vignette ── */}
       <div
