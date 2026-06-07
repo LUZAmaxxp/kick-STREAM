@@ -24,7 +24,7 @@ export function useNextKickoff() {
     let intervalId = null
     let cancelled = false
     let targetMs = Date.now() + 45 * 60 * 1000
-    let matchName = 'Next Premier League Match'
+    let matchName = 'Next Major Event'
 
     const tick = () => {
       if (cancelled) return

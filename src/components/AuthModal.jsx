@@ -47,7 +47,7 @@ export default function AuthModal({ open, onClose, onAuth }) {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 z-50 flex items-center justify-center bg-black/40"
+        className="fixed inset-0 z-50 flex items-center justify-center bg-black/60"
         onClick={onClose}
       >
         <motion.div
@@ -55,24 +55,24 @@ export default function AuthModal({ open, onClose, onAuth }) {
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.95, opacity: 0 }}
           transition={{ type: 'spring', stiffness: 300, damping: 25 }}
-          className="bg-[#F5F3EE] border-2 border-[#1A1A1A] p-8 rounded-none w-full max-w-sm shadow-xl relative"
+          className="bg-black border border-border p-8 rounded-[24px] w-full max-w-sm shadow-2xl relative"
           onClick={e => e.stopPropagation()}
         >
           <button
-            className="absolute top-3 right-3 text-[#1A1A1A] hover:text-[#00A651] text-xl font-bold"
+            className="absolute top-3 right-3 text-cream/80 hover:text-accent text-xl font-bold"
             onClick={onClose}
             aria-label="Close"
           >
             ×
           </button>
-          <h2 className="font-anton text-2xl text-[#1A1A1A] mb-4 uppercase text-center">
+          <h2 className="font-anton text-2xl text-cream mb-4 uppercase text-center">
             {isLogin ? 'Sign In' : 'Sign Up'}
           </h2>
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <input
               type="email"
               placeholder="Email"
-              className="border-2 border-[#1A1A1A] px-4 py-2 font-dmsans text-[#1A1A1A] bg-[#FFF] rounded-none focus:outline-none"
+              className="border border-border px-4 py-2 font-ui text-cream bg-black-light rounded-[10px] focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/20"
               value={email}
               onChange={e => setEmail(e.target.value)}
               autoFocus
@@ -80,21 +80,21 @@ export default function AuthModal({ open, onClose, onAuth }) {
             <input
               type="password"
               placeholder="Password"
-              className="border-2 border-[#1A1A1A] px-4 py-2 font-dmsans text-[#1A1A1A] bg-[#FFF] rounded-none focus:outline-none"
+              className="border border-border px-4 py-2 font-ui text-cream bg-black-light rounded-[10px] focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/20"
               value={password}
               onChange={e => setPassword(e.target.value)}
             />
-            {error && <div className="text-red-600 text-xs text-center">{error}</div>}
+            {error && <div className="text-red-500 text-xs text-center">{error}</div>}
             <button
               type="submit"
-              className="bg-[#1A1A1A] text-[#F5F3EE] font-anton text-[15px] tracking-[0.14em] border-0 rounded-none uppercase py-2 mt-2 hover:bg-[#00A651] hover:text-[#F5F3EE] transition"
+              className="bg-accent text-black font-anton text-[15px] tracking-[0.14em] border-0 rounded-[10px] uppercase py-3 mt-2 hover:bg-accent/90 transition"
             >
               {isLogin ? 'Sign In' : 'Sign Up'}
             </button>
           </form>
           <div className="mt-4 text-center">
             <button
-              className="text-[#00A651] font-dmsans text-xs underline hover:text-[#1A1A1A]"
+              className="text-cream/70 font-ui text-xs underline hover:text-accent"
               onClick={() => setIsLogin(v => !v)}
               type="button"
             >

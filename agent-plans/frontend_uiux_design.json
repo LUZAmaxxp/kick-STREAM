@@ -150,10 +150,55 @@
         "Hero content remains readable when video is paused or blocked"
       ]
     },
+    "trustBar": {
+      "design": "A lightweight credibility strip with performance indicators and brand trust cues.",
+      "uxIntent": "Reinforce confidence quickly with compact trust signals before deeper exploration.",
+      "behavior": "Visible under hero on desktop and within page flow on mobile."
+    },
+    "productReveal": {
+      "design": "Feature-focused cards with concise benefit statements and supporting icons.",
+      "uxIntent": "Communicate core capabilities in a scannable layout that supports comparison and engagement.",
+      "interaction": "Cards are paced with consistent spacing and subtle hover states."
+    },
+    "howItWorks": {
+      "design": "Step-by-step flow that demonstrates setup and engagement in clear phases.",
+      "uxIntent": "Reduce friction by breaking the process into digestible actions and visual milestones.",
+      "mobileNotes": "Each step stacks cleanly with accessible spacing and labels."
+    },
+    "stats": {
+      "design": "Value propositions presented as performance metrics, counters, and micro-data panels.",
+      "uxIntent": "Use data-driven credibility to support trust and urgency without overloading the page.",
+      "motion": "Animate counts on view for perceived momentum."
+    },
     "pricing": {
-      "design": "Card-based plan comparison with highlighted popular option.",
-      "interaction": "Primary CTA drives purchase intent and contact action.",
-      "uxIntent": "Reduce cognitive load in plan comparison using consistent card rhythm and visual emphasis."
+      "design": "Four-term card-based plan comparison with a highlighted popular option and 1-day free trial messaging.",
+      "interaction": "Primary CTA drives trial starts and direct contact with minimal choice friction.",
+      "uxIntent": "Reduce cognitive load with clear term labels, strong price hierarchy, and approachable trial reassurance."
+    },
+    "testimonials": {
+      "design": "Quote cards with clear attribution and selective star or badge cues.",
+      "uxIntent": "Build trust through relatable user stories anchored to the platform's sports focus.",
+      "behavior": "Keep testimonial text short and visually balanced."
+    },
+    "liveMatchTicker": {
+      "design": "A compact update strip with match status, teams, and urgency markers.",
+      "uxIntent": "Surface live energy in a low-profile, repeatable section that strengthens the platform's real-time promise.",
+      "interaction": "Ticker state updates should update quietly without jarring layout shifts."
+    },
+    "faq": {
+      "design": "Accordion-style FAQs with clear questions and concise answers.",
+      "uxIntent": "Provide quick clarity on common concerns without requiring page reloads.",
+      "accessibility": "Each toggle should expose aria-expanded state and preserve keyboard navigation."
+    },
+    "finalCTA": {
+      "design": "A focused closing section with strong language and a single conversion action.",
+      "uxIntent": "Capture attention after the page story has been told and reduce choice friction.",
+      "behavior": "Keep the action visible on both desktop and mobile with generous hit area."
+    },
+    "footer": {
+      "design": "Minimal utility footer with secondary links and a simple brand anchor.",
+      "uxIntent": "Provide a clean site endpoint and basic trust signals without competing with the main conversion flow.",
+      "mobileNotes": "Stack footer groups vertically for easy thumb access."
     },
     "authPage": {
       "design": "Split-brand experience on large screens, focused single-column form on mobile.",
@@ -180,6 +225,83 @@
       "placement": "Persistent bottom-right floating action",
       "behavior": "Opens WhatsApp deep-link with prefilled message",
       "uxIntent": "Offer zero-friction direct contact when account creation is a barrier."
+    }
+  },
+  "componentDetails": {
+    "Nav": {
+      "purpose": "Guide visitors through the marketing funnel and surface login/contact actions.",
+      "details": "Desktop shows horizontal links, the main CTA remains prominent, and the header can become sticky or visible after scroll. Mobile collapses into a large, accessible menu with clean touch targets.",
+      "uxImpact": "Maintains clarity without distracting from the hero, while still giving users easy access to essential sections and conversion actions."
+    },
+    "Hero": {
+      "purpose": "Anchor the page with an emotionally engaging statement and fast access to signup or contact.",
+      "details": "Combines a bold headline, supporting kicker text, and a strong primary CTA. A layered video/poster background supports the brand tone, with gradients and overlays preserving legibility.",
+      "uxImpact": "Creates a compelling first impression and anchors the page story immediately, while keeping the call to action visible on load."
+    },
+    "TrustBar": {
+      "purpose": "Provide quick credibility and proof points near the top of the funnel.",
+      "details": "A narrow strip with subtle icons, stats, or trust statements. Designed to be visible without overwhelming the hero.",
+      "uxImpact": "Boosts confidence before users commit to scrolling or clicking, especially on first visits."
+    },
+    "ProductReveal": {
+      "purpose": "Explain the platform's core benefits in a scannable format.",
+      "details": "Uses feature cards or columns with short headlines, descriptive copy, and iconography. Supports both desktop grids and mobile stacked layouts.",
+      "uxImpact": "Helps users quickly understand what KickStream delivers, shortening the path from curiosity to action."
+    },
+    "HowItWorks": {
+      "purpose": "Make the onboarding and usage process feel simple and predictable.",
+      "details": "Displays sequential steps with numbers or labels, concise copy, and visual rhythm. Each step is optimized for legibility on small screens.",
+      "uxImpact": "Reduces anxiety about setup by making the experience feel straightforward and attainable."
+    },
+    "Stats": {
+      "purpose": "Reinforce the value proposition with tangible metrics.",
+      "details": "Presents count-up numbers, user metrics, or performance indicators in a compact panel. Uses motion only as a supportive enhancement.",
+      "uxImpact": "Adds credibility and momentum without creating distraction."
+    },
+    "Pricing": {
+      "purpose": "Make subscription choice easy and actionable.",
+      "details": "Displays four-term plan cards with clear pricing, a highlighted recommended option, and direct CTA buttons. Each card emphasizes the 1-day free trial and term length.",
+      "uxImpact": "Reduces decision paralysis and guides users toward the option that best fits their timeline and commitment comfort."
+    },
+    "Testimonials": {
+      "purpose": "Show social proof and real-user confidence.",
+      "details": "Includes short quotes, user names or roles, and optional supporting visual cues. Maintains readability with ample spacing.",
+      "uxImpact": "Strengthens trust with relatable voices without requiring users to read dense text."
+    },
+    "LiveMatchTicker": {
+      "purpose": "Surface the platform's live sports relevance through real-time context.",
+      "details": "A concise strip that highlights match progress, team names, and status. Should update seamlessly and remain unobtrusive.",
+      "uxImpact": "Reminds visitors that KickStream is live-first, which supports urgency and the product narrative."
+    },
+    "FAQ": {
+      "purpose": "Answer common questions with minimal effort.",
+      "details": "Uses collapsible panels or list items with clear labels and short answers. Includes keyboard-friendly navigation and visible state indicators.",
+      "uxImpact": "Helps users self-serve and reduces the need for support interruptions."
+    },
+    "FinalCTA": {
+      "purpose": "Close the page with a strong, easy next step.",
+      "details": "Keeps a single high-contrast action visible, often with supportive copy that reinforces the primary offer.",
+      "uxImpact": "Transforms page interest into a clear action point when the story is complete."
+    },
+    "Footer": {
+      "purpose": "Provide utility links and a calm visual endpoint.",
+      "details": "Contains secondary navigation, brand information, and legal or contact links. Uses simplified layout on mobile.",
+      "uxImpact": "Anchors the site without adding noise to the conversion flow."
+    },
+    "AuthPage": {
+      "purpose": "Authenticate users with clear role separation and minimal friction.",
+      "details": "Presents login fields with explicit user/admin context, error states, and action buttons. Mobile view simplifies layout while preserving clarity.",
+      "uxImpact": "Reduces mistakes, improves confidence, and supports quick entry for returning users."
+    },
+    "ChatWidget": {
+      "purpose": "Keep support and real-time conversation available throughout the user journey.",
+      "details": "A floating launcher opens a compact panel with a message list, entry field, and connection/status indicators. It supports inline send feedback and helps users feel heard.",
+      "uxImpact": "Makes the platform feel responsive and accessible without overshadowing the main page content."
+    },
+    "WhatsAppContactButton": {
+      "purpose": "Offer a frictionless guest support channel.",
+      "details": "A floating action button that opens WhatsApp with a prefilled message. It is visible only to guests and designed for touch-friendly use.",
+      "uxImpact": "Removes barriers to contact and gives visitors an instant, familiar support option."
     }
   },
   "interactionDesign": {

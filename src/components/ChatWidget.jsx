@@ -28,7 +28,7 @@ export default function ChatWidget({ user }) {
       <button
         aria-label="Open chat"
         onClick={() => setOpen((v) => !v)}
-        className="fixed z-50 bg-[#1A1A1A] hover:bg-[#00A651] text-[#F5F3EE] rounded-full shadow-lg w-14 h-14 flex items-center justify-center transition-colors border-2 border-[#1A1A1A]"
+        className="fixed z-50 bg-black text-cream rounded-full shadow-2xl w-14 h-14 flex items-center justify-center transition-colors border-2 border-accent/30 hover:border-accent hover:bg-black-light"
         style={{
           borderRadius: '50%',
           fontSize: 0,
@@ -46,15 +46,15 @@ export default function ChatWidget({ user }) {
             right: 6,
             width: 14,
             height: 14,
-            background: '#E8714F',
+            background: '#B79E4F',
             borderRadius: '50%',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            color: '#fff',
+            color: '#0D0D0D',
             fontSize: 10,
             fontWeight: 700,
-            border: '2px solid #fff',
+            border: '2px solid #0D0D0D',
             zIndex: 2
           }}>{notifications.length}</span>
         )}
@@ -63,7 +63,7 @@ export default function ChatWidget({ user }) {
       {/* Chat UI overlay */}
       {open && (
         <div
-          className="fixed z-50 bg-[#FFF] border-2 border-[#1A1A1A] rounded-xl shadow-2xl flex flex-col"
+          className="fixed z-50 bg-black border-2 border-border rounded-xl shadow-2xl flex flex-col"
           style={{
             right: 'max(12px, env(safe-area-inset-right))',
             left: 'max(12px, env(safe-area-inset-left))',
@@ -75,9 +75,9 @@ export default function ChatWidget({ user }) {
             maxHeight: '75vh',
           }}
         >
-          <div className="flex items-center justify-between px-4 py-3 border-b-2 border-[#1A1A1A] bg-[#F5F3EE] rounded-t-xl">
-            <span className="font-anton text-lg text-[#1A1A1A]">Chat</span>
-            <button onClick={() => setOpen(false)} aria-label="Close chat" className="text-[#1A1A1A] hover:text-[#00A651] text-2xl font-bold">×</button>
+          <div className="flex items-center justify-between px-4 py-3 border-b-2 border-border bg-black-light rounded-t-xl">
+            <span className="font-anton text-lg text-cream">Chat</span>
+            <button onClick={() => setOpen(false)} aria-label="Close chat" className="text-cream hover:text-accent text-2xl font-bold">×</button>
           </div>
           <div className="flex-1 overflow-y-auto">
             <Chat user={user} open={open} />

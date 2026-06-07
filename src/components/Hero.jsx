@@ -72,7 +72,7 @@ export default function Hero() {
       ref={ref}
       id="hero"
       className="relative w-full h-screen min-h-[600px] flex items-center justify-start overflow-hidden texture-overlay"
-      style={{ backgroundColor: '#F5F3EE' }}
+      style={{ backgroundColor: '#0D0D0D' }}
     >
       {/* ── Video background (hidden on mobile) ── */}
       <motion.div
@@ -116,17 +116,17 @@ export default function Hero() {
         </video>
       </div>
 
-      {/* ── Light editorial vignette ── */}
+      {/* ── Atmospheric noir gradient ── */}
       <div
         className="absolute inset-0 pointer-events-none"
-        style={{ background: 'linear-gradient(to right, rgba(245, 243, 238, 0.85) 0%, rgba(245, 243, 238, 0.4) 60%, rgba(245, 243, 238, 0) 100%)' }}
+        style={{ background: 'linear-gradient(110deg, rgba(13,13,13,0.86) 0%, rgba(13,13,13,0.45) 45%, rgba(13,13,13,0.12) 100%)' }}
       />
 
       {/* ── Content ── */}
       <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 w-full">
         {/* Eyebrow */}
-        <p className="font-data text-black text-xs tracking-[0.25em] uppercase mb-6 opacity-70">
-          Football Everywhere 
+        <p className="font-data text-cream/80 text-xs tracking-[0.25em] uppercase mb-6">
+          Football Everywhere
         </p>
 
         <HeroSlogans />
@@ -139,9 +139,9 @@ export default function Hero() {
             animate="show"
             className="whitespace-nowrap overflow-hidden"
           >
-            <p className="font-data text-black text-sm md:text-base tracking-wider">
+            <p className="font-data text-cream text-sm md:text-base tracking-wider">
               Server connected. Firmware loaded.{' '}
-              <span className="text-black/60">
+              <span className="text-cream/70">
                 Next Event starting in{' '}
               </span>
               <span className="text-accent font-semibold">
@@ -157,12 +157,12 @@ export default function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.2, duration: 0.4 }}
-          style={{ boxShadow: '4px 4px 0px rgba(26, 26, 26, 0.3)' }}
+          style={{ boxShadow: '6px 6px 0px rgba(0, 0, 0, 0.3)' }}
           onMouseEnter={e => {
-            e.currentTarget.style.boxShadow = '8px 8px 0px rgba(26, 26, 26, 0.5)'
+            e.currentTarget.style.boxShadow = '10px 10px 0px rgba(0, 0, 0, 0.45)'
           }}
           onMouseLeave={e => {
-            e.currentTarget.style.boxShadow = '4px 4px 0px rgba(26, 26, 26, 0.3)'
+            e.currentTarget.style.boxShadow = '6px 6px 0px rgba(0, 0, 0, 0.3)'
           }}
           className={`
             inline-flex items-center gap-2
@@ -170,11 +170,11 @@ export default function Hero() {
             bg-black text-cream
             font-ui font-semibold text-sm uppercase tracking-[0.14em]
             transition-all
-            hover:shadow-editorial
-            focus:outline-none focus-visible:ring-2 focus-visible:ring-black
+            hover:bg-black-light
+            focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/50
           `}
         >
-          Get Your Kit
+          Get Your Pass
           <span className="text-base leading-none">→</span>
         </motion.a>
 
@@ -183,9 +183,9 @@ export default function Hero() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1.5, duration: 0.6 }}
-          className="mt-5 font-ui text-sm text-black/50 tracking-wide"
+          className="mt-5 font-ui text-sm text-cream/70 tracking-wide"
         >
-          Ships within 48 hours. No contract. Cancel anytime.
+          Instant setup. No contract. Cancel anytime.
         </motion.p>
       </div>
 
@@ -196,7 +196,7 @@ export default function Hero() {
         transition={{ delay: 2, duration: 1 }}
         className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
       >
-        <span className="font-data text-[10px] tracking-[0.2em] text-black/40 uppercase">Scroll</span>
+        <span className="font-data text-[10px] tracking-[0.2em] text-cream/40 uppercase">Scroll</span>
         <div className="w-px h-10 bg-gradient-to-b from-black/30 to-transparent" />
       </motion.div>
     </section>

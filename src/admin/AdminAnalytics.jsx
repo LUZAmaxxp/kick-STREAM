@@ -57,7 +57,7 @@ export default function AdminAnalytics() {
     <div style={styles.root}>
       <div style={styles.header}>
         <div style={styles.headerLeft}>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FFB347" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#B79E4F" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
             <line x1="18" y1="20" x2="18" y2="10" />
             <line x1="12" y1="20" x2="12" y2="4" />
             <line x1="6" y1="20" x2="6" y2="14" />
@@ -69,7 +69,7 @@ export default function AdminAnalytics() {
           <span style={styles.liveDot} />
           TELEMETRY
         </span>
-        <button onClick={handleExport} style={{ marginLeft: 16, background: '#FFB347', color: '#1A1A1A', border: 'none', borderRadius: 6, padding: '6px 16px', fontWeight: 700, cursor: 'pointer' }}>
+        <button onClick={handleExport} style={{ marginLeft: 16, background: '#B79E4F', color: '#1A1A1A', border: 'none', borderRadius: 6, padding: '6px 16px', fontWeight: 700, cursor: 'pointer' }}>
           Export to Excel
         </button>
       </div>
@@ -83,7 +83,7 @@ export default function AdminAnalytics() {
         ) : (
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
             <thead>
-              <tr style={{ background: '#F5F3EE', borderBottom: '2px solid #FFB347' }}>
+              <tr style={{ background: '#F5F3EE', borderBottom: '2px solid #B79E4F' }}>
                 <th style={{ textAlign: 'left', padding: 8 }}>Name</th>
                 <th style={{ textAlign: 'left', padding: 8 }}>Email</th>
                 <th style={{ textAlign: 'left', padding: 8 }}>Plan</th>
@@ -140,7 +140,7 @@ const styles = {
   badge: {
     fontSize: 10, fontWeight: 600,
     background: 'transparent',
-    color: '#E8714F', border: '2px solid #E8714F',
+    color: '#B79E4F', border: '2px solid #B79E4F',
     borderRadius: 0, padding: '1px 7px',
   },
   liveTag: {
@@ -152,7 +152,7 @@ const styles = {
   liveDot: {
     display: 'inline-block',
     width: 5, height: 5, borderRadius: '50%',
-    background: '#E8714F',
+    background: '#B79E4F',
   },
   summaryRow: {
     display: 'flex', gap: 0,

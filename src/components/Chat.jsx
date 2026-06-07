@@ -165,12 +165,12 @@ const Chat = ({ user, open }) => {
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', background: '#fff', borderRadius: 12, boxShadow: '0 2px 16px 0 rgba(26,26,26,0.06)' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', background: '#0D0D0D', borderRadius: 12, boxShadow: '0 24px 60px rgba(0,0,0,0.35)' }}>
       <div style={{ flex: 1, overflowY: 'auto', padding: '18px 12px 8px 12px', display: 'flex', flexDirection: 'column', gap: 8 }}>
         {loading ? (
-          <div style={{ textAlign: 'center', color: '#888', margin: 16 }}>Loading chat...</div>
+          <div style={{ textAlign: 'center', color: 'rgba(240,235,225,0.75)', margin: 16 }}>Loading chat...</div>
         ) : messages.length === 0 ? (
-          <div style={{ textAlign: 'center', color: '#888', margin: 16 }}>No messages yet.</div>
+          <div style={{ textAlign: 'center', color: 'rgba(240,235,225,0.75)', margin: 16 }}>No messages yet.</div>
         ) : (
           messages.map((msg, index) => {
             const isAdmin = msg.data.isAdmin;
@@ -182,12 +182,12 @@ const Chat = ({ user, open }) => {
                 style={{
                   alignSelf: isAdmin ? 'flex-end' : (isSelf ? 'flex-end' : 'flex-start'),
                   maxWidth: '75%',
-                  background: isAdmin ? '#E8714F' : (isSelf ? '#00A651' : '#F5F3EE'),
-                  color: isAdmin || isSelf ? '#fff' : '#1A1A1A',
+                  background: isAdmin ? '#B79E4F' : (isSelf ? '#161614' : '#111111'),
+                  color: isAdmin ? '#0D0D0D' : '#F0EBE1',
                   borderRadius: isAdmin ? '16px 16px 4px 16px' : (isSelf ? '16px 16px 4px 16px' : '16px 16px 16px 4px'),
                   padding: '10px 16px',
                   marginBottom: 2,
-                  boxShadow: isAdmin ? '0 2px 8px 0 rgba(232,113,79,0.08)' : (isSelf ? '0 2px 8px 0 rgba(0,166,81,0.08)' : '0 2px 8px 0 rgba(26,26,26,0.04)'),
+                  boxShadow: isAdmin ? '0 2px 10px 0 rgba(183,158,79,0.12)' : (isSelf ? '0 2px 10px 0 rgba(255,255,255,0.05)' : '0 2px 10px 0 rgba(0,0,0,0.18)'),
                   fontSize: 14,
                   position: 'relative',
                   wordBreak: 'break-word',
@@ -206,7 +206,7 @@ const Chat = ({ user, open }) => {
         )}
         <div ref={messagesEndRef} />
       </div>
-      <div style={{ borderTop: '1.5px solid #F5F3EE', padding: '10px 12px', background: '#FAFAF8', borderRadius: '0 0 12px 12px' }}>
+      <div style={{ borderTop: '1.5px solid #2A2A26', padding: '10px 12px', background: '#161614', borderRadius: '0 0 12px 12px' }}>
         {!!connectionError && (
           <div style={{ color: '#b42318', fontSize: 12, marginBottom: 6 }}>
             {connectionError}
@@ -235,7 +235,7 @@ const Chat = ({ user, open }) => {
               background: 'transparent',
               fontSize: 15,
               padding: '8px 0',
-              color: '#1A1A1A',
+              color: '#F0EBE1',
               opacity: sending ? 0.6 : 1,
             }}
           />
@@ -243,8 +243,8 @@ const Chat = ({ user, open }) => {
             onClick={handleSendMessage}
             disabled={sending || messageText.trim() === ''}
             style={{
-              background: sending || messageText.trim() === '' ? '#ccc' : '#00A651',
-              color: '#fff',
+              background: sending || messageText.trim() === '' ? 'rgba(240,235,225,0.12)' : '#B79E4F',
+              color: sending || messageText.trim() === '' ? 'rgba(240,235,225,0.5)' : '#0D0D0D',
               border: 'none',
               borderRadius: 8,
               padding: '8px 14px',

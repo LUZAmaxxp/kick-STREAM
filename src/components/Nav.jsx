@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 
 const NAV_LINKS = [
-  { label: 'How It Works', href: '#how-it-works' },
+  { label: 'Why Us', href: '#why-us' },
   { label: 'Pricing',      href: '#pricing' },
   { label: 'Sign In',      href: '/auth' },
 ];
@@ -29,32 +29,32 @@ export default function Nav({ user, logout }) {
           exit={{ y: '-100%', opacity: 0 }}
           transition={{ duration: 0.3, ease: 'easeOut' }}
           className="fixed top-0 left-0 right-0 z-50"
-          style={{ backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', background: 'rgba(245, 243, 238, 0.9)', borderBottom: '2px solid #1A1A1A' }}
+          style={{ backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', background: 'rgba(13, 13, 13, 0.92)', borderBottom: '1px solid rgba(183, 158, 79, 0.18)' }}
         >
           <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
             {/* Wordmark */}
-            <a href="#" className="font-display text-2xl tracking-widest text-black">
+            <a href="#" className="font-display text-2xl tracking-widest text-cream">
               KICKSTREAM
             </a>
 
             {/* Desktop links */}
             <div className="hidden md:flex items-center gap-8">
               <a
-                href="#how-it-works"
-                className="text-xs font-ui font-semibold uppercase tracking-[0.15em] text-black/60 hover:text-black transition-colors"
+                href="#why-us"
+                className="text-xs font-ui font-semibold uppercase tracking-[0.15em] text-cream/70 hover:text-accent transition-colors"
               >
-                How It Works
+                Why Us
               </a>
               <a
                 href="#pricing"
-                className="text-xs font-ui font-semibold uppercase tracking-[0.15em] text-black/60 hover:text-black transition-colors"
+                className="text-xs font-ui font-semibold uppercase tracking-[0.15em] text-cream/70 hover:text-accent transition-colors"
               >
                 Pricing
               </a>
               {!user ? (
                 <Link
                   to="/auth"
-                  className="text-xs font-ui font-semibold uppercase tracking-[0.15em] text-black/60 hover:text-black transition-colors"
+                  className="text-xs font-ui font-semibold uppercase tracking-[0.15em] text-cream/70 hover:text-accent transition-colors"
                 >
                   Sign In
                 </Link>
@@ -63,15 +63,15 @@ export default function Nav({ user, logout }) {
                   {user.isAdmin && (
                     <Link
                       to="/admin"
-                      className="text-xs font-ui font-semibold uppercase tracking-[0.15em] text-[#E8714F] hover:text-black transition-colors"
+                      className="text-xs font-ui font-semibold uppercase tracking-[0.15em] text-accent hover:text-cream transition-colors"
                     >
                       Dashboard
                     </Link>
                   )}
-                  <span className="text-xs font-ui font-semibold uppercase tracking-[0.15em] text-black/80">{user.email || user.username || 'Account'}</span>
+                  <span className="text-xs font-ui font-semibold uppercase tracking-[0.15em] text-cream/90">{user.email || user.username || 'Account'}</span>
                   <button
                     onClick={logout}
-                    className="ml-2 text-xs font-ui font-semibold uppercase tracking-[0.15em] text-red-600 hover:text-black transition-colors"
+                    className="ml-2 text-xs font-ui font-semibold uppercase tracking-[0.15em] text-red-500 hover:text-cream transition-colors"
                   >
                     Logout
                   </button>
@@ -91,9 +91,9 @@ export default function Nav({ user, logout }) {
               onClick={() => setMenuOpen(o => !o)}
               aria-label="Toggle menu"
             >
-              <span className={`block w-6 h-0.5 bg-black transition-transform ${menuOpen ? 'rotate-45 translate-y-2' : ''}`} />
-              <span className={`block w-6 h-0.5 bg-black transition-opacity ${menuOpen ? 'opacity-0' : ''}`} />
-              <span className={`block w-6 h-0.5 bg-black transition-transform ${menuOpen ? '-rotate-45 -translate-y-2' : ''}`} />
+              <span className={`block w-6 h-0.5 bg-cream transition-transform ${menuOpen ? 'rotate-45 translate-y-2' : ''}`} />
+              <span className={`block w-6 h-0.5 bg-cream transition-opacity ${menuOpen ? 'opacity-0' : ''}`} />
+              <span className={`block w-6 h-0.5 bg-cream transition-transform ${menuOpen ? '-rotate-45 -translate-y-2' : ''}`} />
             </button>
           </div>
 
@@ -105,21 +105,21 @@ export default function Nav({ user, logout }) {
                 animate={{ height: 'auto', opacity: 1 }}
                 exit={{ height: 0, opacity: 0 }}
                 transition={{ duration: 0.25 }}
-                className="md:hidden overflow-hidden border-t-rule"
-                style={{ borderColor: '#1A1A1A' }}
+                className="md:hidden overflow-hidden border-t-rule bg-black/95"
+                style={{ borderColor: 'rgba(183, 158, 79, 0.18)' }}
               >
                 <div className="flex flex-col gap-4 px-6 py-6">
                   <a
-                    href="#how-it-works"
+                    href="#why-us"
                     onClick={() => setMenuOpen(false)}
-                    className="text-sm font-ui font-semibold uppercase tracking-widest text-black/60 hover:text-black"
+                    className="text-sm font-ui font-semibold uppercase tracking-widest text-cream/70 hover:text-accent"
                   >
-                    How It Works
+                    Why Us
                   </a>
                   <a
                     href="#pricing"
                     onClick={() => setMenuOpen(false)}
-                    className="text-sm font-ui font-semibold uppercase tracking-widest text-black/60 hover:text-black"
+                    className="text-sm font-ui font-semibold uppercase tracking-widest text-cream/70 hover:text-accent"
                   >
                     Pricing
                   </a>
@@ -127,7 +127,7 @@ export default function Nav({ user, logout }) {
                     <Link
                       to="/auth"
                       onClick={() => setMenuOpen(false)}
-                      className="text-sm font-ui font-semibold uppercase tracking-widest text-black/60 hover:text-black"
+                      className="text-sm font-ui font-semibold uppercase tracking-widest text-cream/70 hover:text-accent"
                     >
                       Sign In
                     </Link>
@@ -137,15 +137,15 @@ export default function Nav({ user, logout }) {
                         <Link
                           to="/admin"
                           onClick={() => setMenuOpen(false)}
-                          className="text-sm font-ui font-semibold uppercase tracking-widest text-[#E8714F] hover:text-black"
+                          className="text-sm font-ui font-semibold uppercase tracking-widest text-accent hover:text-cream"
                         >
                           Dashboard
                         </Link>
                       )}
-                      <span className="text-sm font-ui font-semibold uppercase tracking-widest text-black/80">{user.email || user.username || 'Account'}</span>
+                      <span className="text-sm font-ui font-semibold uppercase tracking-widest text-cream/90">{user.email || user.username || 'Account'}</span>
                       <button
                         onClick={() => { setMenuOpen(false); logout(); }}
-                        className="ml-2 text-sm font-ui font-semibold uppercase tracking-widest text-red-600 hover:text-black"
+                        className="ml-2 text-sm font-ui font-semibold uppercase tracking-widest text-red-500 hover:text-cream"
                       >
                         Logout
                       </button>

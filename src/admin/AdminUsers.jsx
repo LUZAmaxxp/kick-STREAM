@@ -89,7 +89,7 @@ export default function AdminUsers() {
   );
 }
 
-const avatarColors = ['#E8714F', '#1A1A1A', '#E8714F', '#1A1A1A', '#E8714F'];
+const avatarColors = ['#B79E4F', '#1A1A1A', '#B79E4F', '#1A1A1A', '#B79E4F'];
 
 const styles = {
   root: {
@@ -157,16 +157,16 @@ const styles = {
   visitBadge: (visits) => ({
     display: 'inline-block',
     fontSize: 11, fontWeight: 600,
-    color: visits > 5 ? '#E8714F' : visits > 2 ? '#1A1A1A' : 'rgba(26,26,26,0.5)',
-    background: visits > 5 ? 'rgba(232, 113, 79, 0.08)' : 'transparent',
+    color: visits > 5 ? '#B79E4F' : visits > 2 ? '#1A1A1A' : 'rgba(26,26,26,0.5)',
+    background: visits > 5 ? 'rgba(183, 158, 79, 0.08)' : 'transparent',
     padding: '2px 8px', borderRadius: 0,
   }),
   statusPill: (status) => ({
     display: 'inline-block',
     fontSize: 9, letterSpacing: '0.12em', fontWeight: 700,
     background: 'transparent',
-    color: '#E8714F',
-    border: '2px solid #E8714F',
+    color: '#B79E4F',
+    border: '2px solid #B79E4F',
     padding: '3px 8px', borderRadius: 0,
   }),
 };

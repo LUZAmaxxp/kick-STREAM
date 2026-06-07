@@ -2,19 +2,38 @@ import { motion } from 'framer-motion'
 
 const STEPS = [
   {
-    num: '01',
-    headline: 'CHOOSE YOUR PLAN',
-    body: 'Pick the tier that fits your match schedule. Monthly, annual, or multi-device — no hidden fees.',
+    icon: (
+      <svg viewBox="0 0 64 64" className="w-[5.5rem] h-[5.5rem]" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M16 24l16-12 16 12v12a8 8 0 0 1-8 8H24a8 8 0 0 1-8-8V24z" />
+        <path d="M16 24l16 22 16-22" />
+        <path d="M24 24l8-8 8 8" />
+      </svg>
+    ),
+    headline: 'Premium Quality Without the Monopoly Markups',
+    body: "We believe you shouldn't have to pay massive corporate cable bills just to enjoy world-class entertainment. By bypassing traditional middlemen and managing high-bandwidth server pathways directly to your screen, we deliver a genuinely luxurious, elite viewing experience at a highly accessible, smart price point.",
   },
   {
-    num: '02',
-    headline: 'RECEIVE YOUR KIT',
-    body: 'Your dedicated server and pre-loaded firmware kit ships within 48 hours. Tracked delivery, no faff.',
+    icon: (
+      <svg viewBox="0 0 64 64" className="w-[5.5rem] h-[5.5rem]" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M32 12v40" />
+        <path d="M20 20l24 12-24 12" />
+      </svg>
+    ),
+    headline: 'The End of the Buffering Wheel',
+    body: "There is nothing worse than your screen freezing right as a historic play is about to happen. Kick-Stream is engineered on an advanced H265 anti-freeze server matrix built to withstand global traffic surges. With an industry-leading 99.9% uptime record, your picture stays razor-sharp and fluid while everyone else is left staring at a loading icon.",
   },
   {
-    num: '03',
-    headline: 'PLUG IN. KICK OFF.',
-    body: 'Power on, connect, stream. Never miss another opening whistle. Your server, your signal, forever.',
+    icon: (
+      <svg viewBox="0 0 64 64" className="w-[5.5rem] h-[5.5rem]" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="32" cy="32" r="18" />
+        <path d="M14 32h36" />
+        <path d="M32 14v36" />
+        <path d="M20 18c8 4 16 4 24 0" />
+        <path d="M20 46c8-4 16-4 24 0" />
+      </svg>
+    ),
+    headline: 'One Account. Complete Freedom.',
+    body: "Stop juggling five different expensive, confusing streaming subscriptions just to watch your favorite teams and shows. We consolidate the world's finest sports, cinema, and news networks into a single, beautifully organized, high-speed interface that puts you completely in control of your entertainment.",
   },
 ]
 
@@ -25,24 +44,24 @@ const fadeUp = {
 
 export default function HowItWorks() {
   return (
-    <section id="how-it-works" className="py-28 px-6" style={{ backgroundColor: '#F5F3EE' }}>
+    <section id="why-us" className="py-28 px-6" style={{ backgroundColor: '#0D0D0D' }}>
       <div className="max-w-7xl mx-auto">
         {/* Section label */}
         <motion.p
           variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }}
-          className="font-data text-black text-xs tracking-[0.25em] uppercase mb-4 opacity-60"
+          className="font-data text-cream/70 text-xs tracking-[0.25em] uppercase mb-4"
         >
-          How It Works
+          Why Choose Us
         </motion.p>
         <motion.h2
           variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }}
           transition={{ delay: 0.1 }}
-          className="font-display text-[clamp(40px,6vw,72px)] text-black mb-16 leading-none"
+          className="font-display text-[clamp(40px,6vw,72px)] text-cream mb-16 leading-none"
         >
-          THREE STEPS TO EVERY MATCH.
+          Built to Protect Your Evenings
         </motion.h2>
 
-        {/* Steps */}
+        {/* Steps (Why Us items) */}
         <div className="relative flex flex-col md:flex-row items-start gap-0 md:gap-0">
 
           {STEPS.map((step, i) => (
@@ -56,19 +75,19 @@ export default function HowItWorks() {
                 transition={{ delay: i * 0.15 }}
                 className="flex-1 flex flex-col gap-4 px-0 md:px-8 py-6 md:py-0"
               >
-                {/* Step number */}
+                {/* Step icon/number */}
                 <span
-                  className="font-display text-[80px] md:text-[96px] leading-none"
-                  style={{ color: 'rgba(26,26,26,0.08)', letterSpacing: '-0.04em' }}
+                  className="inline-flex items-center justify-center w-[5.5rem] h-[5.5rem]"
+                  style={{ color: 'rgba(183, 158, 79, 0.12)', letterSpacing: '-0.04em' }}
                 >
-                  {step.num}
+                  {step.icon}
                 </span>
 
                 <div>
-                  <h3 className="font-display text-2xl md:text-3xl text-black tracking-wider mb-2">
+                  <h3 className="font-display text-2xl md:text-3xl text-cream tracking-wider mb-2">
                     {step.headline}
                   </h3>
-                  <p className="font-ui text-sm text-black/60 leading-relaxed max-w-xs">
+                  <p className="font-ui text-sm text-cream/70 leading-relaxed max-w-xs">
                     {step.body}
                   </p>
                 </div>

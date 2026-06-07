@@ -53,7 +53,7 @@ function AdminLogin({ onLogin }) {
         {/* Header */}
         <div style={styles.cardHeader}>
           <div style={styles.dot('#AAFF45')} />
-          <div style={styles.dot('#FFB347')} />
+          <div style={styles.dot('#B79E4F')} />
           <div style={styles.dot('#FF5B5B')} />
           <span style={styles.termTitle}>admin@kickstream ~ /login</span>
         </div>
@@ -155,8 +155,8 @@ const styles = {
   corner: {
     position: 'absolute',
     width: 20, height: 20,
-    borderTop: '2px solid rgba(232, 113, 79, 0.3)',
-    borderLeft: '2px solid rgba(232, 113, 79, 0.3)',
+    borderTop: '2px solid rgba(183, 158, 79, 0.3)',
+    borderLeft: '2px solid rgba(183, 158, 79, 0.3)',
     display: 'block',
   },
   card: {
@@ -222,7 +222,7 @@ const styles = {
   fieldWrap: { display: 'flex', flexDirection: 'column', gap: 6 },
   label: {
     fontSize: 10, letterSpacing: '0.14em',
-    color: '#E8714F', fontWeight: 600,
+    color: '#B79E4F', fontWeight: 600,
     fontFamily: "'Courier Prime', monospace",
     textTransform: 'uppercase',
   },
@@ -235,7 +235,7 @@ const styles = {
     transition: 'border-color 0.2s',
   },
   prompt: {
-    color: '#E8714F', fontSize: 13,
+    color: '#B79E4F', fontSize: 13,
     marginRight: 8, userSelect: 'none',
     fontFamily: "'Courier Prime', monospace",
   },
@@ -247,18 +247,18 @@ const styles = {
     fontFamily: "'DM Sans', sans-serif",
   },
   errorBox: {
-    background: 'rgba(232, 113, 79, 0.08)',
-    border: '2px solid #E8714F',
+    background: 'rgba(183, 158, 79, 0.08)',
+    border: '2px solid #B79E4F',
     borderRadius: 0,
     padding: '10px 12px',
-    fontSize: 11, color: '#E8714F',
+    fontSize: 11, color: '#B79E4F',
     letterSpacing: '0.04em',
   },
   btn: (loading) => ({
     marginTop: 8,
     display: 'flex', alignItems: 'center', justifyContent: 'center',
     padding: '12px 0',
-    background: loading ? '#1A1A1A' : '#E8714F',
+    background: loading ? '#1A1A1A' : '#B79E4F',
     color: loading ? '#F5F3EE' : '#F5F3EE',
     border: 'none', borderRadius: 0,
     fontSize: 12, fontWeight: 700,

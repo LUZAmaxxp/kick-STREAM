@@ -7,11 +7,11 @@
       "structure": "src/ contains modular components, hooks, pages, and admin UI. Main entry is App.jsx. Admin and user dashboards are separated.",
       "features": [
         "User authentication with session persistence (JWT in HTTP-only cookies)",
-        "WhatsApp-like chat widget with real-time updates",
-        "Notification system for both users and admins (real-time, badge, dropdown)",
-        "Admin dashboard with user management, analytics, and email queue",
-        "Analytics tracking via useAnalytics hook (page views, visits)",
-        "Modern UI/UX with Tailwind and custom styles"
+        "Modular marketing and account UI with reusable Hero, Nav, Pricing, and Stats components",
+        "Live chat widget with persistent history, connection state, and inline feedback",
+        "Notification system for users and admins with real-time badges and dropdown status",
+        "Admin dashboard for user oversight, analytics, and email queue management",
+        "Analytics tracking via useAnalytics hook for visitors, matches, and chat events"
       ]
     },
     "backend": {
@@ -27,8 +27,21 @@
       ]
     }
   },
+  "frontendDetails": {
+    "overview": "The frontend is designed around a marketing-to-auth flow that guides guests into action while keeping support and live interaction clearly available.",
+    "components": {
+      "Nav": "Responsive site navigation with scroll-aware reveal behavior, desktop links, and a mobile collapsible menu. Emphasizes sign-in CTAs while remaining lightweight.",
+      "Hero": "A bold landing module with headline, kickoff context, supporting copy, and a strong primary CTA, paired with layered media for visual energy.",
+      "Pricing": "Plan comparison cards with recommended options, clear pricing, and direct action buttons to reduce choice friction.",
+      "LiveMatchTicker": "A live update strip that reinforces the platform's real-time sports positioning through match status and urgency cues.",
+      "AuthPage": "A role-aware authentication page for users and admins, with explicit context, validation messaging, and mobile-friendly layout.",
+      "ChatWidget": "A persistent floating chat launcher that reveals a compact support panel with message history, connection state, and send feedback.",
+      "WhatsAppContactButton": "A guest-only floating action that opens WhatsApp with a prefilled message for fast, zero-friction direct contact."
+    }
+  },
   "dataModels": {
     "User": "Stores user credentials, profile, and admin flag.",
+
     "Message": "Stores chat and contact messages, sender info, timestamps, and read status.",
     "UserAnalytics": "Tracks per-user analytics: visits, page views, matches watched, plan type, country, IP, and visit history.",
     "Conversation": "Groups chat messages by user and admin for persistent threaded chat.",

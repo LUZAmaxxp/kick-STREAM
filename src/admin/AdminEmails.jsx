@@ -142,12 +142,12 @@ export default function AdminEmails() {
                       style={{
                         alignSelf: m.isAdmin ? 'flex-end' : 'flex-start',
                         maxWidth: '70%',
-                        background: m.isAdmin ? '#E8714F' : '#F5F3EE',
+                        background: m.isAdmin ? '#B79E4F' : '#F5F3EE',
                         color: m.isAdmin ? '#fff' : '#1A1A1A',
                         borderRadius: m.isAdmin ? '16px 16px 4px 16px' : '16px 16px 16px 4px',
                         padding: '10px 16px',
                         marginBottom: 2,
-                        boxShadow: m.isAdmin ? '0 2px 8px 0 rgba(232,113,79,0.08)' : '0 2px 8px 0 rgba(26,26,26,0.04)',
+                        boxShadow: m.isAdmin ? '0 2px 8px 0 rgba(183,158,79,0.08)' : '0 2px 8px 0 rgba(26,26,26,0.04)',
                         fontSize: 14,
                         position: 'relative',
                       }}
@@ -191,7 +191,7 @@ export default function AdminEmails() {
   );
 }
 
-const avatarColors = ['#E8714F', '#1A1A1A', '#E8714F', '#1A1A1A', '#E8714F'];
+const avatarColors = ['#B79E4F', '#1A1A1A', '#B79E4F', '#1A1A1A', '#B79E4F'];
 
 const styles = {
   root: {
@@ -209,7 +209,7 @@ const styles = {
   unreadBadge: {
     fontSize: 10, fontWeight: 700,
     background: 'transparent',
-    color: '#E8714F', border: '2px solid #E8714F',
+    color: '#B79E4F', border: '2px solid #B79E4F',
     borderRadius: 0, padding: '1px 7px',
   },
   liveTag: {
@@ -220,7 +220,7 @@ const styles = {
   },
   liveDot: {
     display: 'inline-block',
-    width: 5, height: 5, borderRadius: '50%', background: '#E8714F',
+    width: 5, height: 5, borderRadius: '50%', background: '#B79E4F',
   },
   emptyState: {
     padding: '48px 20px',
@@ -249,8 +249,8 @@ const styles = {
     padding: '14px 16px',
     borderBottom: '1px solid rgba(26,26,26,0.08)',
     cursor: 'pointer',
-    background: active ? 'rgba(232, 113, 79, 0.05)' : 'transparent',
-    borderLeft: active ? '2px solid #E8714F' : '2px solid transparent',
+    background: active ? 'rgba(183, 158, 79, 0.05)' : 'transparent',
+    borderLeft: active ? '2px solid #B79E4F' : '2px solid transparent',
     transition: 'all 0.15s',
   }),
   mailItemTop: { display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 },
@@ -268,7 +268,7 @@ const styles = {
     whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
   },
   senderTime: { fontSize: 9, color: 'rgba(26,26,26,0.4)', marginTop: 1, fontFamily: "'Courier Prime', monospace" },
-  activeIndicator: { width: 5, height: 5, borderRadius: '50%', background: '#E8714F', flexShrink: 0 },
+  activeIndicator: { width: 5, height: 5, borderRadius: '50%', background: '#B79E4F', flexShrink: 0 },
   msgPreview: {
     fontSize: 10, color: 'rgba(26,26,26,0.5)',
     whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
@@ -288,17 +288,17 @@ const styles = {
   detailAvatar: {
     width: 36, height: 36, borderRadius: 0, flexShrink: 0,
     background: 'transparent',
-    border: '2px solid #E8714F',
-    color: '#E8714F', fontSize: 14, fontWeight: 700,
+    border: '2px solid #B79E4F',
+    color: '#B79E4F', fontSize: 14, fontWeight: 700,
     display: 'flex', alignItems: 'center', justifyContent: 'center',
   },
   detailEmail: { fontSize: 13, color: '#1A1A1A', fontWeight: 600 },
   detailTime: { fontSize: 10, color: 'rgba(26,26,26,0.4)', marginTop: 2, fontFamily: "'Courier Prime', monospace" },
   deleteBtn: {
     display: 'flex', alignItems: 'center', gap: 5,
-    background: 'transparent', border: '2px solid #E8714F',
+    background: 'transparent', border: '2px solid #B79E4F',
     borderRadius: 0, padding: '5px 10px',
-    color: '#E8714F', fontSize: 10, letterSpacing: '0.1em',
+    color: '#B79E4F', fontSize: 10, letterSpacing: '0.1em',
     cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
     transition: 'all 0.15s',
   },

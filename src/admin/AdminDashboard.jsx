@@ -65,9 +65,9 @@ export default function AdminDashboard({ user }) {
       {/* Stats row - now below top bar */}
       <div style={styles.statsRow}>
         {[
-          { label: 'TOTAL USERS', value: stats.totalUsers, icon: '◈', color: '#E8714F' },
+          { label: 'TOTAL USERS', value: stats.totalUsers, icon: '◈', color: '#B79E4F' },
           { label: 'EMAILS QUEUED', value: stats.emailsQueued, icon: '◉', color: '#1A1A1A' },
-          { label: 'CLICK EVENTS', value: stats.clickEvents, icon: '◆', color: '#E8714F' },
+          { label: 'CLICK EVENTS', value: stats.clickEvents, icon: '◆', color: '#B79E4F' },
           { label: 'UPTIME', value: '99.9%', icon: '▲', color: '#1A1A1A' },
         ].map((s) => (
           <div key={s.label} style={styles.statCard}>
@@ -128,12 +128,12 @@ const styles = {
     height: 52,
   },
   topLeft: { display: 'flex', alignItems: 'center', gap: 8 },
-  statusDot: { width: 7, height: 7, borderRadius: '50%', background: '#E8714F', boxShadow: '0 0 6px rgba(232, 113, 79, 0.5)' },
+  statusDot: { width: 7, height: 7, borderRadius: '50%', background: '#B79E4F', boxShadow: '0 0 6px rgba(183, 158, 79, 0.5)' },
   siteLabel: { fontSize: 12, fontWeight: 700, letterSpacing: '0.18em', color: '#1A1A1A', fontFamily: "'Anton', sans-serif" },
   slash: { color: 'rgba(26,26,26,0.3)', fontSize: 14 },
   pageLabel: { fontSize: 11, color: 'rgba(26,26,26,0.5)', letterSpacing: '0.08em' },
   topCenter: { display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 },
-  timeLabel: { fontSize: 13, fontWeight: 600, color: '#E8714F', letterSpacing: '0.08em', fontFamily: "'Courier Prime', monospace" },
+  timeLabel: { fontSize: 13, fontWeight: 600, color: '#B79E4F', letterSpacing: '0.08em', fontFamily: "'Courier Prime', monospace" },
   dateLabel: { fontSize: 10, color: 'rgba(26,26,26,0.4)', letterSpacing: '0.1em', fontFamily: "'Courier Prime', monospace" },
   topRight: { display: 'flex', alignItems: 'center', gap: 12 },
   sessionPill: {
@@ -145,13 +145,13 @@ const styles = {
     background: '#F5F3EE',
     fontFamily: "'Courier Prime', monospace",
   },
-  sessionDot: { width: 6, height: 6, borderRadius: '50%', background: '#E8714F', animation: 'pulse 2s infinite' },
+  sessionDot: { width: 6, height: 6, borderRadius: '50%', background: '#B79E4F', animation: 'pulse 2s infinite' },
   logoutBtn: {
     display: 'flex', alignItems: 'center', gap: 6,
     background: 'transparent',
-    border: '2px solid #E8714F',
+    border: '2px solid #B79E4F',
     borderRadius: 0, padding: '6px 12px',
-    color: '#E8714F', fontSize: 11,
+    color: '#B79E4F', fontSize: 11,
     letterSpacing: '0.12em', fontWeight: 600,
     cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
     transition: 'all 0.2s',

@@ -28,16 +28,16 @@ export default class ErrorBoundary extends React.Component {
           alignItems: 'center',
           justifyContent: 'center',
           padding: 24,
-          background: '#F5F3EE',
-          color: '#1A1A1A',
+          background: '#0D0D0D',
+          color: '#F0EBE1',
           fontFamily: 'system-ui, sans-serif',
           textAlign: 'center',
         }}>
           <h1 style={{ fontSize: 28, marginBottom: 12 }}>Something went wrong.</h1>
-          <p style={{ marginBottom: 16, opacity: 0.7 }}>Please reload the page or try again.</p>
+          <p style={{ marginBottom: 16, opacity: 0.78 }}>Please reload the page or try again.</p>
           <button
             onClick={() => { this.handleReset(); window.location.reload(); }}
-            style={{ background: '#1A1A1A', color: '#F5F3EE', border: 'none', padding: '10px 24px', cursor: 'pointer' }}
+            style={{ background: '#B79E4F', color: '#0D0D0D', border: 'none', padding: '10px 24px', cursor: 'pointer' }}
           >
             Reload
           </button>

@@ -1,0 +1,405 @@
+{
+  "task": "full_site_redesign",
+  "project": "KickStream Platform",
+  "instruction": "Apply the Noir Gold design system to all frontend surfaces. Change only visual design — colors, typography, spacing, borders, layout composition, and component styling. Do NOT change any logic, routing, state management, API calls, socket connections, authentication flow, or data models. All existing content, copy, and functional behavior must remain identical.",
+
+  "design_system": {
+    "name": "Noir Gold",
+    "philosophy": "Dark-ground editorial luxury. Premium broadcast energy — closer to F1, DAZN, UEFA than a SaaS landing page. Contrast and spatial restraint over decoration. Borders only, no box shadows.",
+    "colors": {
+      "pitch_black":     { "hex": "#0D0D0D", "role": "Primary background, hero surface, auth backgrounds" },
+      "carbon":          { "hex": "#161614", "role": "Section alternates, card surfaces, sidebar, admin panels" },
+      "gunmetal":        { "hex": "#2A2A26", "role": "Borders, dividers, input backgrounds, nav separators" },
+      "iron":            { "hex": "#1E1E1A", "role": "Table row dividers, subtle internal separators" },
+      "linen":           { "hex": "#F0EBE1", "role": "Primary text, headlines, form labels, nav links" },
+      "ash":             { "hex": "#78756E", "role": "Muted labels, secondary copy, placeholder text, sidebar secondary nav" },
+      "ghost":           { "hex": "#3A3A36", "role": "Disabled states, read items, inactive borders, deep muted text" },
+      "champagne_gold":  { "hex": "#E8C97A", "role": "Primary accent — CTAs, active nav, featured card border, highlights, gold stat card, current day chart bar, unread email dot, focus rings, role toggle active state" },
+      "stadium_green":   { "hex": "#5DBA85", "role": "Live/online states, positive deltas, feature checklist icons, send button, system online chip, user online dot" },
+      "signal_red":      { "hex": "#C0392B", "role": "Errors, inline validation, unread badge on sidebar nav items, negative deltas" }
+    },
+    "do_not_use": [
+      "#F5F3EE (old cream background)",
+      "#FAFAF8 (old surface light)",
+      "#E8714F (old orange accent)",
+      "#00A651 (old green — replace with #5DBA85)",
+      "#1A1A1A (old near-black — replace with #0D0D0D or #161614)"
+    ],
+    "typography": {
+      "display": {
+        "family": "Bebas Neue",
+        "import": "https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap",
+        "usage": "Hero headlines, section stat numbers, pricing amounts, auth left-panel taglines, final CTA headline",
+        "weight": "400 (naturally ultra-bold)",
+        "transform": "uppercase",
+        "tracking": "-0.02em to -0.04em for headlines, 0 for numbers"
+      },
+      "ui": {
+        "family": "Inter",
+        "import": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap",
+        "usage": "Nav links, subheadings, body copy, form labels, CTAs, buttons, admin sidebar, table cells, badges",
+        "weights": "400 body, 500 subheads and labels, 600 buttons and CTAs"
+      },
+      "mono": {
+        "family": "JetBrains Mono",
+        "import": "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap",
+        "usage": "Live match ticker, score display, match metadata, monospace data fields",
+        "weight": "400 / 500",
+        "tracking": "+0.04em to +0.12em"
+      },
+      "drop_immediately": ["Anton", "DM Sans"]
+    },
+    "spacing": {
+      "section_vertical_padding": "80px to 120px — generous empty space is the luxury signal",
+      "card_padding": "20px to 28px",
+      "input_padding": "10px 14px",
+      "border_weight": "1px solid #2A2A26 for structural borders, 0.5px for internal separators",
+      "border_radius": {
+        "inputs": "5px",
+        "buttons": "5px",
+        "cards": "8px to 10px",
+        "badges_pills": "3px to 4px",
+        "live_chips": "100px (full pill)"
+      }
+    },
+    "shadows": "NONE — use borders only. No box-shadow anywhere in the design.",
+    "section_alternation": "Alternate full-bleed #0D0D0D and #161614 between sections. Do NOT use the same background for more than two consecutive sections.",
+    "motion": {
+      "stat_counters": "Count up on viewport enter — one animation per section max",
+      "headline_reveal": "Left-to-right character reveal on hero load",
+      "live_dot_pulse": "Subtle CSS pulse on .live-dot elements (green)",
+      "rule": "No parallax on every element. One ambient motion per section maximum."
+    }
+  },
+
+  "font_import_block": "@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');",
+
+  "css_variables": {
+    "comment": "Add these to :root in index.css, replacing existing variables",
+    "variables": {
+      "--ks-bg":          "#0D0D0D",
+      "--ks-bg-alt":      "#161614",
+      "--ks-border":      "#2A2A26",
+      "--ks-border-sub":  "#1E1E1A",
+      "--ks-text":        "#F0EBE1",
+      "--ks-text-muted":  "#78756E",
+      "--ks-text-ghost":  "#3A3A36",
+      "--ks-gold":        "#E8C97A",
+      "--ks-green":       "#5DBA85",
+      "--ks-red":         "#C0392B",
+      "--ks-font-display":"'Bebas Neue', sans-serif",
+      "--ks-font-ui":     "'Inter', sans-serif",
+      "--ks-font-mono":   "'JetBrains Mono', monospace"
+    }
+  },
+
+  "screens": {
+
+    "marketing_homepage": {
+      "file": "src/App.jsx and all marketing section components",
+      "global_rules": [
+        "Root background: #0D0D0D",
+        "All section backgrounds alternate between #0D0D0D and #161614",
+        "No box shadows anywhere",
+        "No card shadows — border only: 1px solid #2A2A26",
+        "Body font: Inter 400, color #F0EBE1",
+        "Remove all orange (#E8714F) — replace with #E8C97A",
+        "Remove all cream backgrounds (#F5F3EE, #FAFAF8)"
+      ],
+      "components": {
+        "Nav": {
+          "default_state": "background: transparent, position: absolute over hero",
+          "scrolled_state": "background: #0D0D0D, border-bottom: 1px solid #2A2A26, position: sticky top-0",
+          "logo": "font-family: Inter 700, letter-spacing: 0.1em, text-transform: uppercase, color: #F0EBE1 — 'Kick' + '<span style=color:#E8C97A>Stream</span>'",
+          "links": "font-family: Inter 500, font-size: 13px, color: #78756E, hover: #F0EBE1, letter-spacing: 0.04em",
+          "cta_button": "background: #E8C97A, color: #0D0D0D, font: Inter 600 11px, letter-spacing: 0.08em, text-transform: uppercase, border-radius: 5px, padding: 8px 18px, no border",
+          "mobile_menu": "full-screen overlay background #0D0D0D, links stacked at 20px Inter 500, close icon top-right in #E8C97A"
+        },
+        "Hero": {
+          "background": "autoplay muted looping video with #0D0D0D poster fallback — overlay a dark vignette: linear-gradient(to right, #0D0D0D 45%, transparent 100%) on left, linear-gradient(to top, #0D0D0D 15%, transparent 60%) on bottom",
+          "eyebrow": "font: Inter 500 11px, letter-spacing: 0.14em, text-transform: uppercase, color: #E8C97A — content: 'Live Streaming Platform'",
+          "headline": "font: Bebas Neue 72–96px, text-transform: uppercase, letter-spacing: -0.02em, line-height: 1.0, color: #F0EBE1 — highlight keyword in #E8C97A using a <span>",
+          "subheadline": "font: Inter 400 16px, color: #78756E, line-height: 1.7, max-width: 480px",
+          "primary_cta": "background: #E8C97A, color: #0D0D0D, font: Inter 700 13px, text-transform: uppercase, letter-spacing: 0.08em, border-radius: 5px, padding: 14px 32px",
+          "secondary_cta": "border: 1px solid rgba(240,235,225,0.2), color: rgba(240,235,225,0.6), same size as primary, background: transparent",
+          "live_chip": "border: 1px solid rgba(93,186,133,0.3), border-radius: 100px, padding: 5px 12px, font: Inter 500 11px, color: #5DBA85 — prepend a 6px pulsing green dot"
+        },
+        "TrustBar": {
+          "background": "#161614",
+          "border": "1px solid #2A2A26 top and bottom",
+          "items": "font: Inter 500 11px, letter-spacing: 0.1em, text-transform: uppercase, color: #78756E",
+          "separator": "4px circle #E8C97A opacity 0.5 between items",
+          "padding": "14px 0"
+        },
+        "ProductReveal": {
+          "background": "#0D0D0D",
+          "layout": "Each feature as a full-width row. Large index number (01 / 02 / 03) in Bebas Neue 80px color #2A2A26 — decorative, top-left of row. Content area has a 2px solid #E8C97A left border. Title: Bebas Neue 32px #F0EBE1. Body: Inter 400 15px #78756E. Icon replaced by index number — remove emoji icons from headings.",
+          "alternation": "Odd rows: content left-aligned. Even rows: content right-aligned (mirror layout)."
+        },
+        "HowItWorks": {
+          "background": "#161614",
+          "step_number": "Bebas Neue 48px #E8C97A",
+          "step_title": "Inter 600 16px #F0EBE1 letter-spacing 0.04em uppercase",
+          "step_body": "Inter 400 14px #78756E",
+          "connector": "1px dashed #2A2A26 between steps on desktop"
+        },
+        "Stats": {
+          "background": "#0D0D0D",
+          "layout": "Full-bleed section, no cards, no borders. Metrics side by side with generous space.",
+          "number": "Bebas Neue 72–80px #F0EBE1, animate count up on viewport enter",
+          "label": "Inter 500 12px #78756E letter-spacing 0.12em text-transform uppercase, displayed below number",
+          "divider": "1px solid #2A2A26 between stats on desktop"
+        },
+        "Pricing": {
+          "background": "#161614",
+          "section_label": "Inter 500 11px #78756E letter-spacing 0.12em uppercase — 'Invest in Better Entertainment'",
+          "card": "background: #0D0D0D, border: 1px solid #2A2A26, border-radius: 8px, padding: 24px",
+          "featured_card": "border: 1px solid #E8C97A, background: rgba(232,201,122,0.04) — Gold plan only",
+          "plan_label": "Inter 500 10px #78756E letter-spacing 0.1em uppercase",
+          "featured_plan_label": "color: #E8C97A",
+          "price": "Bebas Neue 40px #F0EBE1",
+          "period": "Inter 400 11px #78756E",
+          "feature_list": "Inter 400 12px #78756E, green checkmark icon #5DBA85 before each item",
+          "cta_default": "border: 1px solid #2A2A26, background: transparent, color: rgba(240,235,225,0.6), Inter 600 11px uppercase, border-radius: 5px",
+          "cta_featured": "background: #E8C97A, color: #0D0D0D, Inter 700 11px uppercase, border-radius: 5px, no border",
+          "trial_note": "Inter 400 11px #3A3A36 centered below cards — '1-day free trial available'"
+        },
+        "Testimonials": {
+          "background": "#0D0D0D",
+          "layout": "Single column, generous vertical spacing. No card wrapper — open layout.",
+          "quote_mark": "Bebas Neue 96px color rgba(232,201,122,0.12) — decorative, positioned top-left of quote block",
+          "quote_text": "Inter 400 18px #78756E line-height 1.7, no star icons",
+          "author": "Inter 600 13px #F0EBE1 letter-spacing 0.04em",
+          "remove": "Remove all star rating icons — replace with the decorative oversized quotation mark"
+        },
+        "LiveMatchTicker": {
+          "background": "#0D0D0D",
+          "border": "1px solid #2A2A26 top and bottom",
+          "font": "JetBrains Mono 400 13px #F0EBE1",
+          "live_badge": "background: rgba(93,186,133,0.1), border: 1px solid rgba(93,186,133,0.3), color: #5DBA85, font: Inter 600 9px uppercase letter-spacing 0.1em, border-radius: 3px, padding: 2px 7px — prepend 5px pulsing green dot",
+          "score": "JetBrains Mono 500 16px #F0EBE1",
+          "team_names": "JetBrains Mono 400 12px #78756E",
+          "separator": "1px solid #2A2A26 vertical between match items"
+        },
+        "FAQ": {
+          "background": "#161614",
+          "layout": "No card wrapper. Full-width rows separated by 1px solid #2A2A26. No background on rows.",
+          "question": "Inter 500 15px #F0EBE1, padding: 20px 0",
+          "answer": "Inter 400 14px #78756E line-height 1.7, padding: 0 0 20px 0, indented 16px",
+          "toggle_icon": "Plus/minus — color: #E8C97A, positioned right",
+          "remove": "Remove all card backgrounds and box shadows from FAQ items"
+        },
+        "FinalCTA": {
+          "background": "#0D0D0D",
+          "headline": "Bebas Neue 64–80px #F0EBE1, line 2 in #E8C97A, text-align center",
+          "cta_button": "background: #E8C97A, color: #0D0D0D, Inter 700 14px uppercase letter-spacing 0.08em, padding: 16px 48px, border-radius: 5px",
+          "sub_text": "Inter 400 12px #3A3A36 centered below button — '1-day free trial · Cancel anytime'"
+        },
+        "Footer": {
+          "background": "#111",
+          "border": "1px solid #2A2A26 top",
+          "links": "Inter 400 12px #78756E hover #F0EBE1",
+          "brand": "Inter 700 13px #F0EBE1 uppercase letter-spacing 0.1em",
+          "divider": "1px solid #2A2A26"
+        }
+      }
+    },
+
+    "auth_page": {
+      "file": "src/pages/AuthPage.jsx",
+      "layout": "Two-column split on desktop (50/50). Right panel only on mobile (left panel collapses). Min-height: 100vh. Background: #0D0D0D.",
+      "left_panel": {
+        "background": "#111",
+        "border_right": "1px solid #2A2A26",
+        "padding": "48px 44px",
+        "brand_logo": "Inter 700 16px letter-spacing 0.1em uppercase — 'Kick' #F0EBE1 + 'Stream' #E8C97A",
+        "signin_tagline": "Bebas Neue 48px #F0EBE1 uppercase, line-height 1.0 — e.g. 'Every\\nMatch.\\nLive.' with 'Live.' in #E8C97A",
+        "signup_tagline": "Bebas Neue 48px #F0EBE1 uppercase — e.g. 'Start\\nFor Free.\\nWatch Live.' with 'Free.' in #E8C97A",
+        "signup_checklist": "Inter 400 12px #78756E with #5DBA85 ti-check icon before each feature item",
+        "subtext": "Inter 400 12px #78756E line-height 1.6",
+        "live_chip": "border: 1px solid rgba(93,186,133,0.3), border-radius: 100px, padding: 5px 12px, Inter 500 10px #5DBA85 — prepend 5px pulsing green dot — visible on sign-in panel only",
+        "mobile": "hidden — display:none below md breakpoint"
+      },
+      "right_panel": {
+        "background": "#0D0D0D",
+        "padding": "48px 44px",
+        "mobile_padding": "32px 24px",
+        "form_title": "Inter 700 15px #F0EBE1 letter-spacing 0.04em text-transform uppercase",
+        "form_subtitle": "Inter 400 12px #78756E margin-bottom 28px",
+        "role_toggle": {
+          "container": "display: flex, border: 1px solid #2A2A26, border-radius: 6px, overflow: hidden, margin-bottom: 24px",
+          "button_default": "flex:1, padding: 9px, Inter 600 10px uppercase letter-spacing 0.08em, color: #78756E, background: transparent, border: none",
+          "button_active": "background: #E8C97A, color: #0D0D0D",
+          "admin_register": "When Admin tab is active: hide registration form, show message 'Admin accounts are created by the platform administrator.' in Inter 400 12px #78756E"
+        },
+        "field_label": "Inter 500 10px #78756E letter-spacing 0.1em text-transform uppercase, margin-bottom: 6px",
+        "field_input": "background: #161614, border: 1px solid #2A2A26, border-radius: 5px, padding: 10px 14px, font: Inter 400 13px #F0EBE1, outline: none — focus state: border-color: #E8C97A",
+        "field_error": "border-color: #C0392B — error message below field: Inter 400 11px #C0392B, no toast popups",
+        "forgot_password": "Inter 400 11px #E8C97A, text-align: right, margin: -4px 0 18px",
+        "submit_button": "width: 100%, background: #E8C97A, color: #0D0D0D, border: none, border-radius: 5px, padding: 12px, Inter 700 12px uppercase letter-spacing 0.08em, cursor: pointer",
+        "signup_submit_label": "'Create Account — Start Free Trial'",
+        "footer_link": "Inter 400 11px #78756E centered, link text in #E8C97A",
+        "terms": "Inter 400 10px #3A3A36 centered, margin-top: 10px — sign-up only"
+      }
+    },
+
+    "admin_dashboard": {
+      "file": "src/pages/AdminDashboard.jsx and admin components",
+      "layout": "Two-column: fixed sidebar 200px + fluid main content. Full viewport height. Background: #0D0D0D.",
+      "sidebar": {
+        "background": "#111",
+        "border_right": "1px solid #2A2A26",
+        "width": "200px",
+        "brand_area": {
+          "padding": "18px 20px",
+          "border_bottom": "1px solid #2A2A26",
+          "logo": "Inter 700 13px uppercase letter-spacing 0.1em — 'Kick' #F0EBE1 + 'Stream' #E8C97A",
+          "admin_badge": "background: #E8C97A, color: #0D0D0D, font: Inter 700 9px uppercase letter-spacing 0.06em, padding: 2px 6px, border-radius: 3px, margin-left: 8px"
+        },
+        "section_groups": [
+          { "label": "Overview", "items": ["Dashboard", "Users", "Email Queue"] },
+          { "label": "Activity", "items": ["Chat Threads", "Notifications", "Analytics"] },
+          { "label": "System",   "items": ["Settings", "Sign Out"] }
+        ],
+        "section_label": "Inter 500 9px #3A3A36 letter-spacing 0.14em uppercase, padding: 14px 18px 6px",
+        "nav_item_default": "display: flex align-items: center gap: 8px, padding: 7px 10px, border-radius: 5px, Inter 400 12px #78756E, icon: Tabler outline 14px — no background",
+        "nav_item_active": "background: rgba(232,201,122,0.08), color: #E8C97A",
+        "nav_item_hover": "background: rgba(255,255,255,0.03), color: #F0EBE1",
+        "badge": "background: #C0392B, color: #fff, Inter 700 9px, padding: 1px 5px, border-radius: 10px, margin-left: auto — on Email Queue and Chat Threads with unread count"
+      },
+      "main_area": {
+        "background": "#0D0D0D",
+        "padding": "24px",
+        "topbar": {
+          "layout": "flex justify-between align-center, margin-bottom: 24px",
+          "page_title": "Inter 700 14px #F0EBE1 letter-spacing 0.06em uppercase",
+          "system_chip": "border: 1px solid rgba(93,186,133,0.25), border-radius: 100px, padding: 4px 12px, Inter 500 10px #5DBA85 — prepend 5px green dot",
+          "admin_avatar": "28px circle, background: #2A2A26, border: 1px solid #3A3A36, Inter 600 10px #78756E — initials"
+        },
+        "stat_cards": {
+          "layout": "4-column grid, gap: 10px",
+          "card_default": "background: #161614, border: 1px solid #2A2A26, border-radius: 8px, padding: 14px 16px",
+          "card_primary": "border-color: rgba(232,201,122,0.3) — use for Total Users card only",
+          "label": "Inter 500 9px #78756E letter-spacing 0.12em uppercase, margin-bottom: 8px",
+          "value": "Inter 800 22px #F0EBE1 letter-spacing -0.02em — primary card value in #E8C97A",
+          "delta_positive": "Inter 400 10px #5DBA85",
+          "delta_negative": "Inter 400 10px #C0392B"
+        },
+        "panels": {
+          "style": "background: #161614, border: 1px solid #2A2A26, border-radius: 8px, padding: 16px",
+          "panel_header": "flex justify-between align-center, margin-bottom: 14px",
+          "panel_title": "Inter 600 10px #78756E letter-spacing 0.1em uppercase",
+          "panel_action": "Inter 500 11px #E8C97A cursor-pointer"
+        },
+        "user_list": {
+          "row": "flex align-center gap:10px, padding: 8px 0, border-bottom: 1px solid #1E1E1A",
+          "avatar": "26px circle, background: #2A2A26, Inter 600 9px #78756E — initials",
+          "name": "Inter 400 12px #F0EBE1 flex:1",
+          "plan_badge_platinum": "background: rgba(93,186,133,0.1), color: #5DBA85, Inter 600 9px uppercase letter-spacing 0.05em, padding: 2px 7px, border-radius: 3px",
+          "plan_badge_gold": "background: rgba(232,201,122,0.12), color: #E8C97A, same sizing",
+          "plan_badge_silver": "background: rgba(120,117,110,0.15), color: #78756E, same sizing",
+          "online_dot": "6px circle #5DBA85 for online, #3A3A36 for offline"
+        },
+        "email_queue": {
+          "row": "flex align-start gap:10px, padding: 8px 0, border-bottom: 1px solid #1E1E1A",
+          "unread_dot": "6px circle #E8C97A, flex-shrink:0, margin-top: 4px",
+          "read_dot": "6px circle #3A3A36",
+          "subject": "Inter 400 12px #F0EBE1 — read: #78756E",
+          "meta": "Inter 400 10px #78756E"
+        },
+        "analytics_table": {
+          "header_row": "Inter 500 9px #3A3A36 letter-spacing 0.1em uppercase, padding: 8px 0",
+          "data_row": "border-bottom: 1px solid #1E1E1A, padding: 8px 0",
+          "cell_primary": "Inter 400 12px #F0EBE1",
+          "cell_muted": "Inter 400 12px #78756E"
+        },
+        "chart_bars": {
+          "bar_default": "background: #2A2A26, border-radius: 2px 2px 0 0",
+          "bar_active": "background: #E8C97A — current period only",
+          "axis_label": "Inter 400 9px #3A3A36 — active label in #E8C97A"
+        },
+        "notification_items": {
+          "unread": "border-left: 2px solid #E8C97A, background: rgba(232,201,122,0.04)",
+          "read": "border-left: 2px solid #2A2A26, background: transparent",
+          "text": "Inter 400 12px #F0EBE1 — read: #78756E",
+          "timestamp": "Inter 400 10px #78756E"
+        }
+      }
+    },
+
+    "chat_widget": {
+      "file": "src/components/ChatWidget.jsx and src/components/Chat.jsx",
+      "launcher_button": {
+        "background": "#161614",
+        "border": "1px solid #2A2A26",
+        "border_radius": "100px (pill) or 50% (circle)",
+        "icon": "Tabler ti-message, 18px, color: #F0EBE1",
+        "unread_badge": "background: #E8C97A, color: #0D0D0D, Inter 700 9px, 16px circle, positioned top-right of button"
+      },
+      "panel": {
+        "background": "#161614",
+        "border": "1px solid #2A2A26",
+        "border_radius": "10px",
+        "header": {
+          "background": "#111",
+          "border_bottom": "1px solid #2A2A26",
+          "padding": "12px 16px",
+          "title": "Inter 600 13px #F0EBE1",
+          "status_chip": "Inter 500 10px #5DBA85 with pulsing green dot — 'Online'",
+          "close_icon": "Tabler ti-x, 16px, color: #78756E"
+        },
+        "message_list": {
+          "background": "#0D0D0D",
+          "user_bubble": "background: #E8C97A, color: #0D0D0D, Inter 400 12px, border-radius: 10px 10px 2px 10px, padding: 8px 12px, max-width: 75%",
+          "admin_bubble": "background: #2A2A26, color: #F0EBE1, Inter 400 12px, border-radius: 10px 10px 10px 2px, same sizing",
+          "timestamp": "Inter 400 10px #3A3A36"
+        },
+        "input_area": {
+          "background": "#111",
+          "border_top": "1px solid #2A2A26",
+          "padding": "10px 12px",
+          "input": "background: #161614, border: 1px solid #2A2A26, border-radius: 5px, padding: 8px 12px, Inter 400 12px #F0EBE1 — focus: border-color #E8C97A",
+          "send_button": "background: #5DBA85, color: #0D0D0D, border: none, border-radius: 5px, padding: 8px 14px, Inter 600 11px uppercase"
+        },
+        "error_state": "Inter 400 11px #C0392B inline below input — no toast"
+      }
+    },
+
+    "whatsapp_button": {
+      "file": "src/components/WhatsAppContactButton.jsx",
+      "style": "Ghost circle — background: transparent, border: 1px solid #2A2A26, width: 48px, height: 48px, border-radius: 50%, display: flex align-items justify-content center",
+      "icon": "WhatsApp SVG icon, 20px, color: #F0EBE1",
+      "hover_state": "border-color: #5DBA85, icon color: #5DBA85",
+      "tooltip": "Inter 400 11px #F0EBE1, background: #2A2A26, border-radius: 4px, padding: 4px 8px — 'Chat with us' — appears on hover",
+      "note": "Do NOT use the standard green WhatsApp floating button style. Understated ghost button only."
+    }
+  },
+
+  "constraints": [
+    "DO NOT change any component logic, props, state, hooks, or event handlers",
+    "DO NOT change any API endpoint calls or socket.io event names",
+    "DO NOT change any routing configuration or auth flow behavior",
+    "DO NOT change any data models or backend code",
+    "DO NOT change any content, copy, labels, or placeholder text",
+    "DO NOT change any accessibility attributes (aria-*, role, tabIndex) already present",
+    "DO NOT add new npm packages — only Google Fonts via @import in CSS",
+    "ONLY modify CSS classes, Tailwind utility classes, inline styles, and src/index.css",
+    "Keep all existing component file names and folder structure intact",
+    "Admin registration disabled state is already implemented — only restyle the messaging text, do not change the logic"
+  ],
+
+  "implementation_order": [
+    "1. Add font @import and CSS variables to src/index.css",
+    "2. Remove old color variables and font references from index.css",
+    "3. Restyle Nav component",
+    "4. Restyle Hero component",
+    "5. Restyle TrustBar, ProductReveal, HowItWorks, Stats in sequence",
+    "6. Restyle Pricing component",
+    "7. Restyle Testimonials, LiveMatchTicker, FAQ, FinalCTA, Footer",
+    "8. Restyle AuthPage (both sign-in and sign-up states)",
+    "9. Restyle AdminDashboard layout and sidebar",
+    "10. Restyle admin stat cards, panels, user list, email queue, analytics table",
+    "11. Restyle ChatWidget launcher and panel",
+    "12. Restyle WhatsAppContactButton"
+  ]
+}

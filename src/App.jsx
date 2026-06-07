@@ -90,11 +90,11 @@ export default function App() {
         <Route
           path="/*"
           element={
-            <div className="overflow-x-hidden" style={{ backgroundColor: '#F5F3EE', color: '#1A1A1A' }}>
+            <div className="overflow-x-hidden" style={{ backgroundColor: '#0D0D0D', color: '#F0EBE1' }}>
               {/* Scroll progress bar */}
               <div
                 className="fixed top-0 left-0 z-[60] h-[2px] transition-none"
-                style={{ width: `${scrollPct}%`, backgroundColor: '#E8714F' }}
+                style={{ width: `${scrollPct}%`, backgroundColor: '#B79E4F' }}
               />
 
               <Nav user={user} logout={logout} />

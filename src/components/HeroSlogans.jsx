@@ -4,19 +4,15 @@ import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 const SLOGANS = [
   {
     id: 1,
-    phrase: 'All the Action. None of the Lag.',
-    accents: ['None', 'of', 'Lag'],
-    accentWordIndexes: [3, 4, 5, 6],
+    phrase: 'The Entire World of Live Entertainment.',
+    accents: ['Entertainment'],
+    accentWordIndexes: [5],
   },
   {
     id: 2,
-    phrase: 'Every Match. Everywhere.',
-    accents: ['Everywhere'],
-  },
-  {
-    id: 3,
-    phrase: 'Unlimited Access. Unmatched Quality.',
-    accents: ['Unmatched', 'Quality'],
+    phrase: 'Curated For Your Screen.',
+    accents: ['Your', 'Screen'],
+    accentWordIndexes: [2, 3],
   },
 ];
 
@@ -76,7 +72,7 @@ export default function HeroSlogans() {
           {activeSlogan && (
             <motion.h1
               key={activeSlogan.id}
-              className="font-display text-[clamp(56px,11vw,144px)] leading-[0.92] text-black max-w-3xl"
+              className="font-display text-[clamp(56px,11vw,144px)] leading-[0.92] text-cream max-w-3xl"
               style={{ letterSpacing: '-0.02em' }}
               initial={prefersReducedMotion ? false : 'initial'}
               animate={prefersReducedMotion ? false : 'animate'}

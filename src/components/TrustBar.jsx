@@ -1,12 +1,12 @@
 const ITEMS = [
-  '12,000+ ACTIVE STREAMS',
-  'COVERAGE: ALL PREMIER LEAGUE FIXTURES',
-  'LATENCY UNDER 3 SECONDS',
-  'BRITISH SERVERS. BRITISH FOOTBALL.',
-  'NO CONTRACT. CANCEL ANYTIME.',
-  '4K QUALITY ON EVERY DEVICE',
-  'SHIPS IN 48 HOURS',
-  '99.9% UPTIME GUARANTEED',
+  '20,000+ LIVE GLOBAL NETWORKS',
+  'HIGH-PRIORITY WORLD CUP ROUTING',
+  'PRISTINE 4K / UHD DEFINITION',
+  'SMART TVS & STREAMING HARDWARE',
+  'MOBILES, TABLETS & DESKTOPS',
+  'ZERO FRICTION. INSTANT VIEWING.',
+  'H265 ANTI-FREEZE TECHNOLOGY',
+  '99.9% UPTIME RECORD',
 ]
 
 // Duplicate for seamless infinite scroll
@@ -16,7 +16,7 @@ export default function TrustBar() {
   return (
     <div
       className="relative overflow-hidden texture-overlay"
-      style={{ backgroundColor: '#F5F3EE', borderTop: '2px solid #1A1A1A', borderBottom: '2px solid #1A1A1A' }}
+      style={{ backgroundColor: '#0D0D0D', borderTop: '2px solid rgba(183, 158, 79, 0.14)', borderBottom: '2px solid rgba(183, 158, 79, 0.14)' }}
     >
       <div
         className="flex whitespace-nowrap py-4 animate-marquee"
@@ -26,7 +26,7 @@ export default function TrustBar() {
       >
         {TRACK.map((item, i) => (
           <span key={i} className="inline-flex items-center gap-4 mx-4">
-            <span className="font-data text-xs tracking-[0.18em] text-black/70 uppercase">
+            <span className="font-data text-xs tracking-[0.18em] text-cream/70 uppercase">
               {item}
             </span>
             <span className="text-accent text-xs leading-none select-none">●</span>

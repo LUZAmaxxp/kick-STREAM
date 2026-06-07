@@ -2,25 +2,18 @@ import { motion } from 'framer-motion'
 
 const QUOTES = [
   {
-    text: "Cancelled Sky and BT the same week. Best decision I've made since supporting this lot in 1998. Picture is flawless.",
-    name: 'Gary T.',
-    club: 'Tottenham',
-    location: 'Watford',
+    text: "I originally joined Kick-Stream just to secure a stable feed for the big international tournaments. The 4K clarity blew me away—there's absolutely zero lag, even on busy weekend matchdays when standard streams usually crash. It's easily the best upgrade I've made for my living room.",
+    name: 'David M.',
+    club: 'Community Member',
+    location: 'Verified User',
     bg: '#FAFAF8',
   },
   {
-    text: "Thought it'd be complicated to set up. Took me four minutes. Four. My son was furious he didn't find it first.",
-    name: 'Damian O.',
-    club: 'Everton',
-    location: 'Liverpool',
+    text: "Managing multiple streaming apps was costing my family a fortune every month. Kick-Stream simplified everything. We got all our international channels and movies running on our Firestick in less than ten minutes. Flawless service.",
+    name: 'Elena R.',
+    club: 'Community Member',
+    location: 'Verified User',
     bg: '#F5F3EE',
-  },
-  {
-    text: "The latency on my old stream was killing me. Spoilers everywhere before the goals even loaded. Never again.",
-    name: 'Marcus W.',
-    club: 'Leeds United',
-    location: 'Sheffield',
-    bg: '#FAFAF8',
   },
 ]
 
@@ -31,19 +24,19 @@ const fadeUp = {
 
 export default function Testimonials() {
   return (
-    <section className="py-28 px-6" style={{ backgroundColor: '#F5F3EE' }}>
+    <section className="py-28 px-6" style={{ backgroundColor: '#0D0D0D' }}>
       <div className="max-w-7xl mx-auto">
 
         <motion.p
           variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }}
-          className="font-data text-black text-xs tracking-[0.25em] uppercase mb-4 opacity-60"
+          className="font-data text-cream/70 text-xs tracking-[0.25em] uppercase mb-4"
         >
           From the Terraces
         </motion.p>
         <motion.h2
           variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }}
           transition={{ delay: 0.1 }}
-          className="font-display text-[clamp(40px,6vw,72px)] text-black mb-16 leading-none"
+          className="font-display text-[clamp(40px,6vw,72px)] text-cream mb-16 leading-none"
         >
           FANS DON'T LIE.
         </motion.h2>
@@ -57,8 +50,8 @@ export default function Testimonials() {
               whileInView="show"
               viewport={{ once: true, margin: '-60px' }}
               transition={{ delay: i * 0.13 }}
-              className="relative editorial-box p-8"
-              style={{ background: q.bg, boxShadow: '4px 4px 0px rgba(26, 26, 26, 0.15)' }}
+              className="relative bg-black/75 border border-border p-8 rounded-[28px]"
+              style={{ boxShadow: '0 18px 48px rgba(0, 0, 0, 0.24)' }}
             >
               {/* Large opening quote */}
               <span
@@ -70,15 +63,15 @@ export default function Testimonials() {
 
               {/* Quote body */}
               <p
-                className="font-ui text-base text-black/80 leading-relaxed mb-8"
+                className="font-ui text-base text-cream/85 leading-relaxed mb-8"
                 style={{ fontStyle: 'italic' }}
               >
                 {q.text}
               </p>
 
               {/* Attribution */}
-              <div className="rule-top pt-5">
-                <p className="font-data text-[11px] tracking-[0.18em] text-black/50 uppercase">
+              <div className="rule-top pt-5 border-t border-border/60">
+                <p className="font-data text-[11px] tracking-[0.18em] text-cream/60 uppercase">
                   {q.name} — {q.club} Fan, {q.location}
                 </p>
               </div>
