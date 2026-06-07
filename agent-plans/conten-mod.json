@@ -1,0 +1,171 @@
+{
+  "task": "content_replacement",
+  "instruction": "Replace all user-facing marketing content in the KickStream React frontend with the new content provided below. Do not change any component structure, logic, styling, routing, or functionality — only update text strings, labels, and copy. Match each content block to the correct existing component based on its section name.",
+  "content_map": {
+    "hero": {
+      "headline": "The Entire World of Live Entertainment. Curated For Your Screen."
+    },
+    "product_reveal_or_features": [
+      {
+        "section_id": "world_stage",
+        "icon": "🏆",
+        "title": "The World Stage: Every Match, Every Moment",
+        "body": "Don't just watch the FIFA World Cup—experience it like you are sitting in the VIP box. When the entire world tunes in and public servers begin to lag, Kick-Stream keeps you anchored in flawless 4K at 60 FPS. From the nervous tension of the group stages to the absolute euphoria of the final whistle, follow your national team with high-priority streaming lines. No blackouts, no interrupted feeds, just pure, heart-pounding football history exactly as it happens."
+      },
+      {
+        "section_id": "courtside",
+        "icon": "🏀",
+        "title": "Courtside Intensity & Global Athletics",
+        "body": "For the true fan, sports never sleep. Feel the energy of every crucial fourth-quarter buzzer-beater, every high-octane motorsport grid start, and every championship fight night. We don't just provide feeds; we deliver premium, high-bandwidth networks optimized for fast-motion athletics. It's the ultimate front-row sports pass, giving you real-time access to the games everyone is talking about, with zero lag during game-changing moments."
+      },
+      {
+        "section_id": "cinema",
+        "icon": "🎬",
+        "title": "Your Private Cinema Lounge & Global Networks",
+        "body": "Escape the limits of regional television. Gain immediate access to an elite library of 20,000+ live international networks spanning the US, UK, Europe, Arabic regions, and beyond. Paired with a continuously updated Video-on-Demand (VOD) library overflowing with Hollywood masterpieces, trending global series, and complete family entertainment, your screen becomes the ultimate passport to global culture."
+      }
+    ],
+    "device_compatibility": {
+      "headline": "Zero Friction. Instant Viewing on Any Screen.",
+      "subheadline": "True modern luxury means never fighting with technology. Kick-Stream integrates seamlessly with your current lifestyle in under 5 minutes, requiring no advanced technical skills or complicated setups.",
+      "devices": [
+        {
+          "name": "Smart TVs",
+          "description": "Native, optimized fluid performance for Samsung, LG, Sony, and Android TV setups."
+        },
+        {
+          "name": "Streaming Hardware",
+          "description": "Instant, lightweight execution on Amazon Firestick, Apple TV, or Android boxes."
+        },
+        {
+          "name": "Mobiles & Tablets",
+          "description": "Keep your premium access in your pocket with flawless streaming on iOS and Android."
+        },
+        {
+          "name": "Desktops & Laptops",
+          "description": "Pure high-definition playback directly inside your preferred web browser."
+        }
+      ]
+    },
+    "pricing": {
+      "headline": "Invest in Better Entertainment",
+      "plans": [
+        {
+          "name": "Silver Plan",
+          "billing": "Monthly",
+          "price_placeholder": "€XX.XX / month",
+          "tagline": "Test the premium network.",
+          "features": [
+            "20,000+ Live Global Networks",
+            "High-Priority World Cup Routing",
+            "Pristine 4K / UHD Definition",
+            "24/7 Personal Setup Guidance",
+            "1 Unrestricted Private Line"
+          ],
+          "cta": "Unlock Silver Access"
+        },
+        {
+          "name": "Gold Plan",
+          "billing": "6-Months",
+          "price_placeholder": "€XX.XX / bi-annually",
+          "tagline": "The favorite choice for dedicated fans.",
+          "features": [
+            "20,000+ Live Global Networks",
+            "High-Priority World Cup Routing",
+            "Pristine 4K / UHD Definition",
+            "24/7 Personal Setup Guidance",
+            "1 Unrestricted Private Line"
+          ],
+          "cta": "Unlock Gold Access"
+        },
+        {
+          "name": "Platinum Plan",
+          "billing": "Annual",
+          "price_placeholder": "€XX.XX / yearly",
+          "tagline": "The ultimate unrestricted streaming lifestyle.",
+          "features": [
+            "Best Value & Price Protection",
+            "20,000+ Live Global Networks",
+            "High-Priority World Cup Routing",
+            "Pristine 4K / UHD Definition",
+            "VIP Priority Setup & Care",
+            "1 Unrestricted Private Line"
+          ],
+          "cta": "Secure Platinum Pass"
+        }
+      ]
+    },
+    "why_choose_us": {
+      "headline": "Built to Protect Your Evenings",
+      "items": [
+        {
+          "icon": "💎",
+          "title": "Premium Quality Without the Monopoly Markups",
+          "body": "We believe you shouldn't have to pay massive corporate cable bills just to enjoy world-class entertainment. By bypassing traditional middlemen and managing high-bandwidth server pathways directly to your screen, we deliver a genuinely luxurious, elite viewing experience at a highly accessible, smart price point."
+        },
+        {
+          "icon": "⚡",
+          "title": "The End of the Buffering Wheel",
+          "body": "There is nothing worse than your screen freezing right as a historic play is about to happen. Kick-Stream is engineered on an advanced H265 anti-freeze server matrix built to withstand global traffic surges. With an industry-leading 99.9% uptime record, your picture stays razor-sharp and fluid while everyone else is left staring at a loading icon."
+        },
+        {
+          "icon": "🌍",
+          "title": "One Account. Complete Freedom.",
+          "body": "Stop juggling five different expensive, confusing streaming subscriptions just to watch your favorite teams and shows. We consolidate the world's finest sports, cinema, and news networks into a single, beautifully organized, high-speed interface that puts you completely in control of your entertainment."
+        }
+      ]
+    },
+    "testimonials": {
+      "headline": "Real Experiences From Our Community",
+      "items": [
+        {
+          "rating": "⭐⭐⭐⭐",
+          "quote": "I originally joined Kick-Stream just to secure a stable feed for the big international tournaments. The 4K clarity blew me away—there's absolutely zero lag, even on busy weekend matchdays when standard streams usually crash. It's easily the best upgrade I've made for my living room.",
+          "author": "David M."
+        },
+        {
+          "rating": "⭐⭐⭐⭐",
+          "quote": "Managing multiple streaming apps was costing my family a fortune every month. Kick-Stream simplified everything. We got all our international channels and movies running on our Firestick in less than ten minutes. Flawless service.",
+          "author": "Elena R."
+        }
+      ]
+    },
+    "faq": {
+      "headline": "Frequently Asked Questions",
+      "items": [
+        {
+          "question": "Will my stream freeze during major, high-demand championship games?",
+          "answer": "No. While standard providers overload their systems, Kick-Stream invests in premium, load-balanced edge servers. When millions of viewers log on simultaneously for a massive sports final, our system dynamically scales your connection to ensure your feed remains smooth, clear, and uninterrupted."
+        },
+        {
+          "question": "Can I easily find specific international networks and sports leagues?",
+          "answer": "Absolutely. Our system is built with user experience in mind. The library is cleanly categorized by country and genre, featuring dedicated, lightning-fast sections for global football, basketball, premium cinema, and live broadcasts."
+        },
+        {
+          "question": "I'm not great with technology. How difficult is the installation process?",
+          "answer": "It is entirely stress-free. You don't need any technical background whatsoever. Your private access credentials along with a simple, visual step-by-step guide will land in your inbox within 10 to 30 minutes of purchase, and our team is right here to guide you if you want a helping hand."
+        }
+      ]
+    },
+    "about_us": {
+      "headline": "Our Vision: Unrestricting the World's Media",
+      "body": "At Kick-Stream, we believe that access to global culture, historic sports moments, and cinematic storytelling shouldn't be locked behind expensive regional paywalls and frustrating restrictions. Founded by digital automation and streaming network specialists, our mission is to deliver absolute server reliability and pristine visual definitions straight to individual homes. We handle the complex backend technology so you can simply sit back, relax, and enjoy the moments that matter."
+    },
+    "contact": {
+      "headline": "We're Ready to Help You Connect",
+      "subheadline": "Have a question about configuring your specific streaming stick, or want advice on selecting the best player app for your TV? Our support team is active around the clock to make sure you enjoy an elite experience from day one.",
+      "email_label": "Direct Support Email",
+      "email": "support@kick-stream.com",
+      "chat_label": "Live Concierge Support",
+      "chat_cta": "Click the chat widget at the bottom right of your screen to speak directly with an expert right now."
+    }
+  },
+  "constraints": [
+    "Do NOT modify any component file structure, props, state, or logic.",
+    "Do NOT change any CSS classes, Tailwind tokens, or inline styles.",
+    "Do NOT alter routing, authentication flows, or backend integration.",
+    "Only update hardcoded text strings, headline copy, body copy, button labels, and list items.",
+    "If a section in the app has no matching content block above, leave it unchanged.",
+    "Preserve all existing placeholder values (e.g. €XX.XX) exactly as written until real prices are confirmed."
+  ]
+}

@@ -1,9 +1,9 @@
 {
   "document": {
-    "title": "Kick Stream Frontend UI/UX and Design Specification",
-    "version": "1.0.0",
-    "updatedAt": "2026-06-02",
-    "scope": "Public marketing site, authentication experience, guest contact affordances, chat widget UX, and admin entry surface.",
+    "title": "KickStream Frontend UI/UX and Design Specification",
+    "version": "1.1.0",
+    "updatedAt": "2026-06-07",
+    "scope": "Public marketing funnel, authentication experience, guest contact affordances, chat widget UX, and admin entry surface.",
     "sourceOfTruth": [
       "src/App.jsx",
       "src/components/Hero.jsx",
@@ -16,20 +16,20 @@
     ]
   },
   "experienceGoals": {
-    "brandIntent": "Convey premium, high-energy football streaming with editorial boldness and modern confidence.",
+    "brandIntent": "Convey premium, high-energy football streaming with editorial boldness, focused clarity, and modern confidence.",
     "userGoals": [
-      "Understand value proposition quickly",
-      "Navigate trust and pricing content with low friction",
-      "Authenticate with clear role boundaries",
-      "Contact support or sales instantly as a guest",
-      "Chat in real time after login"
+      "Understand the KickStream value proposition immediately",
+      "Move from discovery to login/contact with minimal friction",
+      "See real-time match context and live engagement signals",
+      "Use guest support and WhatsApp contact without creating friction",
+      "Access chat and account context quickly after authentication"
     ],
     "uxPrinciples": [
-      "High visual contrast with restrained palette",
-      "Strong typography hierarchy for instant scanning",
-      "Progressive disclosure (guest vs authenticated actions)",
-      "Fast feedback for async actions",
-      "Mobile-first touch ergonomics for key flows"
+      "High visual contrast with a restrained yet athletic palette",
+      "Strong typography hierarchy for instant scanning on desktop and mobile",
+      "Progressive disclosure to keep marketing and support actions distinct",
+      "Fast visual feedback for async actions and socket state changes",
+      "Mobile-first touch ergonomics for key conversion and chat controls"
     ]
   },
   "visualLanguage": {
@@ -138,15 +138,16 @@
       "mobileNotes": "Menu uses large touch targets and clear typographic hierarchy."
     },
     "hero": {
-      "content": "Statement headline, kickoff timing line, primary CTA.",
+      "content": "Statement headline, kickoff timing line, primary CTA, and live-match framing.",
       "mediaStrategy": {
-        "desktop": "Autoplay looping background video with poster fallback",
+        "desktop": "Autoplay looping background video with poster fallback and progressive loading",
         "mobile": "Autoplay looping mobile-optimized video with muted inline playback protections"
       },
-      "uxIntent": "Deliver emotional impact in first viewport while preserving text legibility via layered gradient overlays.",
+      "uxIntent": "Deliver emotional impact in the first viewport while preserving text legibility and fast entry for mobile users.",
       "riskAndMitigation": [
         "Large media payload risk mitigated through poster fallback and optimization pipeline",
-        "Autoplay restrictions mitigated by muted+inline+retry strategy"
+        "Autoplay restrictions mitigated by muted+inline+retry strategy",
+        "Hero content remains readable when video is paused or blocked"
       ]
     },
     "pricing": {

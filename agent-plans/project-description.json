@@ -1,6 +1,6 @@
 {
   "projectName": "KickStream Platform",
-  "description": "KickStream is a full-stack web application for real-time sports streaming, analytics, and user engagement. It features a modern React frontend, a Node.js/Express backend, MongoDB for data storage, and real-time communication via socket.io and Ably. The platform includes user authentication, persistent chat, admin dashboards, analytics, notifications, and email integration.",
+  "description": "KickStream is a purpose-built sports engagement platform that blends live match awareness, fan communication, and admin analytics into a polished, real-time web experience. It pairs a React/Vite frontend with a Node.js/Express backend, MongoDB persistence, secure JWT session cookies, and real-time channels powered by socket.io and Ably. The product delivers live chat, match tracking, guest support, admin monitoring, and email notifications in a modern, performance-minded package.",
   "architecture": {
     "frontend": {
       "framework": "React (Vite)",
@@ -67,6 +67,6 @@
     "scripts": "backend/scripts/createAdmin.js creates an initial admin user."
   },
   "agentNotes": {
-    "LLM": "This project is a robust, real-time, full-stack web platform with modular, scalable architecture. All real-time and analytics features are implemented with best practices for session persistence, notification targeting, and data integrity. For further extension, add more analytics events, roles, or notification types as needed."
+    "LLM": "This project is a modern, real-time sports companion with a focus on match awareness, chat, and operational analytics. The current architecture balances responsive marketing content with a protected auth flow, admin observability, and real-time updates. For future work, extend guest support paths, enrich match event analytics, and refine mobile-first hero media performance."
   }
 }
