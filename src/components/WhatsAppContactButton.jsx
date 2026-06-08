@@ -8,7 +8,7 @@ export default function WhatsAppContactButton() {
   const rawNumber =
     import.meta.env.VITE_WHATSAPP_NUMBER ||
     import.meta.env.VITE_PUBLIC_WHATSAPP_NUMBER ||
-    '212631604905';
+    '18582525266';
   const phone = sanitizePhone(rawNumber);
   const defaultMessage = import.meta.env.VITE_WHATSAPP_MESSAGE || 'Hi, I need help with KickStream.';
 
