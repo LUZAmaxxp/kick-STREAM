@@ -146,7 +146,7 @@ export default function Pricing() {
 
               {/* CTA */}
               <a
-                href={`https://wa.me/212631604905?text=${encodeURIComponent(`Hello, I am interested in the ${plan.name}.`)}`}
+                href={`https://wa.me/18582525266?text=${encodeURIComponent(`Hello, I am interested in the ${plan.name}.`)}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className={`
