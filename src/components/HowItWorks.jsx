@@ -3,37 +3,41 @@ import { motion } from 'framer-motion'
 const STEPS = [
   {
     icon: (
-      <svg viewBox="0 0 64 64" className="w-[5.5rem] h-[5.5rem]" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M16 24l16-12 16 12v12a8 8 0 0 1-8 8H24a8 8 0 0 1-8-8V24z" />
-        <path d="M16 24l16 22 16-22" />
-        <path d="M24 24l8-8 8 8" />
+      <svg viewBox="0 0 24 24" className="w-14 h-14" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="4" y="4" width="6" height="6" rx="1" />
+        <rect x="14" y="4" width="6" height="6" rx="1" />
+        <rect x="4" y="14" width="6" height="6" rx="1" />
+        <rect x="14" y="14" width="6" height="6" rx="1" />
+        <path d="M10 10l4 4m0-4l-4 4" className="opacity-40" />
       </svg>
     ),
-    headline: 'Premium Quality Without the Monopoly Markups',
-    body: "We believe you shouldn't have to pay massive corporate cable bills just to enjoy world-class entertainment. By bypassing traditional middlemen and managing high-bandwidth server pathways directly to your screen, we deliver a genuinely luxurious, elite viewing experience at a highly accessible, smart price point.",
+    headline: 'Everything in One Place',
+    body: "Stop juggling multiple expensive subscriptions just to watch your favourite teams and shows. Live football, major sports, movies, series, news, and international channels — all consolidated into a single, easy-to-use interface. No switching between apps, no extra costs.",
   },
   {
     icon: (
-      <svg viewBox="0 0 64 64" className="w-[5.5rem] h-[5.5rem]" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M32 12v40" />
-        <path d="M20 20l24 12-24 12" />
+      <svg viewBox="0 0 24 24" className="w-14 h-14" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="2" y="3" width="20" height="14" rx="2" />
+        <path d="M8 21h8" />
+        <path d="M12 17v4" />
+        <path d="M7 8l5 3-5 3V8z" fill="currentColor" className="text-accent/20" />
+        <rect x="15" y="12" width="7" height="10" rx="1" className="fill-black" />
+        <path d="M18 15v4" />
       </svg>
     ),
-    headline: 'The End of the Buffering Wheel',
-    body: "There is nothing worse than your screen freezing right as a historic play is about to happen. Kick-Stream is engineered on an advanced H265 anti-freeze server matrix built to withstand global traffic surges. With an industry-leading 99.9% uptime record, your picture stays razor-sharp and fluid while everyone else is left staring at a loading icon.",
+    headline: 'Simple Setup on Any Device',
+    body: "Most people are up and running in just a few minutes. Works on Smart TVs, Amazon Firestick, Android TV Boxes, Android phones and tablets, iPhone and iPad, Windows PCs, and Mac computers. If you're not sure whether your device is supported, get in touch and we'll check for you.",
   },
   {
     icon: (
-      <svg viewBox="0 0 64 64" className="w-[5.5rem] h-[5.5rem]" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <circle cx="32" cy="32" r="18" />
-        <path d="M14 32h36" />
-        <path d="M32 14v36" />
-        <path d="M20 18c8 4 16 4 24 0" />
-        <path d="M20 46c8-4 16-4 24 0" />
+      <svg viewBox="0 0 24 24" className="w-14 h-14" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
+        <path d="M12 8v4" />
+        <path d="M12 16h.01" />
       </svg>
     ),
-    headline: 'One Account. Complete Freedom.',
-    body: "Stop juggling five different expensive, confusing streaming subscriptions just to watch your favorite teams and shows. We consolidate the world's finest sports, cinema, and news networks into a single, beautifully organized, high-speed interface that puts you completely in control of your entertainment.",
+    headline: 'Friendly Support When You Need It',
+    body: "Your access credentials and a simple step-by-step setup guide land in your inbox within 10 to 30 minutes of purchase. Our support team replies quickly and helps you get started the same day — no technical background required.",
   },
 ]
 
@@ -56,10 +60,17 @@ export default function HowItWorks() {
         <motion.h2
           variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }}
           transition={{ delay: 0.1 }}
-          className="font-display text-[clamp(40px,6vw,72px)] text-cream mb-16 leading-none"
+          className="font-display text-[clamp(40px,6vw,72px)] text-cream mb-4 leading-none"
         >
-          Built to Protect Your Evenings
+          Why People Stay With Us
         </motion.h2>
+        <motion.p
+          variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }}
+          transition={{ delay: 0.15 }}
+          className="font-ui text-sm text-cream/70 mb-16 max-w-2xl"
+        >
+          Many people come looking for football or a specific sports event, but over time they end up using the service every day.
+        </motion.p>
 
         {/* Steps (Why Us items) */}
         <div className="relative flex flex-col md:flex-row items-start gap-0 md:gap-0">

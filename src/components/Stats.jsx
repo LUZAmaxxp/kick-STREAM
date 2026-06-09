@@ -77,14 +77,14 @@ export default function Stats() {
           transition={{ delay: 0.1 }}
           className="font-display text-[clamp(40px,6vw,72px)] text-cream mb-4 text-center leading-none"
         >
-          Zero Friction. Instant Viewing on Any Screen.
+          Works On The Devices You Already Use.
         </motion.h2>
         <motion.p
           variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }}
           transition={{ delay: 0.15 }}
           className="font-ui text-sm text-cream/60 mb-16 text-center max-w-2xl mx-auto"
         >
-          True modern luxury means never fighting with technology. Kick-Stream integrates seamlessly with your current lifestyle in under 5 minutes, requiring no advanced technical skills or complicated setups.
+          Most people are up and running in just a few minutes. Our service works across a wide range of devices, so you can watch at home or on the go.
         </motion.p>
 
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-12 md:gap-8">
@@ -92,13 +92,13 @@ export default function Stats() {
             <StatItem icon="tv" label="Smart TVs" glow={false} />
           </motion.div>
           <motion.div variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true, margin: '-60px' }} transition={{ delay: 0.12 }}>
-            <StatItem icon="hardware" label="Streaming Hardware" glow={true} />
+            <StatItem icon="hardware" label="Firestick & Android TV" glow={true} />
           </motion.div>
           <motion.div variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true, margin: '-60px' }} transition={{ delay: 0.24 }}>
-            <StatItem icon="mobile" label="Mobiles & Tablets" glow={false} />
+            <StatItem icon="mobile" label="Phones & Tablets" glow={false} />
           </motion.div>
           <motion.div variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true, margin: '-60px' }} transition={{ delay: 0.36 }}>
-            <StatItem icon="laptop" label="Desktops & Laptops" glow={true} />
+            <StatItem icon="laptop" label="PCs & Mac" glow={true} />
           </motion.div>
         </div>
 

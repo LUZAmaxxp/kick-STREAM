@@ -48,7 +48,7 @@ export default function FinalCTA() {
           transition={{ delay: 0.2 }}
           className="font-ui text-base text-cream/70 mb-12 max-w-md"
         >
-          True modern luxury means never fighting with technology. Kick-Stream integrates seamlessly with your current lifestyle in under 5 minutes.
+          Live football, major sports, movies, series, and 20,000+ international channels — all in one place. Up and running in under five minutes on the devices you already own.
         </motion.p>
 
         <motion.div

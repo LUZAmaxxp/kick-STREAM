@@ -3,16 +3,16 @@ import { motion, AnimatePresence } from 'framer-motion'
 
 const QUESTIONS = [
   {
-    q: 'Will my stream freeze during major, high-demand championship games?',
-    a: 'No. While standard providers overload their systems, Kick-Stream invests in premium, load-balanced edge servers. When millions of viewers log on simultaneously for a massive sports final, our system dynamically scales your connection to ensure your feed remains smooth, clear, and uninterrupted.',
+    q: 'What can I watch on KickStream?',
+    a: 'You get live football (Premier League, Champions League, La Liga, Serie A, Bundesliga, FA Cup, and more), major sports (NFL, NBA, UFC, Boxing, Formula 1, Tennis, Rugby), movies, TV series, UK and US news, documentaries, kids and family channels, and 20,000+ international channels from different countries and regions.',
   },
   {
-    q: 'Can I easily find specific international networks and sports leagues?',
-    a: 'Absolutely. Our system is built with user experience in mind. The library is cleanly categorized by country and genre, featuring dedicated, lightning-fast sections for global football, basketball, premium cinema, and live broadcasts.',
+    q: 'Which devices does KickStream work on?',
+    a: 'KickStream works on Smart TVs, Amazon Firestick and Fire TV, Android TV Boxes, Android phones and tablets, iPhone and iPad, Windows PCs, and Mac computers. If you\'re not sure whether your specific device is supported, just get in touch and we\'ll be happy to check for you.',
   },
   {
-    q: 'I\'m not great with technology. How difficult is the installation process?',
-    a: 'It is entirely stress-free. You don\'t need any technical background whatsoever. Your private access credentials along with a simple, visual step-by-step guide will land in your inbox within 10 to 30 minutes of purchase, and our team is right here to guide you if you want a helping hand.',
+    q: 'How difficult is the setup process?',
+    a: 'It\'s entirely stress-free. Most people are up and running in under five minutes. Your private access credentials and a simple visual step-by-step guide will land in your inbox within 10 to 30 minutes of purchase. Our team is right here to guide you if you want a helping hand.',
   },
 ]
 

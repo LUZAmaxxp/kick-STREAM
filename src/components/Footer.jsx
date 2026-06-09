@@ -55,7 +55,7 @@ export default function Footer() {
                 KICKSTREAM
               </a>
               <p className="font-data text-xs text-cream/70 mt-2 tracking-[0.12em]">
-                Unrestricting the World's Media
+                Live Sports, Movies & TV — All in One Place.
               </p>
             </div>
 
@@ -113,7 +113,7 @@ export default function Footer() {
 
             {/* Tagline */}
             <p className="font-data text-[11px] text-cream/60 tracking-[0.1em]">
-              Founded by specialists to deliver absolute server reliability and pristine visual definitions.
+              Trusted by customers every day to keep things simple, reliable, and easy to use.
             </p>
           </div>
         </div>

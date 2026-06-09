@@ -2,18 +2,22 @@ import { motion } from 'framer-motion'
 
 const QUOTES = [
   {
-    text: "I originally joined Kick-Stream just to secure a stable feed for the big international tournaments. The 4K clarity blew me away—there's absolutely zero lag, even on busy weekend matchdays when standard streams usually crash. It's easily the best upgrade I've made for my living room.",
-    name: 'David M.',
+    text: "I mainly joined for football, but I've ended up using it every day. Setup was straightforward and everything worked as expected.",
+    name: 'Verified Customer',
     club: 'Community Member',
     location: 'Verified User',
-    bg: '#FAFAF8',
   },
   {
-    text: "Managing multiple streaming apps was costing my family a fortune every month. Kick-Stream simplified everything. We got all our international channels and movies running on our Firestick in less than ten minutes. Flawless service.",
-    name: 'Elena R.',
+    text: "Works well on my Firestick and the channel selection is better than I expected.",
+    name: 'Verified Customer',
     club: 'Community Member',
     location: 'Verified User',
-    bg: '#F5F3EE',
+  },
+  {
+    text: "Support replied quickly when I had a question and helped me get started the same day.",
+    name: 'Verified Customer',
+    club: 'Community Member',
+    location: 'Verified User',
   },
 ]
 
@@ -31,7 +35,7 @@ export default function Testimonials() {
           variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }}
           className="font-data text-cream/70 text-xs tracking-[0.25em] uppercase mb-4"
         >
-          From the Terraces
+          What Our Customers Say
         </motion.p>
         <motion.h2
           variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }}

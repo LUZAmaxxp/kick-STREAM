@@ -126,7 +126,7 @@ export default function Hero() {
       <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 w-full">
         {/* Eyebrow */}
         <p className="font-data text-cream/80 text-xs tracking-[0.25em] uppercase mb-6">
-          Football Everywhere
+          Live Sports & Entertainment
         </p>
 
         <HeroSlogans />

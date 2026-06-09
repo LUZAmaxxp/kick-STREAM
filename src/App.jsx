@@ -8,6 +8,7 @@ import ChatWidget from './components/ChatWidget';
 import WhatsAppContactButton from './components/WhatsAppContactButton';
 import AuthPage from './pages/AuthPage';
 const TrustBar        = lazy(() => import('./components/TrustBar'));
+const ImageSlider     = lazy(() => import('./components/ImageSlider'));
 const ProductReveal   = lazy(() => import('./components/ProductReveal'));
 const HowItWorks      = lazy(() => import('./components/HowItWorks'));
 const Stats           = lazy(() => import('./components/Stats'));
@@ -103,6 +104,7 @@ export default function App() {
               {!user && <WhatsAppContactButton />}
               <Suspense fallback={null}>
                 <TrustBar />
+                <ImageSlider />
                 <ProductReveal />
                 <HowItWorks />
                 <Stats />

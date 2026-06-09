@@ -1,0 +1,380 @@
+{
+  "document": {
+    "title": "KickStream Marketing Page — Current Content Audit",
+    "version": "1.0.0",
+    "lastUpdated": "2026-06-09",
+    "scope": "Complete content inventory of all marketing sections, copy, CTAs, and visual elements",
+    "sourceOfTruth": "src/components/ and src/pages/"
+  },
+  "sections": {
+    "hero": {
+      "component": "src/components/Hero.jsx",
+      "purpose": "First impression, value proposition, primary conversion funnel",
+      "layout": "Full-screen video background with animated slogans and messaging",
+      "elements": {
+        "background_media": {
+          "desktop_source": "13433792_3840_2160_30fps.mp4",
+          "mobile_source": "13406407_1080_1920_30fps.mp4",
+          "fallback_poster": "hero-poster.svg",
+          "description": "Looping stadium floodlights video, autoplay muted"
+        },
+        "eyebrow": {
+          "text": "British Football Streaming",
+          "style": "uppercase, small, subdued color"
+        },
+        "rotating_slogans": [
+          {
+            "phrase": "All the Action. None of the Lag.",
+            "accent_words": ["None", "of", "Lag"],
+            "accent_color": "orange"
+          },
+          {
+            "phrase": "Every Match. Everywhere.",
+            "accent_words": ["Everywhere"],
+            "accent_color": "orange"
+          },
+          {
+            "phrase": "Unlimited Access. Unmatched Quality.",
+            "accent_words": ["Unmatched", "Quality"],
+            "accent_color": "orange"
+          }
+        ],
+        "slogan_behavior": "Auto-rotate every 4 seconds with fade animation",
+        "status_line": {
+          "part1": "Server connected. Firmware loaded.",
+          "part2": "Next Event starting in",
+          "timer": "Dynamic countdown HH:MM:SS from useNextKickoff hook"
+        },
+        "primary_cta": {
+          "text": "Get Your Kit",
+          "target": "#pricing section",
+          "style": "bold button with arrow icon"
+        },
+        "sub_copy": "Ships within 48 hours. No contract. Cancel anytime."
+      }
+    },
+    "trust_bar": {
+      "component": "src/components/TrustBar.jsx",
+      "purpose": "Build credibility through marquee trust signals",
+      "layout": "Horizontally scrolling marquee (infinite loop on pause)",
+      "background": "#0D0D0D",
+      "border": "Top and bottom thin gold border",
+      "trust_signals": [
+        "20,000+ LIVE GLOBAL NETWORKS",
+        "HIGH-PRIORITY WORLD CUP ROUTING",
+        "PRISTINE 4K / UHD DEFINITION",
+        "SMART TVS & STREAMING HARDWARE",
+        "MOBILES, TABLETS & DESKTOPS",
+        "ZERO FRICTION. INSTANT VIEWING.",
+        "H265 ANTI-FREEZE TECHNOLOGY",
+        "99.9% UPTIME RECORD"
+      ],
+      "behavior": "Continuous scroll left to right, pauses on hover"
+    },
+    "product_reveal": {
+      "component": "src/components/ProductReveal.jsx",
+      "purpose": "Deep feature storytelling with device mockup and narrative",
+      "layout": "Two-column grid: device mockup left, feature stack right",
+      "device_mockup": {
+        "type": "TV bezel with fake match HUD",
+        "score_display": "ARS 2 — 1 CHE",
+        "live_badge": "Pulsing LIVE indicator top-right",
+        "4k_badge": "4K HD label bottom-left",
+        "audio_waveform": "Animated bars bottom-right"
+      },
+      "feature_cards": [
+        {
+          "headline": "The World Stage: Every Match, Every Moment",
+          "body": "Don't just watch the FIFA World Cup—experience it like you are sitting in the VIP box. When the entire world tunes in and public servers begin to lag, Kick-Stream keeps you anchored in flawless 4K at 60 FPS. From the nervous tension of the group stages to the absolute euphoria of the final whistle, follow your national team with high-priority streaming lines. No blackouts, no interrupted feeds, just pure, heart-pounding football history exactly as it happens.",
+          "icon": "Stadium/monitor custom SVG"
+        },
+        {
+          "headline": "Courtside Intensity & Global Athletics",
+          "body": "For the true fan, sports never sleep. Feel the energy of every crucial fourth-quarter buzzer-beater, every high-octane motorsport grid start, and every championship fight night. We don't just provide feeds; we deliver premium, high-bandwidth networks optimized for fast-motion athletics. It's the ultimate front-row sports pass, giving you real-time access to the games everyone is talking about, with zero lag during game-changing moments.",
+          "icon": "Globe/network custom SVG"
+        },
+        {
+          "headline": "Your Private Cinema Lounge & Global Networks",
+          "body": "Escape the limits of regional television. Gain immediate access to an elite library of 20,000+ live international networks spanning the US, UK, Europe, Arabic regions, and beyond. Paired with a continuously updated Video-on-Demand (VOD) library overflowing with Hollywood masterpieces, trending global series, and complete family entertainment, your screen becomes the ultimate passport to global culture.",
+          "icon": "Screen/media custom SVG"
+        }
+      ]
+    },
+    "how_it_works": {
+      "component": "src/components/HowItWorks.jsx",
+      "purpose": "Address objections and establish value proposition pillars",
+      "layout": "Three-column layout with connectors between items",
+      "section_label": "Why Choose Us",
+      "headline": "Built to Protect Your Evenings",
+      "steps": [
+        {
+          "headline": "Premium Quality Without the Monopoly Markups",
+          "body": "We believe you shouldn't have to pay massive corporate cable bills just to enjoy world-class entertainment. By bypassing traditional middlemen and managing high-bandwidth server pathways directly to your screen, we deliver a genuinely luxurious, elite viewing experience at a highly accessible, smart price point."
+        },
+        {
+          "headline": "The End of the Buffering Wheel",
+          "body": "There is nothing worse than your screen freezing right as a historic play is about to happen. Kick-Stream is engineered on an advanced H265 anti-freeze server matrix built to withstand global traffic surges. With an industry-leading 99.9% uptime record, your picture stays razor-sharp and fluid while everyone else is left staring at a loading icon."
+        },
+        {
+          "headline": "One Account. Complete Freedom.",
+          "body": "Stop juggling five different expensive, confusing streaming subscriptions just to watch your favorite teams and shows. We consolidate the world's finest sports, cinema, and news networks into a single, beautifully organized, high-speed interface that puts you completely in control of your entertainment."
+        }
+      ]
+    },
+    "stats": {
+      "component": "src/components/Stats.jsx",
+      "purpose": "Demonstrate multi-device compatibility and ease of setup",
+      "layout": "Four-column device icon grid",
+      "section_label": "Device Compatibility",
+      "headline": "Zero Friction. Instant Viewing on Any Screen.",
+      "subheadline": "True modern luxury means never fighting with technology. Kick-Stream integrates seamlessly with your current lifestyle in under 5 minutes, requiring no advanced technical skills or complicated setups.",
+      "devices": [
+        { "label": "Smart TVs", "icon": "TV SVG" },
+        { "label": "Streaming Hardware", "icon": "Media Box SVG" },
+        { "label": "Mobiles & Tablets", "icon": "Phone SVG" },
+        { "label": "Desktops & Laptops", "icon": "Laptop SVG" }
+      ]
+    },
+    "pricing": {
+      "component": "src/components/Pricing.jsx",
+      "purpose": "Present subscription tiers with differentiated value props",
+      "layout": "Four-column pricing card grid",
+      "section_label": "Pricing",
+      "headline": "Invest in Better Entertainment",
+      "subheadline": "Every plan includes a 1-day free trial. No blackouts. No upsells.",
+      "plans": [
+        {
+          "id": "one-month",
+          "name": "1 Month",
+          "price": "$14.99",
+          "period": "/month",
+          "description": "Flexible short-term access with a fast entry point.",
+          "features": [
+            "One-day free trial included",
+            "Live match alerts and chat access",
+            "Optimized streaming routes",
+            "Real-time support ready"
+          ],
+          "cta": "Start 1-Day Trial",
+          "cta_style": "border",
+          "featured": false,
+          "cta_link": "WhatsApp integration via wa.me link"
+        },
+        {
+          "id": "three-month",
+          "name": "3 Months",
+          "price": "$29.99",
+          "period": "/3 months",
+          "description": "Best for fans who want consistent access without commitment.",
+          "features": [
+            "One-day free trial included",
+            "Live match alerts and chat access",
+            "Optimized streaming routes",
+            "Priority support access"
+          ],
+          "cta": "Start 1-Day Trial",
+          "cta_style": "solid",
+          "featured": true,
+          "badge": "MOST POPULAR",
+          "cta_link": "WhatsApp integration via wa.me link"
+        },
+        {
+          "id": "six-month",
+          "name": "6 Months",
+          "price": "$49.99",
+          "period": "/6 months",
+          "description": "Half-year plan for serious fans who settle in for the season.",
+          "features": [
+            "One-day free trial included",
+            "Live match alerts and chat access",
+            "Optimized streaming routes",
+            "Priority support access",
+            "Stream reliability monitoring"
+          ],
+          "cta": "Start 1-Day Trial",
+          "cta_style": "solid",
+          "featured": false,
+          "cta_link": "WhatsApp integration via wa.me link"
+        },
+        {
+          "id": "twelve-month",
+          "name": "12 Months",
+          "price": "$69.99",
+          "period": "/12 months",
+          "description": "Best value package for year-round access and peace of mind.",
+          "features": [
+            "One-day free trial included",
+            "Live match alerts and chat access",
+            "Optimized streaming routes",
+            "Priority support access",
+            "Stream reliability monitoring",
+            "Annual value pricing"
+          ],
+          "cta": "Start 1-Day Trial",
+          "cta_style": "solid",
+          "featured": false,
+          "cta_link": "WhatsApp integration via wa.me link"
+        }
+      ]
+    },
+    "testimonials": {
+      "component": "src/components/Testimonials.jsx",
+      "purpose": "Social proof via user stories and verified testimonials",
+      "layout": "Three-column card layout",
+      "section_label": "From the Terraces",
+      "headline": "FANS DON'T LIE.",
+      "testimonials": [
+        {
+          "quote": "I originally joined Kick-Stream just to secure a stable feed for the big international tournaments. The 4K clarity blew me away—there's absolutely zero lag, even on busy weekend matchdays when standard streams usually crash. It's easily the best upgrade I've made for my living room.",
+          "author": "David M.",
+          "role": "Community Member",
+          "verification": "Verified User"
+        },
+        {
+          "quote": "Managing multiple streaming apps was costing my family a fortune every month. Kick-Stream simplified everything. We got all our international channels and movies running on our Firestick in less than ten minutes. Flawless service.",
+          "author": "Elena R.",
+          "role": "Community Member",
+          "verification": "Verified User"
+        }
+      ]
+    },
+    "live_match_ticker": {
+      "component": "src/components/LiveMatchTicker.jsx",
+      "purpose": "Real-time FOMO trigger showing live Premier League fixtures",
+      "layout": "Full-width scoreboard with live match data",
+      "section_label": "Right Now",
+      "headline": "THIS IS WHAT YOU'RE MISSING.",
+      "subheadline": "Live Premier League fixtures — real data, real scores, updated every minute.",
+      "data_source": "Real Premier League API via usePLFixtures hook",
+      "display_elements": {
+        "match_rows": "Home team badge, score display, away team badge",
+        "status_badges": "LIVE (with pulsing dot), HT (halftime), FT (final), kickoff time",
+        "live_indicator": "Green dot counter showing number of live matches",
+        "hover_state": "Overlay shows 'Streaming Now on KickStream'"
+      },
+      "cta": {
+        "text": "Get Your Pass Now →",
+        "target": "#pricing"
+      }
+    },
+    "faq": {
+      "component": "src/components/FAQ.jsx",
+      "purpose": "Address final objections before conversion",
+      "layout": "Accordion-style Q&A stack",
+      "section_label": "FAQ",
+      "headline": "STRAIGHT ANSWERS.",
+      "questions": [
+        {
+          "q": "Will my stream freeze during major, high-demand championship games?",
+          "a": "No. While standard providers overload their systems, Kick-Stream invests in premium, load-balanced edge servers. When millions of viewers log on simultaneously for a massive sports final, our system dynamically scales your connection to ensure your feed remains smooth, clear, and uninterrupted."
+        },
+        {
+          "q": "Can I easily find specific international networks and sports leagues?",
+          "a": "Absolutely. Our system is built with user experience in mind. The library is cleanly categorized by country and genre, featuring dedicated, lightning-fast sections for global football, basketball, premium cinema, and live broadcasts."
+        },
+        {
+          "q": "I'm not great with technology. How difficult is the installation process?",
+          "a": "It is entirely stress-free. You don't need any technical background whatsoever. Your private access credentials along with a simple, visual step-by-step guide will land in your inbox within 10 to 30 minutes of purchase, and our team is right here to guide you if you want a helping hand."
+        }
+      ]
+    },
+    "final_cta": {
+      "component": "src/components/FinalCTA.jsx",
+      "purpose": "Final conversion push before footer",
+      "layout": "Centered large headline with dual CTAs",
+      "section_label": "Final Whistle",
+      "headline": "THE MATCH STARTS WITH OR WITHOUT YOU.",
+      "body": "True modern luxury means never fighting with technology. Kick-Stream integrates seamlessly with your current lifestyle in under 5 minutes.",
+      "ctas": [
+        {
+          "text": "Get Your Pass Now →",
+          "style": "primary (solid)",
+          "target": "#pricing"
+        },
+        {
+          "text": "See Pricing",
+          "style": "secondary (border)",
+          "target": "#pricing"
+        }
+      ],
+      "guarantee": "Instant access. No contract. Cancel anytime."
+    },
+    "footer": {
+      "component": "src/components/Footer.jsx",
+      "purpose": "Navigation, legal, and brand identity",
+      "layout": "Three-column header, divider, two-column footer",
+      "brand": {
+        "wordmark": "KICKSTREAM",
+        "tagline": "Unrestricting the World's Media"
+      },
+      "navigation_links": [
+        { "label": "How It Works", "href": "#why-us" },
+        { "label": "Pricing", "href": "#pricing" },
+        { "label": "FAQ", "href": "#faq" },
+        { "label": "Sign In", "href": "#" }
+      ],
+      "legal_links": [
+        { "label": "Privacy", "href": "#" },
+        { "label": "Terms", "href": "#" },
+        { "label": "Contact", "href": "#" }
+      ],
+      "social_links": [
+        { "platform": "X / Twitter", "icon": "X Logo" },
+        { "platform": "Instagram", "icon": "Instagram Logo" },
+        { "platform": "YouTube", "icon": "YouTube Logo" }
+      ],
+      "footer_copy": "Founded by specialists to deliver absolute server reliability and pristine visual definitions."
+    }
+  },
+  "content_summary": {
+    "total_sections": 9,
+    "marketing_flow": "Hero hook → Trust bar → Feature storytelling → Objection handling → Device proof → Pricing → Social proof → Urgency trigger (live ticker) → FAQs → Final push → Navigation",
+    "key_messages": [
+      "Zero lag, premium quality streaming for football/sports",
+      "99.9% uptime with advanced H265 anti-freeze tech",
+      "One account replaces multiple subscriptions",
+      "Works on all devices, instant setup (<5 minutes)",
+      "Accessible pricing with free trial, no contract",
+      "Real-time live match data powered by Premier League API",
+      "Community-verified social proof"
+    ],
+    "conversion_funnels": [
+      "Hero → Pricing (Get Your Kit CTA)",
+      "Live Ticker → Pricing (Get Your Pass Now CTA)",
+      "Final CTA → Pricing (Get Your Pass Now CTA)"
+    ],
+    "call_to_actions": [
+      {
+        "text": "Get Your Kit",
+        "placement": "Hero",
+        "target": "#pricing",
+        "style": "primary"
+      },
+      {
+        "text": "Start 1-Day Trial",
+        "placement": "Pricing cards",
+        "target": "WhatsApp link",
+        "style": "varies by plan"
+      },
+      {
+        "text": "Get Your Pass Now →",
+        "placement": "Live Ticker + Final CTA",
+        "target": "#pricing",
+        "style": "primary"
+      },
+      {
+        "text": "See Pricing",
+        "placement": "Final CTA",
+        "target": "#pricing",
+        "style": "secondary"
+      }
+    ],
+    "dynamic_elements": [
+      "Rotating hero slogans (4-second interval)",
+      "Live countdown timer (Next Event starting in HH:MM:SS)",
+      "Real-time Premier League fixture data",
+      "FAQ accordion interactions",
+      "Smooth scroll-triggered animations (Framer Motion)"
+    ]
+  }
+}

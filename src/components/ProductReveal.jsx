@@ -11,8 +11,8 @@ const FEATURES = [
         <path d="M9 19h6" />
       </svg>
     ),
-    headline: 'The World Stage: Every Match, Every Moment',
-    body: "Don't just watch the FIFA World Cup—experience it like you are sitting in the VIP box. When the entire world tunes in and public servers begin to lag, Kick-Stream keeps you anchored in flawless 4K at 60 FPS. From the nervous tension of the group stages to the absolute euphoria of the final whistle, follow your national team with high-priority streaming lines. No blackouts, no interrupted feeds, just pure, heart-pounding football history exactly as it happens.",
+    headline: 'Live Football & Major Sports',
+    body: "Premier League, Champions League, Europa League, FA Cup, La Liga, Serie A, Bundesliga, and more — all in one place. Plus NFL, NBA, NHL, MLB, UFC, Boxing, Tennis, Formula 1, and Rugby throughout the year. When public servers begin to lag on the biggest matchdays, KickStream keeps you anchored in flawless quality with high-priority routing and zero blackouts.",
   },
   {
     icon: (
@@ -23,8 +23,8 @@ const FEATURES = [
         <path d="M6.5 6.5l11 11" />
       </svg>
     ),
-    headline: 'Courtside Intensity & Global Athletics',
-    body: "For the true fan, sports never sleep. Feel the energy of every crucial fourth-quarter buzzer-beater, every high-octane motorsport grid start, and every championship fight night. We don't just provide feeds; we deliver premium, high-bandwidth networks optimized for fast-motion athletics. It's the ultimate front-row sports pass, giving you real-time access to the games everyone is talking about, with zero lag during game-changing moments.",
+    headline: 'Movies, Series & Everyday TV',
+    body: "From recent releases to older favorites across action, comedy, drama, thriller, and family categories. Popular series with complete seasons and new episodes added regularly. UK and US news channels, documentaries, lifestyle content, and everyday entertainment — plus kids and family programming. Your screen becomes the only subscription you need.",
   },
   {
     icon: (
@@ -35,8 +35,8 @@ const FEATURES = [
         <path d="M16 7v10" />
       </svg>
     ),
-    headline: 'Your Private Cinema Lounge & Global Networks',
-    body: "Escape the limits of regional television. Gain immediate access to an elite library of 20,000+ live international networks spanning the US, UK, Europe, Arabic regions, and beyond. Paired with a continuously updated Video-on-Demand (VOD) library overflowing with Hollywood masterpieces, trending global series, and complete family entertainment, your screen becomes the ultimate passport to global culture.",
+    headline: '20,000+ International Channels',
+    body: "Access channels from different countries and regions in one place. Spanning the US, UK, Europe, Arabic regions, and beyond — a continuously updated library covering global sports, cinema, news, and entertainment. No more switching between apps or services. Everything is cleanly organised and ready to watch.",
   },
 ]
 
@@ -68,10 +68,10 @@ export default function ProductReveal() {
               <div className="absolute inset-0 bg-gradient-to-br from-black/80 via-black/70 to-black/95" />
 
               {/* Score bar */}
-              <div className="absolute top-3 left-1/2 -translate-x-1/2 flex items-center gap-3 bg-black/85 px-4 py-1.5 border border-border rounded-full">
-                <span className="font-display text-cream text-lg tracking-widest">ARS</span>
-                <span className="font-data text-accent text-xl font-bold">2 — 1</span>
-                <span className="font-display text-cream text-lg tracking-widest">CHE</span>
+              <div className="absolute top-3 left-1/2 -translate-x-1/2 flex items-center gap-2 md:gap-3 bg-black/85 px-3 md:px-4 py-1.5 border border-border rounded-full whitespace-nowrap z-20">
+                <span className="font-display text-cream text-base md:text-lg tracking-widest">ARS</span>
+                <span className="font-data text-accent text-lg md:text-xl font-bold px-1">2 — 1</span>
+                <span className="font-display text-cream text-base md:text-lg tracking-widest">CHE</span>
               </div>
 
               {/* LIVE badge */}

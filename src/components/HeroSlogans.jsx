@@ -4,14 +4,20 @@ import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 const SLOGANS = [
   {
     id: 1,
-    phrase: 'The Entire World of Live Entertainment.',
-    accents: ['Entertainment'],
-    accentWordIndexes: [5],
+    phrase: 'Live Football. Major Sports. All in One Place.',
+    accents: ['All', 'in', 'One', 'Place'],
+    accentWordIndexes: [4, 5, 6, 7],
   },
   {
     id: 2,
-    phrase: 'Curated For Your Screen.',
-    accents: ['Your', 'Screen'],
+    phrase: 'Movies, Series & News. Every Day.',
+    accents: ['Every', 'Day'],
+    accentWordIndexes: [4, 5],
+  },
+  {
+    id: 3,
+    phrase: 'Every Device. Zero Friction.',
+    accents: ['Zero', 'Friction'],
     accentWordIndexes: [2, 3],
   },
 ];
