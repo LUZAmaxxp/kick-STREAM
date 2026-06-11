@@ -149,7 +149,7 @@ export default function Pricing() {
                 href={`https://wa.me/18582525266?text=${encodeURIComponent(`Hello, I am interested in the ${plan.name}.`)}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-auto text-center py-3.5 text-sm font-ui font-bold uppercase tracking-[0.15em] transition-all bg-black text-cream border-2 border-accent/40 hover:bg-black-light hover:border-accent hover:scale-[1.02]"
+                className="mt-auto text-center py-3.5 text-sm font-ui font-bold uppercase tracking-[0.15em] transition-all bg-black text-cream border-2 border-accent/40 rounded-full hover:bg-black-light hover:border-accent hover:scale-[1.02]"
               >
                 {plan.cta}
               </a>
