@@ -101,7 +101,7 @@ export default function Pricing() {
           Every plan includes a 1-day free trial. No blackouts. No upsells.
         </motion.p>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
           {PLANS.map((plan, i) => (
             <motion.div
               key={plan.id}
@@ -110,36 +110,36 @@ export default function Pricing() {
               whileInView="show"
               viewport={{ once: true, margin: '-60px' }}
               transition={{ delay: i * 0.12 }}
-              className={`relative bg-black/75 border border-border p-8 rounded-[30px] flex flex-col gap-6 ${plan.popular ? 'md:-translate-y-4' : ''}`}
-              style={{ boxShadow: plan.popular ? '0 20px 60px rgba(0,0,0,0.35)' : '0 12px 36px rgba(0,0,0,0.25)' }}
+              className={`relative bg-accent/5 border border-accent/20 p-8 rounded-[30px] flex flex-col gap-6 transition-colors hover:border-accent/40 ${plan.popular ? 'lg:-translate-y-4' : ''}`}
+              style={{ boxShadow: plan.popular ? '0 20px 60px rgba(183, 158, 79, 0.1)' : '0 12px 36px rgba(0,0,0,0.25)' }}
             >
               {/* MOST POPULAR badge */}
               {plan.popular && (
-                <div className="absolute -top-4 right-6 bg-accent text-black font-data text-[10px] tracking-[0.2em] uppercase px-3 py-1 font-semibold border border-border">
+                <div className="absolute -top-4 right-6 bg-accent text-black font-data text-[10px] tracking-[0.2em] uppercase px-3 py-1 font-semibold border border-accent/20">
                   MOST POPULAR
                 </div>
               )}
 
               {/* Plan name */}
               <div>
-                <p className="font-data text-[11px] tracking-[0.2em] text-cream/70 uppercase mb-2">{plan.name}</p>
+                <p className="font-data text-[11px] tracking-[0.2em] text-accent uppercase mb-2">{plan.name}</p>
                 <div className="flex items-end gap-1">
-                  <span className="font-display text-[64px] leading-none text-cream" style={{ letterSpacing: '-0.03em' }}>
+                  <span className="font-display text-[56px] leading-none text-cream" style={{ letterSpacing: '-0.03em' }}>
                     {plan.price}
                   </span>
-                  <span className="font-ui text-sm text-cream/70 mb-2">{plan.period}</span>
+                  <span className="font-ui text-sm text-cream/50 mb-2">{plan.period}</span>
                 </div>
-                <p className="font-ui text-sm text-cream/70 leading-relaxed mt-2">{plan.description}</p>
+                <p className="font-ui text-sm text-cream/70 leading-relaxed mt-2 min-h-[40px]">{plan.description}</p>
               </div>
 
               {/* Features */}
               <ul className="flex flex-col gap-3">
                 {plan.features.map((feat, fi) => (
-                  <li key={fi} className="flex items-center gap-3">
-                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" className="text-accent">
+                  <li key={fi} className="flex items-start gap-3">
+                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" className="text-accent mt-1 shrink-0">
                       <path d="M2 7l3.5 3.5L12 3" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
-                    <span className="font-ui text-sm text-cream/85">{feat}</span>
+                    <span className="font-ui text-sm text-cream/85 leading-tight">{feat}</span>
                   </li>
                 ))}
               </ul>
@@ -149,7 +149,7 @@ export default function Pricing() {
                 href={`https://wa.me/18582525266?text=${encodeURIComponent(`Hello, I am interested in the ${plan.name}.`)}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-auto text-center py-3.5 text-sm font-ui font-semibold uppercase tracking-[0.12em] transition-all bg-accent text-black hover:bg-accent/90"
+                className="mt-auto text-center py-3.5 text-sm font-ui font-semibold uppercase tracking-[0.12em] transition-all bg-black text-cream border border-accent/30 hover:bg-black-light hover:border-accent group-hover:scale-[1.02]"
               >
                 {plan.cta}
               </a>

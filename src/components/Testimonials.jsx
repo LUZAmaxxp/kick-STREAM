@@ -33,7 +33,7 @@ export default function Testimonials() {
 
         <motion.p
           variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }}
-          className="font-data text-cream/70 text-xs tracking-[0.25em] uppercase mb-4"
+          className="font-data text-accent text-xs tracking-[0.25em] uppercase mb-4"
         >
           What Our Customers Say
         </motion.p>
@@ -54,29 +54,36 @@ export default function Testimonials() {
               whileInView="show"
               viewport={{ once: true, margin: '-60px' }}
               transition={{ delay: i * 0.13 }}
-              className="relative bg-black/75 border border-border p-8 rounded-[28px]"
+              className="relative group bg-accent/5 border border-accent/20 p-8 rounded-[30px] transition-all duration-300 hover:border-accent/40 hover:bg-accent/10"
               style={{ boxShadow: '0 18px 48px rgba(0, 0, 0, 0.24)' }}
             >
+              {/* Subtle gold glow on hover */}
+              <div className="absolute inset-0 bg-accent/5 blur-3xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
+
               {/* Large opening quote */}
-              <span
-                className="block font-display leading-none text-accent mb-4 select-none"
-                style={{ fontSize: '96px', lineHeight: '0.7', opacity: 0.5 }}
-              >
-                "
-              </span>
+              <div className="mb-6">
+                <span
+                  className="block font-display leading-none text-accent select-none"
+                  style={{ fontSize: '80px', lineHeight: '0.5' }}
+                >
+                  "
+                </span>
+              </div>
 
               {/* Quote body */}
               <p
-                className="font-ui text-base text-cream/85 leading-relaxed mb-8"
-                style={{ fontStyle: 'italic' }}
+                className="relative z-10 font-ui text-[15px] text-cream/90 leading-relaxed mb-8 italic"
               >
-                {q.text}
+                "{q.text}"
               </p>
 
               {/* Attribution */}
-              <div className="rule-top pt-5 border-t border-border/60">
-                <p className="font-data text-[11px] tracking-[0.18em] text-cream/60 uppercase">
-                  {q.name} — {q.club} Fan, {q.location}
+              <div className="relative z-10 pt-5 border-t border-accent/20">
+                <p className="font-data text-[11px] tracking-[0.18em] text-accent uppercase mb-1">
+                  {q.name}
+                </p>
+                <p className="font-ui text-[10px] tracking-wider text-cream/50 uppercase">
+                   {q.location}
                 </p>
               </div>
             </motion.div>
