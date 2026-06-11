@@ -31,7 +31,7 @@ const PLANS = [
     ],
     cta: 'Start 1-Day Trial',
     ctaStyle: 'solid-white',
-    popular: true,
+    popular: false,
   },
   {
     id: 'six-month',
@@ -48,7 +48,7 @@ const PLANS = [
     ],
     cta: 'Start 1-Day Trial',
     ctaStyle: 'solid-green',
-    popular: false,
+    popular: true,
   },
   {
     id: 'twelve-month',
