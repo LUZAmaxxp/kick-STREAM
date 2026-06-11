@@ -1,7 +1,7 @@
 # Frontend Specification: Kick Stream
 
 ## Overview
-Kick Stream is a modern React-based web application for streaming football matches, offering user plans, direct WhatsApp contact for purchases, and an admin dashboard for monitoring user activity and messages.
+Kick Stream is a modern React-based web application for streaming football matches, offering user plans, direct WhatsApp contact for purchases, and an admin dashboard for monitoring user activity and messages
 
 ---
 
