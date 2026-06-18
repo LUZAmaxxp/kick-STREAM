@@ -12,7 +12,7 @@ const FEATURES = [
       </svg>
     ),
     headline: 'Live Football & Major Sports',
-    body: "Premier League, Champions League, Europa League, FA Cup, La Liga, Serie A, Bundesliga, and more — all in one place. Plus NFL, NBA, NHL, MLB, UFC, Boxing, Tennis, Formula 1, and Rugby throughout the year. When public servers begin to lag on the biggest matchdays, KickStream keeps you anchored in flawless quality with high-priority routing and zero blackouts.",
+    body: "Premier League, Champions League, Europa League, FA Cup, La Liga, Serie A, Bundesliga, and more — all in one place. Plus NFL, NBA, NHL, MLB, UFC, Boxing, Tennis, Formula 1, and Rugby throughout the year. When public servers begin to lag on the biggest matchdays, StreamPITV keeps you anchored in flawless quality with high-priority routing and zero blackouts.",
   },
   {
     icon: (

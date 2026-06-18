@@ -49,14 +49,20 @@ export default function Footer() {
           {/* Top row */}
           <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-10 mb-16">
 
-            {/* Wordmark + tagline */}
-            <div>
-              <a href="#" className="font-display text-3xl tracking-widest text-cream">
-                KICKSTREAM
-              </a>
-              <p className="font-data text-xs text-cream/70 mt-2 tracking-[0.12em]">
-                Live Sports, Movies & TV — All in One Place.
-              </p>
+            {/* Brand logo + tagline */}
+            <div className="flex items-center gap-2">
+              <img src="/images/Logo!.png" alt="StreamPITV logo" className="h-12 w-auto object-contain" />
+              <div>
+                <a href="#" className="font-display text-3xl tracking-widest text-cream">
+                  <span className="inline-flex items-center gap-0 text-white text-sm font-semibold uppercase tracking-[0.12em]">
+                    <span>StreamPI</span>
+                    <span className="text-[#B79E4F]">TV</span>
+                  </span>
+                </a>
+                <p className="font-data text-xs text-cream/70 mt-2 tracking-[0.12em]">
+                  Live Sports, Movies & TV — All in One Place.
+                </p>
+              </div>
             </div>
 
             {/* Nav links */}

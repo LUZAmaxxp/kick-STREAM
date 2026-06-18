@@ -3,12 +3,12 @@ import { motion, AnimatePresence } from 'framer-motion'
 
 const QUESTIONS = [
   {
-    q: 'What can I watch on KickStream?',
+    q: 'What can I watch on StreamPITV?',
     a: 'You get live football (Premier League, Champions League, La Liga, Serie A, Bundesliga, FA Cup, and more), major sports (NFL, NBA, UFC, Boxing, Formula 1, Tennis, Rugby), movies, TV series, UK and US news, documentaries, kids and family channels, and 20,000+ international channels from different countries and regions.',
   },
   {
-    q: 'Which devices does KickStream work on?',
-    a: 'KickStream works on Smart TVs, Amazon Firestick and Fire TV, Android TV Boxes, Android phones and tablets, iPhone and iPad, Windows PCs, and Mac computers. If you\'re not sure whether your specific device is supported, just get in touch and we\'ll be happy to check for you.',
+    q: 'Which devices does StreamPITV work on?',
+    a: 'StreamPITV works on Smart TVs, Amazon Firestick and Fire TV, Android TV Boxes, Android phones and tablets, iPhone and iPad, Windows PCs, and Mac computers. If you\'re not sure whether your specific device is supported, we\'ll be happy to check for you.',
   },
   {
     q: 'How difficult is the setup process?',

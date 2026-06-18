@@ -113,7 +113,7 @@ function MatchRow({ match }) {
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-accent animate-pulse" />
             <span className="font-data text-accent text-xs tracking-[0.2em] uppercase">
-              Streaming Now on KickStream
+              Streaming Now on StreamPITV
             </span>
           </div>
         </motion.div>

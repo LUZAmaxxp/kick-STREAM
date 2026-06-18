@@ -32,9 +32,13 @@ export default function Nav({ user, logout }) {
           style={{ backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', background: 'rgba(13, 13, 13, 0.92)', borderBottom: '1px solid rgba(183, 158, 79, 0.18)' }}
         >
           <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-            {/* Wordmark */}
-            <a href="#" className="font-display text-2xl tracking-widest text-cream">
-              KICKSTREAM
+            {/* Brand logo + wordmark */}
+            <a href="#" className="flex items-center gap-2">
+              <img src="/images/Logo!.png" alt="StreamPITV logo" className="h-10 w-auto object-contain" />
+              <span className="flex items-center gap-0 text-white text-sm font-semibold uppercase tracking-[0.12em]">
+                <span>StreamPI</span>
+                <span className="text-[#B79E4F]">TV</span>
+              </span>
             </a>
 
             {/* Desktop links */}

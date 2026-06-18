@@ -10,7 +10,7 @@ export default function WhatsAppContactButton() {
     import.meta.env.VITE_PUBLIC_WHATSAPP_NUMBER ||
     '18582525266';
   const phone = sanitizePhone(rawNumber);
-  const defaultMessage = import.meta.env.VITE_WHATSAPP_MESSAGE || 'Hi, I need help with KickStream.';
+  const defaultMessage = import.meta.env.VITE_WHATSAPP_MESSAGE || 'Hi, I need help with StreamPITV.';
 
   if (!phone) return null;
 

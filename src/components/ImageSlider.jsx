@@ -18,7 +18,7 @@ const slides = [
     body: "Smart TVs, Amazon Firestick, Android TV, iPhone, iPad, Windows PCs, and Mac computers — all fully supported. Most people are up and running in under five minutes with no technical experience needed.",
     ctaText: "Get Your Pass",
     imageSrc: "/images/compatibility.png",
-    imageAlt: "Multiple screens showing KickStream on different devices",
+    imageAlt: "Multiple screens showing StreamPITV on different devices",
     isLive: false
   },
   {
@@ -271,7 +271,7 @@ export default function ImageSlider() {
       `}</style>
 
       <div className="ks-slider__container">
-        <span className="ks-slider__label">Why KickStream</span>
+        <span className="ks-slider__label">Why StreamPITV</span>
         
         <div 
           key={currentSlide}
